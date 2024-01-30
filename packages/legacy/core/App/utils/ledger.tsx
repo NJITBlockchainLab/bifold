@@ -31,7 +31,8 @@ export const canConnectToLedgerNode = async (node: { host: string; port: number 
   })
 
 export const fetchLedgerNodes = (indyNamespace = 'sovrin'): Array<{ host: string; port: number }> => {
-  const [pool] = pools.filter((p) => p.indyNamespace === indyNamespace)
+  // const [pool] = pools.filter((p) => p.indyNamespace === indyNamespace)
+  const [pool] = pools
   if (!pool) {
     return []
   }
