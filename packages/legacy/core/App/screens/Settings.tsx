@@ -120,11 +120,18 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
               .getParent()
               ?.navigate(Stacks.ContactStack, { screen: Screens.Contacts, params: { navigation: navigation } }),
         },
+        // {
+        //   title: t('Settings.WhatAreContacts'),
+        //   accessibilityLabel: t('Settings.WhatAreContacts'),
+        //   testID: testIdWithKey('WhatAreContacts'),
+        //   onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.WhatAreContacts }),
+        //   value: undefined,
+        // },
         {
-          title: t('Settings.WhatAreContacts'),
-          accessibilityLabel: t('Settings.WhatAreContacts'),
-          testID: testIdWithKey('WhatAreContacts'),
-          onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.WhatAreContacts }),
+          title: t('Settings.QRCodeGen'),
+          accessibilityLabel: t('Settings.QRCodeGen'),
+          testID: testIdWithKey('QRCodeGen'),
+          onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.QRCodeGen }),
           value: undefined,
         },
       ],

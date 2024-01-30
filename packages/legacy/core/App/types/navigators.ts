@@ -38,6 +38,7 @@ export enum Screens {
   NameWallet = 'Name Wallet',
   RenameContact = 'Rename Contact',
   ScanHelp = 'Scan Help',
+  QRCodeGen = 'Generate QR Code',
 }
 
 export enum Stacks {
@@ -97,6 +98,7 @@ export type ContactStackParams = {
   [Screens.ContactDetails]: { connectionId: string }
   [Screens.RenameContact]: { connectionId: string }
   [Screens.WhatAreContacts]: undefined
+  [Screens.QRCodeGen]: undefined
   [Screens.CredentialDetails]: { credentialId: string }
   [Screens.CredentialOffer]: { credentialId: string }
   [Screens.ProofDetails]: { recordId: string; isHistory?: boolean }

@@ -486,6 +486,7 @@ const translation = {
     "AppGuides": "App guides",
     "Build": "Build",
     "WhatAreContacts": "What are Contacts?",
+    "QRCodeGen": "Generate QR Code",
     "ScanMyQR": "Scan my QR code",
     "Help": "Help",
     "MoreInformation": "More information",

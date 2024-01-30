@@ -2319,17 +2319,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-object-assign@npm:^7.16.7":
-  version: 7.18.6
-  resolution: "@babel/plugin-transform-object-assign@npm:7.18.6"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.18.6
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: a9738264cc996c54febafa0701c5a182d99afbddbfe9fbcc0b2536e3b2332b3318a8143aacd0368e31e18c24cd1b1980be7a3b0b2e5122efb520952d863a1203
-  languageName: node
-  linkType: hard
-
 "@babel/plugin-transform-object-rest-spread@npm:^7.22.15":
   version: 7.22.15
   resolution: "@babel/plugin-transform-object-rest-spread@npm:7.22.15"
@@ -3077,7 +3066,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-typescript@npm:^7.16.7, @babel/preset-typescript@npm:^7.17.12":
+"@babel/preset-typescript@npm:^7.17.12":
   version: 7.21.0
   resolution: "@babel/preset-typescript@npm:7.21.0"
   dependencies:
@@ -4074,7 +4063,6 @@ __metadata:
     react-native-orientation-locker: ^1.6.0
     react-native-permissions: ^3.8.4
     react-native-qrcode-svg: ^6.2.0
-    react-native-reanimated: ^3.4.2
     react-native-safe-area-context: ^3.2.0
     react-native-scalable-image: ^1.1.0
     react-native-screens: ^3.24.0
@@ -4146,7 +4134,6 @@ __metadata:
     react-native-orientation-locker: "*"
     react-native-permissions: ^3.8.4
     react-native-qrcode-svg: ^6.2.0
-    react-native-reanimated: ^3.4.2
     react-native-safe-area-context: ^3.2.0
     react-native-screens: ^3.24.0
     react-native-splash-screen: ^3.3.0
@@ -7543,7 +7530,6 @@ __metadata:
     react-native-orientation-locker: ^1.6.0
     react-native-permissions: ^3.8.4
     react-native-qrcode-svg: ^6.2.0
-    react-native-reanimated: ^3.4.2
     react-native-safe-area-context: ^3.2.0
     react-native-scalable-image: ^1.1.0
     react-native-screens: ^3.24.0
@@ -7578,6 +7564,8 @@ __metadata:
     lerna: ^6.6.2
     npm-run-all: ^4.1.5
     prettier: ^2.8.4
+    react-native-qrcode-svg: ^6.2.0
+    react-native-svg: ^14.1.0
     ts-node: ^10.0.0
     typescript: ^5.0.4
   languageName: unknown
@@ -18708,27 +18696,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:^3.4.2":
-  version: 3.5.4
-  resolution: "react-native-reanimated@npm:3.5.4"
-  dependencies:
-    "@babel/plugin-transform-object-assign": ^7.16.7
-    "@babel/preset-typescript": ^7.16.7
-    convert-source-map: ^2.0.0
-    invariant: ^2.2.4
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-    "@babel/plugin-proposal-nullish-coalescing-operator": ^7.0.0-0
-    "@babel/plugin-proposal-optional-chaining": ^7.0.0-0
-    "@babel/plugin-transform-arrow-functions": ^7.0.0-0
-    "@babel/plugin-transform-shorthand-properties": ^7.0.0-0
-    "@babel/plugin-transform-template-literals": ^7.0.0-0
-    react: "*"
-    react-native: "*"
-  checksum: 885449b11324f0399128d665c90e7179a095dfa603dd251e8b1d14df2efe73411acd724562837e114366769e69b8aac2b0a2ffc1f63d2b7dbf1a35024f074604
-  languageName: node
-  linkType: hard
-
 "react-native-safe-area-context@npm:^3.2.0":
   version: 3.4.1
   resolution: "react-native-safe-area-context@npm:3.4.1"
@@ -18808,6 +18775,19 @@ __metadata:
     react: "*"
     react-native: ">=0.50.0"
   checksum: e51a4eccb205c433c088087500b9da6a2956b2f5937ca18211243d033c2f57c9e720167222c394aa660fa070c417ea120ba9542cc3a6b178d0017895b7d35d2e
+  languageName: node
+  linkType: hard
+
+"react-native-svg@npm:^14.1.0":
+  version: 14.1.0
+  resolution: "react-native-svg@npm:14.1.0"
+  dependencies:
+    css-select: ^5.1.0
+    css-tree: ^1.1.3
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: ed94adac9bf3144c5dcbf37a2956ab672d402f11c0ed75cda247d1d9136ce8977f4d01bcfc813ba576bd61ece420d66306c148057e2552828aa8fe9bad173d46
   languageName: node
   linkType: hard
 
