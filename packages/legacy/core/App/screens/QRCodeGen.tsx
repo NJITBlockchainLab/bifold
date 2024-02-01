@@ -1,5 +1,6 @@
+import { useAgent } from '@aries-framework/react-hooks'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import QRCode from 'react-native-qrcode-svg'
@@ -7,6 +8,9 @@ import QRCode from 'react-native-qrcode-svg'
 import Link from '../components/texts/Link'
 import { useTheme } from '../contexts/theme'
 import { Screens, Stacks } from '../types/navigators'
+import { createConnectionInvitation } from '../utils/helpers'
+// const { agent } = useAgent()
+
 
 interface WhatAreContactsProps {
   navigation: NavigationProp<ParamListBase>
@@ -31,6 +35,15 @@ const QRCodeGen: React.FC<WhatAreContactsProps> = () => {
       paddingRight: 25,
     },
   })
+
+  // const createInvitation = useCallback(async () => {
+  //   setInvitation(undefined)
+  //   const result = await createConnectionInvitation(agent)
+  //   if (result) {
+  //     setRecordId(result.record.id)
+  //     setInvitation(result.invitationUrl)
+  //   }
+  // }, [])
 
   return (
     <SafeAreaView style={styles.container}>
