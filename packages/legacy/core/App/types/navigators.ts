@@ -37,6 +37,7 @@ export enum Screens {
   ProofDetails = 'Proof Details',
   NameWallet = 'Name Wallet',
   RenameContact = 'Rename Contact',
+  ProofSelection = 'Select Proof',
   ScanHelp = 'Scan Help',
   QRCodeGen = 'Generate QR Code',
 }
@@ -97,6 +98,7 @@ export type ContactStackParams = {
   [Screens.Chat]: { connectionId: string }
   [Screens.ContactDetails]: { connectionId: string }
   [Screens.RenameContact]: { connectionId: string }
+  [Screens.ProofSelection]: { connectionId: string }
   [Screens.WhatAreContacts]: undefined
   [Screens.QRCodeGen]: undefined
   [Screens.CredentialDetails]: { credentialId: string }

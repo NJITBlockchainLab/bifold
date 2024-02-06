@@ -28,7 +28,7 @@ interface Props extends ConnectProps {
   enableCameraOnError?: boolean
 }
 
-const NewQRView: React.FC<Props> = ({ navigation }) => {
+const QRCodeGen: React.FC<Props> = ({ navigation }) => {
   const { width } = useWindowDimensions()
   const qrSize = width - 40
   const [store] = useStore()
@@ -155,4 +155,4 @@ const NewQRView: React.FC<Props> = ({ navigation }) => {
   )
 }
 
-export default NewQRView
+export default QRCodeGen
