@@ -207,7 +207,7 @@ const ProofRequestAttributesCard: React.FC<ProofRequestAttributesCardParams> = (
   )
 }
 
-const ProofRequestDetails: React.FC<ProofRequestDetailsProps> = ({ route, navigation }) => {
+const ProofRequestDetails: React.FC<ProofRequestDetailsProps> = ({ navigation }) => {
   const { ColorPallet, TextTheme } = useTheme()
   const [store] = useStore()
   const { t } = useTranslation()
@@ -218,6 +218,7 @@ const ProofRequestDetails: React.FC<ProofRequestDetailsProps> = ({ route, naviga
   if (!agent) {
     throw new Error('Unable to fetch agent from AFJ')
   }
+  const templateId = 'Aries:5:VerifiedFullName:0.0.1:indy'
 
   const style = StyleSheet.create({
     container: {
@@ -245,7 +246,7 @@ const ProofRequestDetails: React.FC<ProofRequestDetailsProps> = ({ route, naviga
     },
   })
 
-  const { templateId, connectionId } = route?.params
+  const connectionId = '4449b08e-b3f8-4c5d-98c2-91e0f9093328'
 
   const [meta, setMeta] = useState<MetaOverlay | undefined>(undefined)
   const [attributes, setAttributes] = useState<Array<AnonCredsProofRequestTemplatePayloadData> | undefined>(undefined)

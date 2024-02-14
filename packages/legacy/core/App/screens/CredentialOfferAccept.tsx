@@ -33,7 +33,7 @@ const CredentialOfferAccept: React.FC<CredentialOfferAcceptProps> = ({ visible, 
   const [timer, setTimer] = useState<NodeJS.Timeout>()
   const credential = useCredentialById(credentialId)
   const navigation = useNavigation()
-  const { ListItems } = useTheme()
+  const { ListItems, ColorPallet } = useTheme()
   const { CredentialAdded, CredentialPending } = useAnimatedComponents()
   const { connectionTimerDelay } = useConfiguration()
   const connTimerDelay = connectionTimerDelay ?? 10000 // in ms
@@ -52,6 +52,7 @@ const CredentialOfferAccept: React.FC<CredentialOfferAcceptProps> = ({ visible, 
     messageText: {
       textAlign: 'center',
       marginTop: 30,
+      color: ColorPallet.grayscale.black,
     },
     controlsContainer: {
       marginTop: 'auto',

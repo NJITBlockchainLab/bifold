@@ -11,9 +11,10 @@ import CredentialOffer from '../screens/CredentialOffer'
 import ListContacts from '../screens/ListContacts'
 import ProofDetails from '../screens/ProofDetails'
 import ProofRequest from '../screens/ProofRequest'
-import ProofSelection from '../screens/ProofSelection'
+import ProofRequestDetails from '../screens/ProofRequestDetails'
 import QRCodeGen from '../screens/QRCodeGen'
 import RenameContact from '../screens/RenameContact'
+import SelectProofRequest from '../screens/SelectProofRequest'
 import WhatAreContacts from '../screens/WhatAreContacts'
 import { ContactStackParams, Screens } from '../types/navigators'
 
@@ -41,12 +42,17 @@ const ContactStack: React.FC = () => {
         options={{ title: t('Screens.RenameContact') }}
       />
       <Stack.Screen
-        name={Screens.ProofSelection}
-        component={ProofSelection}
-        options={{ title: t('Screens.ProofSelection') }}
+        name={Screens.SelectProofRequest}
+        component={SelectProofRequest}
+        options={{ title: t('Screens.SelectProofRequest') }}
       />
       <Stack.Screen name={Screens.Chat} component={Chat} />
       <Stack.Screen name={Screens.QRCodeGen} component={QRCodeGen} options={{ title: 'QR Code' }} />
+      <Stack.Screen
+        name={Screens.ProofRequestDetails}
+        component={ProofRequestDetails}
+        options={{ title: 'Proof Request Details' }}
+      />
       <Stack.Screen name={Screens.WhatAreContacts} component={WhatAreContacts} options={{ title: '' }} />
       <Stack.Screen
         name={Screens.CredentialDetails}

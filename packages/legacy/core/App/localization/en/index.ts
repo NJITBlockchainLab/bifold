@@ -487,6 +487,7 @@ const translation = {
     "Build": "Build",
     "WhatAreContacts": "What are Contacts?",
     "QRCodeGen": "Generate QR Code",
+    "ProofRequestDetails":"Proof Request Details",
     "ScanMyQR": "Scan my QR code",
     "Help": "Help",
     "MoreInformation": "More information",
@@ -548,6 +549,7 @@ const translation = {
     "ChangePIN": "Change PIN",
     "CommonDecline": "Decline",
     "ProofRequests": "Proof requests",
+    "SelectProofRequest": "Select proof request",
     "SendProofRequest": "Send a proof request",
     "ChooseProofRequest": "Choose a proof request",
     "ProofRequestUsageHistory": "Usage History",
@@ -560,7 +562,6 @@ const translation = {
     "ProofRequesting": 'Proof Requesting',
     "NameWallet": "Name your wallet",
     "RenameContact": "Edit Contact Name",
-    "ProofSelection": "Select for proof selection",
   },
   "Loading": {
     "TakingTooLong": "This is taking longer than usual. You can return to home or continue waiting.",

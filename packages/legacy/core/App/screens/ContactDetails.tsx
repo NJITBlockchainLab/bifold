@@ -13,7 +13,7 @@ import { ToastType } from '../components/toast/BaseToast'
 import { EventTypes } from '../constants'
 import { useStore } from '../contexts/store'
 import { useTheme } from '../contexts/theme'
-import { useConnectionByOutOfBandId } from '../hooks/connections'
+// import { useConnectionByOutOfBandId } from '../hooks/connections'
 import { BifoldError } from '../types/error'
 import { ContactStackParams, Screens, TabStacks } from '../types/navigators'
 import { ModalUsage } from '../types/remove'
@@ -94,8 +94,8 @@ const ContactDetails: React.FC<ContactDetailsProps> = ({ route }) => {
   }
 
   const handleGoToSelect = () => {
-    // navigation.navigate(Screens.ProofSelection, { connectionId })
-    useConnectionByOutOfBandId()
+    navigation.navigate(Screens.SelectProofRequest, { connectionId })
+    // useConnectionByOutOfBandId()
   }
 
   const callGoToRename = useCallback(() => handleGoToRename(), [])
@@ -132,12 +132,12 @@ const ContactDetails: React.FC<ContactDetailsProps> = ({ route }) => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={callGoToProofSelection}
-        accessibilityLabel={t('Screens.ProofSelection')}
+        accessibilityLabel={t('Screens.SelectProofRequest')}
         accessibilityRole={'button'}
-        testID={testIdWithKey('ProofSelection')}
+        testID={testIdWithKey('SelectProofRequest')}
         style={[styles.contentContainer, { marginTop: 10 }]}
       >
-        <Text style={{ ...TextTheme.normal }}>{t('Screens.ProofSelection')}</Text>
+        <Text style={{ ...TextTheme.normal }}>{t('Screens.SelectProofRequest')}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={callOnRemove}

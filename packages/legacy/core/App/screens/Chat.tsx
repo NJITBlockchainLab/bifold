@@ -277,13 +277,14 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
 
   const onSendRequest = useCallback(async () => {
     navigation.navigate(Stacks.ProofRequestsStack as any, {
-      screen: Screens.ProofRequests,
+      // screen: Screens.ProofRequests,
+      screen: Screens.SelectProofRequest,
       params: { navigation: navigation, connectionId },
     })
   }, [navigation, connectionId])
 
   const actions = useMemo(() => {
-    return store.preferences.useVerifierCapability
+    return !store.preferences.useVerifierCapability
       ? [
           {
             text: t('Verifier.SendProofRequest'),

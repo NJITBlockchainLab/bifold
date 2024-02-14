@@ -433,6 +433,7 @@ export const Buttons = StyleSheet.create({
     padding: 16,
     borderRadius: 4,
     backgroundColor: ColorPallet.brand.modalPrimary,
+    color: ColorPallet.brand.secondary,
   },
   modalPrimaryText: {
     ...TextTheme.bold,
@@ -806,7 +807,7 @@ const PINInputTheme = {
     color: ColorPallet.brand.text,
   },
   icon: {
-    color: ColorPallet.brand.headerIcon,
+    color: ColorPallet.grayscale.black,
   },
 }
 
