@@ -1,6 +1,6 @@
 import { useAgent } from '@aries-framework/react-hooks'
 import { linkProofWithTemplate, sendProofRequest, useProofRequestTemplates } from '@hyperledger/aries-bifold-verifier'
-import { useNavigation } from '@react-navigation/core'
+// import { useNavigation } from '@react-navigation/core'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { View, StyleSheet, ScrollView } from 'react-native'
@@ -12,14 +12,30 @@ import { useTheme } from '../contexts/theme'
 import { Screens } from '../types/navigators'
 import { testIdWithKey } from '../utils/testable'
 
-const SelectProofRequest = (connectionId: string) => {
-  const { OnboardingTheme } = useTheme()
-  const navigation = useNavigation()
+type SelectedFields = {
+  vehicleName: boolean
+  vehicleOwner: boolean
+  expiry_date: boolean
+}
 
-  const [selectedFields, setSelectedFields] = useState({
-    firstName: false,
-    lastName: false,
-    dob: false,
+const SelectProofRequest = ({ navigation, route }: { navigation: any; route: any }) => {
+  const { OnboardingTheme } = useTheme()
+  // const navigation = useNavigation()
+
+  if (!route?.params) {
+    throw new Error('ProofRequest route prams were not set properly')
+  }
+
+  const { connectionId } = route.params
+  // const templateId = 1
+
+  // eslint-disable-next-line no-console
+  console.log(connectionId)
+
+  const [selectedFields, setSelectedFields] = useState<SelectedFields>({
+    vehicleName: false,
+    vehicleOwner: false,
+    expiry_date: false,
   })
   const { t } = useTranslation()
 
@@ -38,7 +54,7 @@ const SelectProofRequest = (connectionId: string) => {
     },
   })
 
-  const handleFieldToggle = (fieldName: string) => {
+  const handleFieldToggle = (fieldName: keyof SelectedFields) => {
     setSelectedFields((prevFields) => ({
       ...prevFields,
       [fieldName]: !prevFields[fieldName],
@@ -47,39 +63,51 @@ const SelectProofRequest = (connectionId: string) => {
 
   // const handleRequest = () => {
   //   const selectedArray = []
-  //   if (selectedFields.firstName) {
+  //   if (selectedFields.vehicleName) {
   //     selectedArray.push('first_name')
   //   }
-  //   if (selectedFields.lastName) {
+  //   if (selectedFields.vehicleOwner) {
   //     selectedArray.push('last_name')
   //   }
-  //   // Now selectedArray contains the desired strings based on the state of firstName and lastName
+  //   // Now selectedArray contains the desired strings based on the state of vehicleName and vehicleOwner
   //   useProofRequestTemplates(true, selectedArray)
   //   // Proceed with further logic using selectedArray
   // }
 
   const { agent } = useAgent()
+  if (!agent) {
+    throw new Error('Unable to fetch agent from AFJ')
+  }
+
+  // const [customPredicateValues, setCustomPredicateValues] = useState<Record<string, Record<string, number>>>({})
 
   const useProofRequest = useCallback(async () => {
     const selectedArray = []
-    if (selectedFields.firstName) {
-      selectedArray.push('first_name')
+    if (selectedFields.vehicleName) {
+      selectedArray.push('vehicle_name')
     }
-    if (selectedFields.lastName) {
-      selectedArray.push('last_name')
+    if (selectedFields.vehicleOwner) {
+      selectedArray.push('vehicle_owner')
     }
     if (connectionId) {
       // Send to specific contact and redirect to the chat with him
-      sendProofRequest(agent, useProofRequestTemplates(true, selectedArray), connectionId, []).then((result) => {
-        if (result?.proofRecord) {
-          linkProofWithTemplate(agent, result.proofRecord, templateId)
-        }
-      })
-
+      if (!selectedFields.expiry_date) {
+        sendProofRequest(agent, useProofRequestTemplates(true, selectedArray), connectionId, []).then((result) => {
+          if (result?.proofRecord) {
+            linkProofWithTemplate(agent, result.proofRecord, '1')
+          }
+        })
+      } else {
+        sendProofRequest(agent, useProofRequestTemplates(true, selectedArray), connectionId, []).then((result) => {
+          if (result?.proofRecord) {
+            linkProofWithTemplate(agent, result.proofRecord, '2')
+          }
+        })
+      }
       navigation.getParent()?.navigate(Screens.Chat, { connectionId })
     } else {
       // Else redirect to the screen with connectionless request
-      navigation.navigate(Screens.ProofRequesting, { templateId, predicateValues: customPredicateValues })
+      // navigation.navigate(Screens.ProofRequesting, { templateId, predicateValues: customPredicateValues })
     }
   }, [agent, connectionId])
 
@@ -89,20 +117,24 @@ const SelectProofRequest = (connectionId: string) => {
         <View style={style.controlsContainer}>
           <View style={style.marginView}>
             <CheckBoxRow
-              title="First Name"
-              checked={selectedFields.firstName}
-              onPress={() => handleFieldToggle('firstName')}
+              title="Vehicle Name"
+              checked={selectedFields.vehicleName}
+              onPress={() => handleFieldToggle('vehicleName')}
             />
           </View>
           <View style={style.marginView}>
             <CheckBoxRow
-              title="Last Name"
-              checked={selectedFields.lastName}
-              onPress={() => handleFieldToggle('lastName')}
+              title="Vehicle Owner"
+              checked={selectedFields.vehicleOwner}
+              onPress={() => handleFieldToggle('vehicleOwner')}
             />
           </View>
           <View style={style.marginView}>
-            <CheckBoxRow title="Date of Birth" checked={selectedFields.dob} onPress={() => handleFieldToggle('dob')} />
+            <CheckBoxRow
+              title="Date of Birth"
+              checked={selectedFields.expiry_date}
+              onPress={() => handleFieldToggle('expiry_date')}
+            />
           </View>
         </View>
         <View style={{ paddingTop: 10, marginBottom: 20 }}>
