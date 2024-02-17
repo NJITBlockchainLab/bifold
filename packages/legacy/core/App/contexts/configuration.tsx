@@ -43,7 +43,7 @@ export interface ConfigurationContext {
   supportedLanguages: Locales[]
   connectionTimerDelay?: number
   autoRedirectConnectionToHome?: boolean
-  proofRequestTemplates?: (useDevTemplates: boolean) => Array<ProofRequestTemplate>
+  proofRequestTemplates?: (useDevTemplates: boolean, attributes: string[]) => Array<ProofRequestTemplate>
   enableTours?: boolean
   enableImplicitInvitations?: boolean
   enableReuseConnections?: boolean

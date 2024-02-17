@@ -60,7 +60,7 @@ describe('ListProofRequests Component', () => {
       fireEvent(templateItemInstance, 'press')
 
       expect(navigation.navigate).toBeCalledWith('Proof Request Details', {
-        templateId: useProofRequestTemplates(false)[0].id,
+        templateId: useProofRequestTemplates(false, [])[0].id,
       })
     })
   })

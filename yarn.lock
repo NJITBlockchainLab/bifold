@@ -7562,6 +7562,7 @@ __metadata:
     eslint-plugin-import: ^2.28.1
     eslint-plugin-prettier: ^4.0.0
     lerna: ^6.6.2
+    lottie-react-native: ^6.6.0
     npm-run-all: ^4.1.5
     prettier: ^2.8.4
     react-native-qrcode-svg: ^6.2.0
@@ -15349,6 +15350,26 @@ __metadata:
   bin:
     loose-envify: cli.js
   checksum: 6517e24e0cad87ec9888f500c5b5947032cdfe6ef65e1c1936a0c48a524b81e65542c9c3edc91c97d5bddc806ee2a985dbc79be89215d613b1de5db6d1cfe6f4
+  languageName: node
+  linkType: hard
+
+"lottie-react-native@npm:^6.6.0":
+  version: 6.6.0
+  resolution: "lottie-react-native@npm:6.6.0"
+  peerDependencies:
+    "@dotlottie/react-player": ^1.6.1
+    "@lottiefiles/react-lottie-player": ^3.5.3
+    react: "*"
+    react-native: ">=0.46"
+    react-native-windows: ">=0.63.x"
+  peerDependenciesMeta:
+    "@dotlottie/react-player":
+      optional: true
+    "@lottiefiles/react-lottie-player":
+      optional: true
+    react-native-windows:
+      optional: true
+  checksum: c989a1765caf7d6a80d72eb1c4702648cc744b07c13f1085f6f4233992264686191d84ff88233b6083ae2548261fccd9375cb9de1f81364f3f2477928d6f5c3b
   languageName: node
   linkType: hard
 

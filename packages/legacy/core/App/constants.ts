@@ -74,7 +74,7 @@ export const PINRules: PINValidationRules = {
   no_cross_pattern: false,
 }
 
-export const domain = 'https://fc83-18-116-10-41.ngrok-free.app'
+export const domain = 'didcomm://invite'
 
 export const tourMargin = 25
 

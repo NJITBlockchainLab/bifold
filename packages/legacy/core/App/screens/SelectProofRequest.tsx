@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 import { useAgent } from '@aries-framework/react-hooks'
 import { linkProofWithTemplate, sendProofRequest, useProofRequestTemplates } from '@hyperledger/aries-bifold-verifier'
-import { useNavigation } from '@react-navigation/core'
-import React, { useCallback, useState } from 'react'
+// import { useNavigation } from '@react-navigation/core'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { View, StyleSheet, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -12,15 +13,26 @@ import { useTheme } from '../contexts/theme'
 import { Screens } from '../types/navigators'
 import { testIdWithKey } from '../utils/testable'
 
-const SelectProofRequest = (connectionId: string) => {
-  const { OnboardingTheme } = useTheme()
-  const navigation = useNavigation()
+const initialState = false
 
-  const [selectedFields, setSelectedFields] = useState({
-    firstName: false,
-    lastName: false,
-    dob: false,
-  })
+const SelectProofRequest = ({ navigation, route }: { navigation: any; route: any }) => {
+  const { OnboardingTheme } = useTheme()
+  // const navigation = useNavigation()
+
+  if (!route?.params) {
+    throw new Error('ProofRequest route prams were not set properly')
+  }
+
+  const { connectionId } = route.params
+  // const templateId = 1
+
+  // const [selectedFields, setSelectedFields] = useState(initialState)
+  const [vehicleName, setvehicleName] = useState(initialState)
+  const [vehicleOwner, setvehicleOwner] = useState(initialState)
+  const [expiryDate, setexpiryDate] = useState(initialState)
+
+  console.log(connectionId)
+  console.log(vehicleName)
   const { t } = useTranslation()
 
   const style = StyleSheet.create({
@@ -38,50 +50,43 @@ const SelectProofRequest = (connectionId: string) => {
     },
   })
 
-  const handleFieldToggle = (fieldName: string) => {
-    setSelectedFields((prevFields) => ({
-      ...prevFields,
-      [fieldName]: !prevFields[fieldName],
-    }))
+  const { agent } = useAgent()
+  if (!agent) {
+    throw new Error('Unable to fetch agent from AFJ')
   }
 
-  // const handleRequest = () => {
-  //   const selectedArray = []
-  //   if (selectedFields.firstName) {
-  //     selectedArray.push('first_name')
-  //   }
-  //   if (selectedFields.lastName) {
-  //     selectedArray.push('last_name')
-  //   }
-  //   // Now selectedArray contains the desired strings based on the state of firstName and lastName
-  //   useProofRequestTemplates(true, selectedArray)
-  //   // Proceed with further logic using selectedArray
-  // }
+  // const [customPredicateValues, setCustomPredicateValues] = useState<Record<string, Record<string, number>>>({})
 
-  const { agent } = useAgent()
-
-  const useProofRequest = useCallback(async () => {
+  const useProofRequest = () => {
     const selectedArray = []
-    if (selectedFields.firstName) {
-      selectedArray.push('first_name')
-    }
-    if (selectedFields.lastName) {
-      selectedArray.push('last_name')
-    }
+    console.error(vehicleName)
+    console.error(vehicleOwner)
+    console.error(expiryDate)
+    if (vehicleName) selectedArray.push('vehicle_name')
+
+    if (vehicleOwner) selectedArray.push('vehicle_owner')
+
     if (connectionId) {
       // Send to specific contact and redirect to the chat with him
-      sendProofRequest(agent, useProofRequestTemplates(true, selectedArray), connectionId, []).then((result) => {
-        if (result?.proofRecord) {
-          linkProofWithTemplate(agent, result.proofRecord, templateId)
-        }
-      })
-
+      if (!expiryDate) {
+        // console.error(useProofRequestTemplates(true, selectedArray))
+        sendProofRequest(agent, useProofRequestTemplates(true, selectedArray)[0], connectionId, {}).then((result) => {
+          if (result?.proofRecord) linkProofWithTemplate(agent, result.proofRecord, '1')
+        })
+      } else {
+        sendProofRequest(agent, useProofRequestTemplates(true, selectedArray)[1], connectionId, {}).then((result) => {
+          if (result?.proofRecord) linkProofWithTemplate(agent, result.proofRecord, '2')
+        })
+      }
+      setvehicleName(false)
+      setvehicleOwner(false)
+      setexpiryDate(false)
       navigation.getParent()?.navigate(Screens.Chat, { connectionId })
-    } else {
+      // } else {
       // Else redirect to the screen with connectionless request
-      navigation.navigate(Screens.ProofRequesting, { templateId, predicateValues: customPredicateValues })
+      // navigation.navigate(Screens.ProofRequesting, { templateId, predicateValues: customPredicateValues })
     }
-  }, [agent, connectionId])
+  }
 
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={style.container}>
@@ -89,20 +94,50 @@ const SelectProofRequest = (connectionId: string) => {
         <View style={style.controlsContainer}>
           <View style={style.marginView}>
             <CheckBoxRow
-              title="First Name"
-              checked={selectedFields.firstName}
-              onPress={() => handleFieldToggle('firstName')}
+              title="Vehicle Name"
+              checked={vehicleName}
+              onPress={() => {
+                setvehicleName(!vehicleName)
+              }}
+              // onPress={() =>
+              //   setSelectedFields((prevVal) => {
+              //     return {
+              //       ...prevVal,
+              //       vehicleName: !prevVal.vehicleName,
+              //     }
+              //   })
+              // }
             />
           </View>
           <View style={style.marginView}>
             <CheckBoxRow
-              title="Last Name"
-              checked={selectedFields.lastName}
-              onPress={() => handleFieldToggle('lastName')}
+              title="Vehicle Owner"
+              checked={vehicleOwner}
+              onPress={() => setvehicleOwner(!vehicleOwner)}
+              // onPress={() =>
+              //   setSelectedFields((prevVal) => {
+              //     return {
+              //       ...prevVal,
+              //       vehicleOwner: !prevVal.vehicleOwner,
+              //     }
+              //   })
+              // }
             />
           </View>
           <View style={style.marginView}>
-            <CheckBoxRow title="Date of Birth" checked={selectedFields.dob} onPress={() => handleFieldToggle('dob')} />
+            <CheckBoxRow
+              title="Expiry Date"
+              checked={expiryDate}
+              onPress={() => setexpiryDate((prev) => !prev)}
+              // onPress={() =>
+              //   setSelectedFields((prevVal) => {
+              //     return {
+              //       ...prevVal,
+              //       expiry_date: !prevVal.expiry_date,
+              //     }
+              //   })
+              // }
+            />
           </View>
         </View>
         <View style={{ paddingTop: 10, marginBottom: 20 }}>
