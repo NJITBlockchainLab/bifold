@@ -44,7 +44,7 @@ export const useProofRequestTemplates = (useDevRestrictions: boolean, attributes
             ],
             requestedPredicates: [
               {
-                name: 'expiry_date',
+                name: 'expiry',
                 predicateType: '>=',
                 predicateValue: parseInt(new Date().toLocaleDateString('en-US').split('/').join('')),
                 restrictions,

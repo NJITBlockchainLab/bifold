@@ -166,7 +166,7 @@ export const markProofAsViewed = async (agent: Agent, record: ProofExchangeRecor
 /*
  * Add template reference to Proof Exchange record
  * */
-export const linkProofWithTemplate = async (agent: Agent, record: ProofExchangeRecord, templateId: string) => {
+export const linkProofWithTemplate = async (agent: Agent, record: ProofExchangeRecord, templateId: number) => {
   record.metadata.set(ProofMetadata.customMetadata, {
     ...record.metadata.data.customMetadata,
     proof_request_template_id: templateId,

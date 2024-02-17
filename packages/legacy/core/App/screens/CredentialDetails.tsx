@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import type { StackScreenProps } from '@react-navigation/stack'
 
 import { CredentialExchangeRecord } from '@aries-framework/core'
