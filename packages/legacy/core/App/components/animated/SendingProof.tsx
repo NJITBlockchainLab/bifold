@@ -2,11 +2,11 @@ import React, { useEffect, useRef } from 'react'
 import { View, StyleSheet, Animated } from 'react-native'
 
 import ActivityIndicator from '../../assets/img/activity-indicator-circle.svg'
-import CredentialInHand from '../../assets/img/credential-in-hand.svg'
-import { useTheme } from '../../contexts/theme'
+import CarImage from '../../assets/img/carfront.svg'
+// import { useTheme } from '../../contexts/theme'
 
 const SendingProof: React.FC = () => {
-  const { ColorPallet } = useTheme()
+  // const { ColorPallet } = useTheme()
   const rotationAnim = useRef(new Animated.Value(0)).current
   const timing: Animated.TimingAnimationConfig = {
     toValue: 1,
@@ -24,15 +24,14 @@ const SendingProof: React.FC = () => {
     },
     animation: {
       position: 'absolute',
+      top: 70,
     },
   })
   const credentialInHandDisplayOptions = {
-    fill: ColorPallet.notification.infoText,
-    height: 130,
-    width: 130,
+    height: 150,
+    width: 150,
   }
   const animatedCircleDisplayOptions = {
-    fill: ColorPallet.notification.infoText,
     height: 250,
     width: 250,
   }
@@ -43,10 +42,11 @@ const SendingProof: React.FC = () => {
 
   return (
     <View style={style.container}>
-      <CredentialInHand style={style.animation} {...credentialInHandDisplayOptions} />
+      <CarImage style={style.animation} {...credentialInHandDisplayOptions} />
       <Animated.View style={{ transform: [{ rotate: rotation }] }}>
         <ActivityIndicator {...animatedCircleDisplayOptions} />
       </Animated.View>
+      <CarImage style={style.animation} {...credentialInHandDisplayOptions} />
     </View>
   )
 }

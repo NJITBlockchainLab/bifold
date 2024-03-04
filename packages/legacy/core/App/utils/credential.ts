@@ -37,7 +37,5 @@ export const getCredentialIdentifiers = (credential: CredentialExchangeRecord) =
 }
 
 export function DateToString(value: string) {
-  // eslint-disable-next-line no-console
-  console.log('here')
   return value.substring(0, 4) + '-' + value.substring(4, 6) + '-' + value.substring(6, 8)
 }

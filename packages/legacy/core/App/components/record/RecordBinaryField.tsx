@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
+import Default from '../../assets/img/default-photo.svg'
 import ImageModal from '../../components/modals/ImageModal'
 import { hiddenFieldValue } from '../../constants'
 import { useTheme } from '../../contexts/theme'
@@ -17,6 +18,10 @@ const RecordBinaryField: React.FC<RecordBinaryFieldProps> = ({ attributeValue, s
   const { ListItems } = useTheme()
   const { t } = useTranslation()
   const [showImageModal, setShowImageModal] = useState(false)
+
+  // const actualValue = attributeValue === '*' ? Default : attributeValue
+  // eslint-disable-next-line no-console
+  // console.log(actualValue)
 
   const styles = StyleSheet.create({
     text: {
@@ -38,7 +43,11 @@ const RecordBinaryField: React.FC<RecordBinaryFieldProps> = ({ attributeValue, s
           testID={testIdWithKey('zoom')}
           onPress={() => setShowImageModal(true)}
         >
-          <Image style={styles.image} source={{ uri: attributeValue }} />
+          {attributeValue === '*' ? (
+            <Default {...{ height: 150, aspectRatio: 1 }} />
+          ) : (
+            <Image style={styles.image} source={{ uri: attributeValue }} />
+          )}
         </TouchableOpacity>
       ) : (
         <Text style={style || styles.text} testID={testIdWithKey('AttributeValue')}>

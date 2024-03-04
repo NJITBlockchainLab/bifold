@@ -2,7 +2,7 @@ import { ProofRequestTemplate, ProofRequestType } from './types/proof-reqeust-te
 
 export const useProofRequestTemplates = (useDevRestrictions: boolean, attributes: string[]) => {
   // console.error(parseInt(new Date().toLocaleDateString('en-US').split('/').join('')))
-  const studentRestrictions = [{ cred_def_id: '4gDrryduTZ1zSs9CEyeS6W:3:CL:354256:issuer-kit-demo' }]
+  const studentRestrictions = [{ cred_def_id: 'UWxT9Rhf6MvQDDnwMc1WPq:3:CL:388905:issuer-kit-demo' }]
   const studentDevRestrictions = [{ schema_name: 'vehicle_credential' }]
   const restrictions = useDevRestrictions ? studentDevRestrictions : studentRestrictions
   const defaultProofRequestTemplates: Array<ProofRequestTemplate> = [
@@ -15,7 +15,7 @@ export const useProofRequestTemplates = (useDevRestrictions: boolean, attributes
         type: ProofRequestType.AnonCreds,
         data: [
           {
-            schema: '4gDrryduTZ1zSs9CEyeS6W:2:vehicle_credential:0.1.0',
+            schema: 'UWxT9Rhf6MvQDDnwMc1WPq:2:vehicle_credential:0.1.0',
             requestedAttributes: [
               {
                 names: attributes,

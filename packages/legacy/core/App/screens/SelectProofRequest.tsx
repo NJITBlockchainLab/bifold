@@ -70,11 +70,11 @@ const SelectProofRequest = ({ navigation, route }: { navigation: any; route: any
       // Send to specific contact and redirect to the chat with him
       if (!expiryDate) {
         // console.error(useProofRequestTemplates(true, selectedArray))
-        sendProofRequest(agent, useProofRequestTemplates(true, selectedArray)[0], connectionId, {}).then((result) => {
+        sendProofRequest(agent, useProofRequestTemplates(false, selectedArray)[0], connectionId, {}).then((result) => {
           if (result?.proofRecord) linkProofWithTemplate(agent, result.proofRecord, '1')
         })
       } else {
-        sendProofRequest(agent, useProofRequestTemplates(true, selectedArray)[1], connectionId, {}).then((result) => {
+        sendProofRequest(agent, useProofRequestTemplates(false, selectedArray)[1], connectionId, {}).then((result) => {
           if (result?.proofRecord) linkProofWithTemplate(agent, result.proofRecord, '2')
         })
       }

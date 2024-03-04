@@ -323,12 +323,12 @@ export const TextTheme: ITextTheme = {
   modalHeadingOne: {
     fontSize: 38,
     fontWeight: 'bold',
-    color: ColorPallet.grayscale.white,
+    color: ColorPallet.grayscale.black,
   },
   modalHeadingThree: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: ColorPallet.grayscale.white,
+    color: ColorPallet.grayscale.black,
   },
   popupModalText: {
     fontSize: 18,
@@ -437,6 +437,7 @@ export const Buttons = StyleSheet.create({
   },
   modalPrimaryText: {
     ...TextTheme.bold,
+    color: ColorPallet.grayscale.white,
     textAlign: 'center',
   },
   modalSecondary: {

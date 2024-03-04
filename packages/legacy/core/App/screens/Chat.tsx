@@ -284,18 +284,16 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
   }, [navigation, connectionId])
 
   const actions = useMemo(() => {
-    return !store.preferences.useVerifierCapability
-      ? [
-          {
-            text: t('Verifier.SendProofRequest'),
-            onPress: () => {
-              setShowActionSlider(false)
-              onSendRequest()
-            },
-            icon: () => <Assets.svg.iconInfoSentDark height={30} width={30} />,
-          },
-        ]
-      : undefined
+    return [
+      {
+        text: t('Verifier.SendProofRequest'),
+        onPress: () => {
+          setShowActionSlider(false)
+          onSendRequest()
+        },
+        icon: () => <Assets.svg.iconInfoSentDark height={30} width={30} />,
+      },
+    ]
   }, [t, store.preferences.useVerifierCapability, onSendRequest])
 
   const onDismiss = () => {

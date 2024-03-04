@@ -1,17 +1,17 @@
 import React, { useEffect, useRef } from 'react'
 import { View, StyleSheet, Animated } from 'react-native'
 
-import ActivityIndicator from '../../assets/img/activity-indicator-circle.svg'
-import CheckInCircle from '../../assets/img/check-in-circle.svg'
-import CredentialInHand from '../../assets/img/credential-in-hand.svg'
+import CarImage from '../../assets/img/carfront.svg'
+import Line from '../../assets/img/line.svg' // Import the Line SVG component
+import Sent from '../../assets/img/sent.svg'
 import { useTheme } from '../../contexts/theme'
 
 const SentProof: React.FC = () => {
   const { ColorPallet } = useTheme()
-  const ringFadeAnim = useRef(new Animated.Value(1)).current
+  const ringFadeAnim = useRef(new Animated.Value(0)).current
   const checkFadeAnim = useRef(new Animated.Value(0)).current
   const ringFadeTiming: Animated.TimingAnimationConfig = {
-    toValue: 0,
+    toValue: 1,
     duration: 600,
     useNativeDriver: true,
   }
@@ -23,54 +23,52 @@ const SentProof: React.FC = () => {
   const style = StyleSheet.create({
     container: {
       alignItems: 'center',
-      justifyContent: 'center',
-      // backgroundColor: 'red',
+      justifyContent: 'space-between',
+      flexDirection: 'row',
+      marginTop: 30, // Added marginTop for space
     },
-    credential: {
-      marginTop: 25,
+    carContainer: {
+      // Adjusted margin to create space between cars
+      marginHorizontal: 70,
+      zIndex: 2,
     },
-    ring: {
-      flexGrow: 3,
+    sentContainer: {
+      // Adjusted position to place the Sent SVG between cars
+      backgroundColor: ColorPallet.brand.modalPrimaryBackground,
       position: 'absolute',
-      // backgroundColor: 'yellow',
+      left: '61%', // Position the Sent SVG in the center horizontally
+      zIndex: 2,
     },
-    check: {
+    lineContainer: {
       position: 'absolute',
+      top: '3%',
+      left: '40%',
+      zIndex: 1,
     },
   })
-  const credentialInHandDisplayOptions = {
-    fill: ColorPallet.notification.infoText,
-    height: 130,
-    width: 130,
-  }
-  const animatedCircleDisplayOptions = {
-    fill: ColorPallet.notification.infoText,
-    height: 250,
-    width: 250,
-  }
 
   useEffect(() => {
-    // Animated.loop(
     Animated.parallel([
       Animated.timing(ringFadeAnim, ringFadeTiming),
       Animated.timing(checkFadeAnim, checkFadeTiming),
     ]).start()
-    // ).start()
-    // Animated.loop(Animated.timing(rotationAnim, rotationTiming)).start()
   }, [])
 
   return (
     <View style={style.container}>
-      <View style={{ alignItems: 'center' }}>
-        <CredentialInHand style={style.credential} {...credentialInHandDisplayOptions} />
-        <Animated.View style={[{ opacity: checkFadeAnim }, style.check]}>
-          <CheckInCircle {...{ height: 45, width: 45 }} />
+      <View style={style.carContainer}>
+        <CarImage {...{ height: 115, width: 115 }} />
+      </View>
+      <View style={style.lineContainer}>
+        <Line />
+      </View>
+      <View style={style.sentContainer}>
+        <Animated.View style={{ opacity: ringFadeAnim }}>
+          <Sent {...{ height: 70, width: 70 }} />
         </Animated.View>
       </View>
-      <View style={style.ring}>
-        <Animated.View style={[{ opacity: ringFadeAnim }]}>
-          <ActivityIndicator {...animatedCircleDisplayOptions} />
-        </Animated.View>
+      <View style={style.carContainer}>
+        <CarImage {...{ height: 115, width: 115 }} />
       </View>
     </View>
   )
