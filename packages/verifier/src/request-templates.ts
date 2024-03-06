@@ -1,7 +1,12 @@
 import { ProofRequestTemplate, ProofRequestType } from './types/proof-reqeust-template'
 
 export const useProofRequestTemplates = (useDevRestrictions: boolean, attributes: string[]) => {
-  // console.error(parseInt(new Date().toLocaleDateString('en-US').split('/').join('')))
+  const currentDate = new Date().toLocaleDateString('en-US').split('/')
+  const todayDate = parseInt(
+    currentDate[2] +
+      (currentDate[0].length === 1 ? '0' + currentDate[0] : currentDate[0]) +
+      (currentDate[1].length === 1 ? '0' + currentDate[1] : currentDate[1])
+  )
   const studentRestrictions = [{ cred_def_id: 'Lk3QLtTqp96teVc1x3H3oF:3:CL:427363:issuer-kit-demo' }]
   const studentDevRestrictions = [{ schema_name: 'vehicle_credential' }]
   const restrictions = useDevRestrictions ? studentDevRestrictions : studentRestrictions
@@ -44,9 +49,9 @@ export const useProofRequestTemplates = (useDevRestrictions: boolean, attributes
             ],
             requestedPredicates: [
               {
-                name: 'expiry',
+                name: 'expiry_date',
                 predicateType: '>=',
-                predicateValue: parseInt(new Date().toLocaleDateString('en-US').split('/').join('')),
+                predicateValue: todayDate,
                 restrictions,
               },
             ],
