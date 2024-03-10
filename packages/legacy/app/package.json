@@ -2,7 +2,7 @@
   "name": "aries-bifold-app",
   "version": "1.0.0",
   "private": true,
-  "description": "Aries Bifold Wallet App",
+  "description": "FHWA Wallet App",
   "scripts": {
     "android": "react-native run-android",
     "gradle": "./android/gradlew --project-dir=./android --no-daemon",

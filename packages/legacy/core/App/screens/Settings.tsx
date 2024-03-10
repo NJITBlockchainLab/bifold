@@ -134,13 +134,13 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
           onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.QRCodeGen }),
           value: undefined,
         },
-        {
-          title: t('Screens.ProofRequestDetails'),
-          accessibilityLabel: t('Screens.ProofRequestDetails'),
-          testID: testIdWithKey('ProofRequestDetails'),
-          onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.ProofRequestDetails }),
-          value: undefined,
-        },
+        // {
+        //   title: t('Screens.ProofRequestDetails'),
+        //   accessibilityLabel: t('Screens.ProofRequestDetails'),
+        //   testID: testIdWithKey('ProofRequestDetails'),
+        //   onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.ProofRequestDetails }),
+        //   value: undefined,
+        // },
       ],
     },
     {

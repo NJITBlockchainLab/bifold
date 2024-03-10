@@ -126,7 +126,7 @@ const SelectProofRequest = ({ navigation, route }: { navigation: any; route: any
           </View>
           <View style={style.marginView}>
             <CheckBoxRow
-              title="Expiry Date"
+              title="Is expired or not?"
               checked={expiryDate}
               onPress={() => setexpiryDate((prev) => !prev)}
               // onPress={() =>

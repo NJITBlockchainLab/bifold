@@ -7,7 +7,8 @@ export const useProofRequestTemplates = (useDevRestrictions: boolean, attributes
       (currentDate[0].length === 1 ? '0' + currentDate[0] : currentDate[0]) +
       (currentDate[1].length === 1 ? '0' + currentDate[1] : currentDate[1])
   )
-  const studentRestrictions = [{ cred_def_id: 'Lk3QLtTqp96teVc1x3H3oF:3:CL:427363:issuer-kit-demo' }]
+  const studentRestrictions = [{ cred_def_id: 'W6uuocP6f1MrRxQBgqFgnT:3:CL:64:fhwa-vdkms-ca' }]
+  const schema_id = 'W6uuocP6f1MrRxQBgqFgnT:2:vehicle_credential:0.1.0'
   const studentDevRestrictions = [{ schema_name: 'vehicle_credential' }]
   const restrictions = useDevRestrictions ? studentDevRestrictions : studentRestrictions
   const defaultProofRequestTemplates: Array<ProofRequestTemplate> = [
@@ -20,7 +21,7 @@ export const useProofRequestTemplates = (useDevRestrictions: boolean, attributes
         type: ProofRequestType.AnonCreds,
         data: [
           {
-            schema: 'Lk3QLtTqp96teVc1x3H3oF:2:vehicle_credential:0.1.0',
+            schema: schema_id,
             requestedAttributes: [
               {
                 names: attributes,
@@ -40,7 +41,7 @@ export const useProofRequestTemplates = (useDevRestrictions: boolean, attributes
         type: ProofRequestType.AnonCreds,
         data: [
           {
-            schema: 'Lk3QLtTqp96teVc1x3H3oF:2:vehicle_credential:0.1.0',
+            schema: schema_id,
             requestedAttributes: [
               {
                 names: attributes,

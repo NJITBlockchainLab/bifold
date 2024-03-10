@@ -111,7 +111,7 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
             if (i < links.length) {
               const link = links[i]
               return (
-                <>
+                <React.Fragment key={i}>
                   <Text>{split}</Text>
                   <Text
                     onPress={() => handleLinkPress(link)}
@@ -120,13 +120,14 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
                   >
                     {link}
                   </Text>
-                </>
+                </React.Fragment>
               )
             }
-            return <Text>{split}</Text>
+            return <Text>{split}</Text> // Ensure each Text component has a unique key
           })}
         </Text>
       )
+
       return {
         _id: record.id,
         text: record.content,
@@ -308,7 +309,7 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
         alignTop
         renderAvatar={() => null}
         messageIdGenerator={(msg) => msg?._id.toString() || '0'}
-        renderMessage={(props) => <ChatMessage messageProps={props} />}
+        renderMessage={(props) => <ChatMessage key={props.currentMessage?._id} messageProps={props} />}
         renderInputToolbar={(props) => renderInputToolbar(props, theme)}
         renderSend={(props) => renderSend(props, theme)}
         renderComposer={(props) => renderComposer(props, theme, t('Contacts.TypeHere'))}
