@@ -30,6 +30,7 @@ const SelectProofRequest = ({ navigation, route }: { navigation: any; route: any
   const [vehicleName, setvehicleName] = useState(initialState)
   const [vehicleOwner, setvehicleOwner] = useState(initialState)
   const [expiryDate, setexpiryDate] = useState(initialState)
+  const [stateIssued, setstateIssued] = useState(initialState)
 
   console.log(connectionId)
   console.log(vehicleName)
@@ -62,9 +63,11 @@ const SelectProofRequest = ({ navigation, route }: { navigation: any; route: any
     console.error(vehicleName)
     console.error(vehicleOwner)
     console.error(expiryDate)
-    if (vehicleName) selectedArray.push('vehicle_name')
+    if (vehicleName) selectedArray.push('vehicle_information')
 
     if (vehicleOwner) selectedArray.push('vehicle_owner')
+
+    if (stateIssued) selectedArray.push('state_issued')
 
     if (connectionId) {
       // Send to specific contact and redirect to the chat with him
@@ -94,7 +97,7 @@ const SelectProofRequest = ({ navigation, route }: { navigation: any; route: any
         <View style={style.controlsContainer}>
           <View style={style.marginView}>
             <CheckBoxRow
-              title="Vehicle Name"
+              title="Vehicle Information"
               checked={vehicleName}
               onPress={() => {
                 setvehicleName(!vehicleName)
@@ -119,6 +122,21 @@ const SelectProofRequest = ({ navigation, route }: { navigation: any; route: any
               //     return {
               //       ...prevVal,
               //       vehicleOwner: !prevVal.vehicleOwner,
+              //     }
+              //   })
+              // }
+            />
+          </View>
+          <View style={style.marginView}>
+            <CheckBoxRow
+              title="State Issued"
+              checked={stateIssued}
+              onPress={() => setstateIssued((prev) => !prev)}
+              // onPress={() =>
+              //   setSelectedFields((prevVal) => {
+              //     return {
+              //       ...prevVal,
+              //       expiry_date: !prevVal.expiry_date,
               //     }
               //   })
               // }

@@ -53,6 +53,9 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams | ContactStackParams>>()
   const connection = useConnectionById(connectionId)
   const basicMessages = useBasicMessagesByConnectionId(connectionId)
+
+  // eslint-disable-next-line no-console
+  console.error(basicMessages)
   const credentials = useCredentialsByConnectionId(connectionId)
   const proofs = useProofsByConnectionId(connectionId)
   const isFocused = useIsFocused()
@@ -63,7 +66,6 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
   const { ColorPallet } = useTheme()
   const [theirLabel, setTheirLabel] = useState(getConnectionName(connection, store.preferences.alternateContactNames))
 
-  // This useEffect is for properly rendering changes to the alt contact name, useMemo did not pick them up
   useEffect(() => {
     setTheirLabel(getConnectionName(connection, store.preferences.alternateContactNames))
   }, [isFocused, connection, store.preferences.alternateContactNames])
@@ -123,7 +125,7 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
                 </React.Fragment>
               )
             }
-            return <Text>{split}</Text> // Ensure each Text component has a unique key
+            return <Text>{split}</Text>
           })}
         </Text>
       )
@@ -271,6 +273,8 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
 
   const onSend = useCallback(
     async (messages: IMessage[]) => {
+      // eslint-disable-next-line no-console
+      console.error(messages)
       await agent?.basicMessages.sendMessage(connectionId, messages[0].text)
     },
     [agent, connectionId]

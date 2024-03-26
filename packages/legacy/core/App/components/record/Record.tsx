@@ -55,7 +55,7 @@ const Record: React.FC<RecordProps> = ({ header, footer, fields, hideFieldValues
 
   return (
     <FlatList
-      data={fields}
+      data={fields.sort((b, a) => (a.name ?? '').localeCompare(b.name ?? ''))}
       keyExtractor={({ name }, index) => name || index.toString()}
       renderItem={({ item: attr, index }) =>
         field ? (

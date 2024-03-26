@@ -169,7 +169,6 @@ const ContactListItem: React.FC<Props> = ({ contact, navigation }) => {
               <Text style={styles.contactNameText}>{contactLabel}</Text>
             </View>
             <View style={styles.timeContainer}>
-              {console.log(formatTime(message.createdAt, { shortMonth: true, trim: true }))}
               <Text style={styles.timeText}>{formatTime(message.createdAt, { shortMonth: true, trim: true })}</Text>
             </View>
           </View>
