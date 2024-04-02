@@ -60,9 +60,6 @@ const SelectProofRequest = ({ navigation, route }: { navigation: any; route: any
 
   const useProofRequest = () => {
     const selectedArray = []
-    console.error(vehicleName)
-    console.error(vehicleOwner)
-    console.error(expiryDate)
     if (vehicleName) selectedArray.push('vehicle_information')
 
     if (vehicleOwner) selectedArray.push('vehicle_owner')
@@ -70,9 +67,7 @@ const SelectProofRequest = ({ navigation, route }: { navigation: any; route: any
     if (stateIssued) selectedArray.push('state_issued')
 
     if (connectionId) {
-      // Send to specific contact and redirect to the chat with him
       if (!expiryDate) {
-        // console.error(useProofRequestTemplates(true, selectedArray))
         sendProofRequest(agent, useProofRequestTemplates(false, selectedArray)[0], connectionId, {}).then((result) => {
           if (result?.proofRecord) linkProofWithTemplate(agent, result.proofRecord, '1')
         })

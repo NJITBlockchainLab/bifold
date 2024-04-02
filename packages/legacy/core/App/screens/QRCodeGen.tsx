@@ -102,8 +102,6 @@ const QRCodeGen: React.FC<Props> = ({ navigation }) => {
     if (result) {
       setRecordId(result.record.id)
       setInvitation(result.record.outOfBandInvitation.toUrl({ domain }))
-      // eslint-disable-next-line no-console
-      console.error(result.invitationUrl)
     }
   }, [])
 
