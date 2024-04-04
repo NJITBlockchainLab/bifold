@@ -223,6 +223,7 @@
     ]
   },
   "dependencies": {
-    "react-native-maps": "^1.13.0"
+    "react-native-maps": "^1.13.0",
+    "react-native-onesignal": "^5.1.0"
   }
 }

@@ -9,6 +9,7 @@ import ContactDetails from '../screens/ContactDetails'
 import CredentialDetails from '../screens/CredentialDetails'
 import CredentialOffer from '../screens/CredentialOffer'
 import ListContacts from '../screens/ListContacts'
+import Maps from '../screens/Maps'
 import ProofDetails from '../screens/ProofDetails'
 import ProofRequest from '../screens/ProofRequest'
 import ProofRequestDetails from '../screens/ProofRequestDetails'
@@ -48,6 +49,7 @@ const ContactStack: React.FC = () => {
       />
       <Stack.Screen name={Screens.Chat} component={Chat} />
       <Stack.Screen name={Screens.QRCodeGen} component={QRCodeGen} options={{ title: 'QR Code' }} />
+      <Stack.Screen name={Screens.Maps} component={Maps} options={{ title: 'Maps' }} />
       <Stack.Screen
         name={Screens.ProofRequestDetails}
         component={ProofRequestDetails}

@@ -143,6 +143,17 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+     implementation(project(':react-native-onesignal')){
+      exclude group: 'com.google.android.gms'
+  }
+
+  implementation(project(':react-native-maps')){
+      exclude group: 'com.google.android.gms'
+  }
+  implementation 'com.google.firebase:firebase-messaging:23.4.0'
+  implementation 'com.google.android.gms:play-services-base:18.0.1'
+  implementation 'com.google.android.gms:play-services-location:19.0.1'
+  implementation 'com.google.android.gms:play-services-maps:18.0.2'
 }
 
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
