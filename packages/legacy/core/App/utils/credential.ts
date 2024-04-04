@@ -6,6 +6,8 @@ import { ImageSourcePropType } from 'react-native'
 import { luminanceForHexColor } from './luminance'
 
 export const isValidAnonCredsCredential = (credential: CredentialExchangeRecord) => {
+  // eslint-disable-next-line no-console
+  console.error(credential)
   return (
     credential &&
     (credential.state === CredentialState.OfferReceived ||
