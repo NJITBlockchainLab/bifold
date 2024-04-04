@@ -221,5 +221,8 @@
       "module",
       "typescript"
     ]
+  },
+  "dependencies": {
+    "react-native-maps": "^1.13.0"
   }
 }

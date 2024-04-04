@@ -41,6 +41,7 @@ export enum Screens {
   RenameContact = 'Rename Contact',
   ScanHelp = 'Scan Help',
   QRCodeGen = 'Generate QR Code',
+  Maps = 'Show Maps',
 }
 
 export enum Stacks {
@@ -104,6 +105,7 @@ export type ContactStackParams = {
   [Screens.SendProofRequest]: { connectionId: string }
   [Screens.WhatAreContacts]: undefined
   [Screens.QRCodeGen]: undefined
+  [Screens.Maps]: undefined
   [Screens.CredentialDetails]: { credentialId: string }
   [Screens.CredentialOffer]: { credentialId: string }
   [Screens.ProofDetails]: { recordId: string; isHistory?: boolean }

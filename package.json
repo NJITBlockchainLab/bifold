@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "lottie-react-native": "^6.6.0",
+    "react-native-maps": "^1.13.0",
     "react-native-qrcode-svg": "^6.2.0",
     "react-native-svg": "^14.1.0"
   }
