@@ -4,9 +4,9 @@ import {
   AnonCredsCredentialsForProofRequest,
   AnonCredsRequestedAttributeMatch,
   AnonCredsRequestedPredicateMatch,
-} from '@aries-framework/anoncreds'
-import { CredentialExchangeRecord, ProofState } from '@aries-framework/core'
-import { useConnectionById, useProofById } from '@aries-framework/react-hooks'
+} from '@credo-ts/anoncreds'
+import { CredentialExchangeRecord, DifPexInputDescriptorToCredentials, ProofState } from '@credo-ts/core'
+import { useConnectionById, useProofById } from '@credo-ts/react-hooks'
 import { Attribute, Predicate } from '@hyperledger/aries-oca/build/legacy'
 import { useIsFocused } from '@react-navigation/core'
 import moment from 'moment'
@@ -21,7 +21,10 @@ import { CredentialCard } from '../components/misc'
 import ConnectionAlert from '../components/misc/ConnectionAlert'
 import ConnectionImage from '../components/misc/ConnectionImage'
 import CommonRemoveModal from '../components/modals/CommonRemoveModal'
+import ProofCancelModal from '../components/modals/ProofCancelModal'
+import InfoTextBox from '../components/texts/InfoTextBox'
 import { EventTypes } from '../constants'
+import { TOKENS, useContainer } from '../container-api'
 import { useAnimatedComponents } from '../contexts/animated-components'
 import { useConfiguration } from '../contexts/configuration'
 import { useNetwork } from '../contexts/network'
@@ -37,7 +40,8 @@ import { ProofCredentialAttributes, ProofCredentialItems, ProofCredentialPredica
 import { ModalUsage } from '../types/remove'
 import { TourID } from '../types/tour'
 import { useAppAgent } from '../utils/agent'
-import { getConnectionName, Fields, evaluatePredicates } from '../utils/helpers'
+import { DescriptorMetadata } from '../utils/anonCredsProofRequestMapper'
+import { Fields, evaluatePredicates, getConnectionName } from '../utils/helpers'
 import { testIdWithKey } from '../utils/testable'
 
 import ProofRequestAccept from './ProofRequestAccept'
@@ -58,12 +62,14 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
   const [pendingModalVisible, setPendingModalVisible] = useState(false)
   const [revocationOffense, setRevocationOffense] = useState(false)
   const [retrievedCredentials, setRetrievedCredentials] = useState<AnonCredsCredentialsForProofRequest>()
+  const [descriptorMetadata, setDescriptorMetadata] = useState<DescriptorMetadata | undefined>()
   const [loading, setLoading] = useState<boolean>(true)
   const [declineModalVisible, setDeclineModalVisible] = useState(false)
+  const [cancelModalVisible, setCancelModalVisible] = useState(false)
   const { ColorPallet, ListItems, TextTheme } = useTheme()
   const { RecordLoading } = useAnimatedComponents()
   const goalCode = useOutOfBandByConnectionId(proof?.connectionId ?? '')?.outOfBandInvitation.goalCode
-  const { enableTours: enableToursConfig, OCABundleResolver, useAttestation } = useConfiguration()
+  const { enableTours: enableToursConfig, useAttestation } = useConfiguration()
   const [containsPI, setContainsPI] = useState(false)
   const [activeCreds, setActiveCreds] = useState<ProofCredentialItems[]>([])
   const [selectedCredentials, setSelectedCredentials] = useState<string[]>([])
@@ -76,6 +82,7 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
   const { loading: attestationLoading } = useAttestation ? useAttestation() : { loading: false }
   const { start } = useTour()
   const screenIsFocused = useIsFocused()
+  const bundleResolver = useContainer().resolve(TOKENS.UTIL_OCA_RESOLVER)
 
   const hasMatchingCredDef = useMemo(() => activeCreds.some((cred) => cred.credDefId !== undefined), [activeCreds])
 
@@ -91,7 +98,7 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
       marginHorizontal: 20,
     },
     pageFooter: {
-      marginBottom: 15,
+      marginVertical: 15,
     },
     headerTextContainer: {
       paddingVertical: 16,
@@ -196,8 +203,10 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
     credProofPromise
       ?.then((value) => {
         if (value) {
-          const { groupedProof, retrievedCredentials, fullCredentials } = value
+          const { groupedProof, retrievedCredentials, fullCredentials, descriptorMetadata } = value
           setLoading(false)
+          setDescriptorMetadata(descriptorMetadata)
+
           let credList: string[] = []
           if (selectedCredentials.length > 0) {
             credList = selectedCredentials
@@ -276,6 +285,7 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
   }, [selectedCredentials, credProofPromise])
 
   const toggleDeclineModalVisible = () => setDeclineModalVisible(!declineModalVisible)
+  const toggleCancelModalVisible = () => setCancelModalVisible(!cancelModalVisible)
 
   const getCredentialsFields = (): Fields => ({
     ...retrievedCredentials?.attributes,
@@ -289,7 +299,7 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
         return false
       }
       const labels = (item.attributes ?? []).map((field) => field.label ?? field.name ?? '')
-      const bundle = await OCABundleResolver.resolveAllBundles({
+      const bundle = await bundleResolver.resolveAllBundles({
         identifiers: { credentialDefinitionId: item.credDefId, schemaId: item.schemaId },
       })
       const flaggedAttributes: string[] = (bundle as any).bundle.bundle.flaggedAttributes.map((attr: any) => attr.name)
@@ -319,6 +329,29 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
         throw new Error(t('ProofRequest.RequestedCredentialsCouldNotBeFound'))
       }
       const format = await agent.proofs.getFormatData(proof.id)
+
+      if (format.request?.presentationExchange) {
+        if (!descriptorMetadata) throw new Error(t('ProofRequest.PresentationMetadataNotFound'))
+
+        const selectedCredentials: DifPexInputDescriptorToCredentials = Object.fromEntries(
+          Object.entries(descriptorMetadata).map(([descriptorId, meta]) => {
+            const activeCredentialIds = activeCreds.map((cred) => cred.credId)
+            const selectedRecord = meta.find((item) => activeCredentialIds.includes(item.record.id))
+            if (!selectedRecord) throw new Error(t('ProofRequest.CredentialMetadataNotFound'))
+            return [descriptorId, [selectedRecord.record]]
+          })
+        )
+
+        await agent.proofs.acceptRequest({
+          proofRecordId: proof.id,
+          proofFormats: { presentationExchange: { credentials: selectedCredentials } },
+        })
+
+        if (proof.connectionId && goalCode && goalCode.endsWith('verify.once')) {
+          agent.connections.deleteById(proof.connectionId)
+        }
+        return
+      }
 
       const formatToUse = format.request?.anoncreds ? 'anoncreds' : 'indy'
 
@@ -390,9 +423,36 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
     navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
   }
 
+  const handleCancelTouched = async () => {
+    try {
+      toggleCancelModalVisible()
+
+      if (agent && proof) {
+        await agent.proofs.sendProblemReport({ proofRecordId: proof.id, description: t('ProofRequest.Declined') })
+        await agent.proofs.declineRequest({ proofRecordId: proof.id })
+
+        if (proof.connectionId && goalCode && goalCode.endsWith('verify.once')) {
+          agent.connections.deleteById(proof.connectionId)
+        }
+      }
+    } catch (err: unknown) {
+      const error = new BifoldError(t('Error.Title1028'), t('Error.Message1028'), (err as Error)?.message ?? err, 1028)
+      DeviceEventEmitter.emit(EventTypes.ERROR_ADDED, error)
+    }
+  }
+
+  const onCancelDone = () => {
+    navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
+  }
+
   const proofPageHeader = () => {
     return (
       <View style={styles.pageMargin}>
+        {attestationLoading && (
+          <View style={{ paddingTop: 20 }}>
+            <InfoTextBox>{t('ProofRequest.JustAMoment')}</InfoTextBox>
+          </View>
+        )}
         {loading || attestationLoading ? (
           <View style={styles.cardLoading}>
             <RecordLoading />
@@ -494,30 +554,41 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
         {!(loading || attestationLoading) && proofConnectionLabel && goalCode === 'aries.vc.verify' ? (
           <ConnectionAlert connectionID={proofConnectionLabel} />
         ) : null}
-        <View style={styles.footerButton}>
-          <Button
-            title={t('Global.Share')}
-            accessibilityLabel={t('Global.Share')}
-            testID={testIdWithKey('Share')}
-            buttonType={ButtonType.Primary}
-            onPress={handleAcceptPress}
-            disabled={
-              !hasAvailableCredentials ||
-              !hasSatisfiedPredicates(getCredentialsFields()) ||
-              revocationOffense ||
-              proof?.state !== ProofState.RequestReceived
-            }
-          />
-        </View>
-        <View style={styles.footerButton}>
-          <Button
-            title={t('Global.Decline')}
-            accessibilityLabel={t('Global.Decline')}
-            testID={testIdWithKey('Decline')}
-            buttonType={!retrievedCredentials ? ButtonType.Primary : ButtonType.Secondary}
-            onPress={toggleDeclineModalVisible}
-          />
-        </View>
+        {!hasAvailableCredentials ||
+        !hasSatisfiedPredicates(getCredentialsFields()) ||
+        revocationOffense ||
+        proof?.state !== ProofState.RequestReceived ? (
+          <View style={styles.footerButton}>
+            <Button
+              title={t('Global.Cancel')}
+              accessibilityLabel={t('Global.Cancel')}
+              testID={testIdWithKey('Cancel')}
+              buttonType={ButtonType.Primary}
+              onPress={handleCancelTouched}
+            />
+          </View>
+        ) : (
+          <>
+            <View style={styles.footerButton}>
+              <Button
+                title={t('Global.Share')}
+                accessibilityLabel={t('Global.Share')}
+                testID={testIdWithKey('Share')}
+                buttonType={ButtonType.Primary}
+                onPress={handleAcceptPress}
+              />
+            </View>
+            <View style={styles.footerButton}>
+              <Button
+                title={t('Global.Decline')}
+                accessibilityLabel={t('Global.Decline')}
+                testID={testIdWithKey('Decline')}
+                buttonType={!retrievedCredentials ? ButtonType.Primary : ButtonType.Secondary}
+                onPress={toggleDeclineModalVisible}
+              />
+            </View>
+          </>
+        )}
       </View>
     )
   }
@@ -543,6 +614,8 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
                     credential={item.credExchangeRecord}
                     credDefId={item.credDefId}
                     schemaId={item.schemaId}
+                    proofCredDefId={item.proofCredDefId}
+                    proofSchemaId={item.proofSchemaId}
                     displayItems={[
                       ...(item.attributes ?? []),
                       ...evaluatePredicates(getCredentialsFields(), item.credId)(item),
@@ -618,6 +691,7 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
           onSubmit={handleDeclineTouched}
           onCancel={toggleDeclineModalVisible}
         />
+        <ProofCancelModal visible={cancelModalVisible} onDone={onCancelDone} />
       </ScrollView>
     </SafeAreaView>
   )

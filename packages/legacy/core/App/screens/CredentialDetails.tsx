@@ -1,15 +1,16 @@
 import type { StackScreenProps } from '@react-navigation/stack'
 
-import { CredentialExchangeRecord } from '@aries-framework/core'
-import { useAgent } from '@aries-framework/react-hooks'
+import { CredentialExchangeRecord } from '@credo-ts/core'
+import { useAgent } from '@credo-ts/react-hooks'
 import { BrandingOverlay } from '@hyperledger/aries-oca'
 import { Attribute, BrandingOverlayType, CredentialOverlay } from '@hyperledger/aries-oca/build/legacy'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { DeviceEventEmitter, Image, ImageBackground, StyleSheet, Text, View } from 'react-native'
+import { DeviceEventEmitter, Image, ImageBackground, StyleSheet, Text, View, useWindowDimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
 
+import CardWatermark from '../components/misc/CardWatermark'
 import CredentialCard from '../components/misc/CredentialCard'
 import InfoBox, { InfoBoxType } from '../components/misc/InfoBox'
 import CommonRemoveModal from '../components/modals/CommonRemoveModal'
@@ -17,7 +18,7 @@ import Record from '../components/record/Record'
 import RecordRemove from '../components/record/RecordRemove'
 import { ToastType } from '../components/toast/BaseToast'
 import { EventTypes } from '../constants'
-import { useConfiguration } from '../contexts/configuration'
+import { TOKENS, useContainer } from '../container-api'
 import { useTheme } from '../contexts/theme'
 import { BifoldError } from '../types/error'
 import { CredentialMetadata, credentialCustomMetadata } from '../types/metadata'
@@ -48,7 +49,7 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
   const { agent } = useAgent()
   const { t, i18n } = useTranslation()
   const { TextTheme, ColorPallet } = useTheme()
-  const { OCABundleResolver } = useConfiguration()
+  const bundleResolver = useContainer().resolve(TOKENS.UTIL_OCA_RESOLVER)
   const [isRevoked, setIsRevoked] = useState<boolean>(false)
   const [revocationDate, setRevocationDate] = useState<string>('')
   const [preciseRevocationDate, setPreciseRevocationDate] = useState<string>('')
@@ -57,15 +58,14 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
     (credential!.metadata.get(CredentialMetadata.customMetadata) as credentialCustomMetadata)
       ?.revoked_detail_dismissed ?? false
   )
-
   const [overlay, setOverlay] = useState<CredentialOverlay<BrandingOverlay>>({
     bundle: undefined,
     presentationFields: [],
     metaOverlay: undefined,
     brandingOverlay: undefined,
   })
-
   const credentialConnectionLabel = getCredentialConnectionLabel(credential)
+  const { width, height } = useWindowDimensions()
 
   const styles = StyleSheet.create({
     container: {
@@ -103,7 +103,6 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
     },
     textContainer: {
       color: credentialTextColor(ColorPallet, overlay.brandingOverlay?.primaryBackgroundColor),
-      flexShrink: 1,
     },
   })
 
@@ -147,7 +146,7 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
       language: i18n.language,
     }
 
-    OCABundleResolver.resolveAllBundles(params).then((bundle) => {
+    bundleResolver.resolveAllBundles(params).then((bundle) => {
       setOverlay({
         ...overlay,
         ...(bundle as CredentialOverlay<BrandingOverlay>),
@@ -231,8 +230,14 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
 
   const CredentialDetailPrimaryHeader: React.FC = () => {
     return (
-      <View testID={testIdWithKey('CredentialDetailsPrimaryHeader')} style={styles.primaryHeaderContainer}>
+      <View
+        testID={testIdWithKey('CredentialDetailsPrimaryHeader')}
+        style={[styles.primaryHeaderContainer, { zIndex: -1 }]}
+      >
         <View>
+          {overlay.metaOverlay?.watermark && (
+            <CardWatermark width={width} height={height} watermark={overlay.metaOverlay?.watermark} />
+          )}
           <Text
             testID={testIdWithKey('CredentialIssuer')}
             style={[
@@ -302,7 +307,7 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
   }
 
   const header = () => {
-    return OCABundleResolver.getBrandingOverlayType() === BrandingOverlayType.Branding01 ? (
+    return bundleResolver.getBrandingOverlayType() === BrandingOverlayType.Branding01 ? (
       <View>
         {isRevoked && !isRevokedMessageHidden ? (
           <View style={{ padding: paddingVertical, paddingBottom: 0 }}>
@@ -316,6 +321,7 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
         <CredentialDetailSecondaryHeader />
         <CredentialCardLogo />
         <CredentialDetailPrimaryHeader />
+
         {isRevoked && !isRevokedMessageHidden ? (
           <View style={{ padding: paddingVertical, paddingTop: 0 }}>
             {credential && <CredentialRevocationMessage credential={credential} />}

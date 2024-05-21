@@ -1,11 +1,11 @@
 import type { StackScreenProps } from '@react-navigation/stack'
 
-import { ProofExchangeRecord, ProofState } from '@aries-framework/core'
-import { useAgent, useConnectionById, useProofById } from '@aries-framework/react-hooks'
+import { ProofExchangeRecord, ProofState } from '@credo-ts/core'
+import { useAgent, useConnectionById, useProofById } from '@credo-ts/react-hooks'
 import {
+  GroupedSharedProofDataItem,
   ProofCustomMetadata,
   ProofMetadata,
-  GroupedSharedProofDataItem,
   markProofAsViewed,
 } from '@hyperledger/aries-bifold-verifier'
 import { useFocusEffect } from '@react-navigation/native'
@@ -85,8 +85,7 @@ const VerifiedProof: React.FC<VerifiedProofProps> = ({
       marginVertical: 30,
     },
     descriptionText: {
-      fontSize: 18,
-      color: TextTheme.normal.color,
+      ...TextTheme.normal,
     },
     label: {
       fontWeight: TextTheme.bold.fontWeight,

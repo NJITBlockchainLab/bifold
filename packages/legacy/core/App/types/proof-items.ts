@@ -1,4 +1,4 @@
-import { CredentialExchangeRecord } from '@aries-framework/core'
+import { CredentialExchangeRecord } from '@credo-ts/core'
 import { Attribute, Predicate } from '@hyperledger/aries-oca/build/legacy'
 
 export interface ProofCredentialAttributes {
@@ -6,7 +6,9 @@ export interface ProofCredentialAttributes {
   credExchangeRecord?: CredentialExchangeRecord
   credId: string
   credDefId?: string
+  proofCredDefId?: string
   schemaId?: string
+  proofSchemaId?: string
   credName: string
   attributes?: Attribute[]
 }
@@ -16,7 +18,9 @@ export interface ProofCredentialPredicates {
   credExchangeRecord?: CredentialExchangeRecord
   credId: string
   credDefId?: string
+  proofCredDefId?: string
   schemaId?: string
+  proofSchemaId?: string
   credName: string
   predicates?: Predicate[]
 }

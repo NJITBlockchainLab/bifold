@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { LegacyIndyCredentialFormat } from '@aries-framework/anoncreds'
+import { LegacyIndyCredentialFormat } from '@credo-ts/anoncreds'
 import {
   BasicMessageRecord,
   CredentialExchangeRecord,
   CredentialProtocolOptions,
   ProofExchangeRecord,
-} from '@aries-framework/core'
+  ConnectionRecord,
+  DidExchangeRole,
+  DidExchangeState,
+} from '@credo-ts/core'
 
 const useCredentials = jest.fn().mockReturnValue({ records: [] } as any)
 const useProofs = jest.fn().mockReturnValue({ records: [] } as any)
@@ -21,6 +24,7 @@ const mockCredentialModule = {
     .mockReturnValue(
       Promise.resolve({} as CredentialProtocolOptions.GetCredentialFormatDataReturn<[LegacyIndyCredentialFormat]>)
     ),
+  findAllByQuery: jest.fn().mockReturnValue(Promise.resolve([])),
 }
 const mockProofModule = {
   getCredentialsForRequest: jest.fn(),
@@ -30,6 +34,36 @@ const mockProofModule = {
   findRequestMessage: jest.fn(),
   requestProof: jest.fn(),
   update: jest.fn(),
+  findAllByQuery: jest.fn().mockReturnValue(Promise.resolve([])),
+}
+const mockBasicMessagesModule = {
+  findAllByQuery: jest.fn().mockReturnValue(Promise.resolve([])),
+}
+const mockConnectionsModule = {
+  getAll: jest.fn().mockReturnValue(
+    Promise.resolve([
+      new ConnectionRecord({
+        id: '1',
+        did: '9gtPKWtaUKxJir5YG2VPxX',
+        theirLabel: 'Faber',
+        role: DidExchangeRole.Responder,
+        theirDid: '2SBuq9fpLT8qUiQKr2RgBe',
+        threadId: '1',
+        state: DidExchangeState.Completed,
+        createdAt: new Date('2020-01-02T00:00:00.000Z'),
+      }),
+      new ConnectionRecord({
+        id: '2',
+        did: '2SBuq9fpLT8qUiQKr2RgBe',
+        role: DidExchangeRole.Requester,
+        theirLabel: 'Bob',
+        theirDid: '9gtPKWtaUKxJir5YG2VPxX',
+        threadId: '1',
+        state: DidExchangeState.Completed,
+        createdAt: new Date('2020-01-01T00:00:00.000Z'),
+      }),
+    ])
+  ),
 }
 
 const mockMediationRecipient = {
@@ -52,6 +86,8 @@ const useAgent = () => ({
   agent: {
     credentials: mockCredentialModule,
     proofs: mockProofModule,
+    basicMessages: mockBasicMessagesModule,
+    connections: mockConnectionsModule,
     mediationRecipient: mockMediationRecipient,
     oob: mockOobModule,
     context: mockAgentContext,
@@ -64,14 +100,14 @@ const useConnections = jest.fn()
 
 export {
   useAgent,
-  useConnectionById,
-  useCredentials,
-  useProofs,
-  useCredentialById,
-  useCredentialByState,
-  useProofById,
-  useProofByState,
-  useConnections,
   useBasicMessages,
   useBasicMessagesByConnectionId,
+  useConnectionById,
+  useConnections,
+  useCredentialById,
+  useCredentialByState,
+  useCredentials,
+  useProofById,
+  useProofByState,
+  useProofs,
 }

@@ -1,6 +1,6 @@
-import { ProofExchangeRecord, ProofState } from '@aries-framework/core'
-import { useConnectionById } from '@aries-framework/react-hooks'
-import { useProofsByTemplateId, isPresentationReceived } from '@hyperledger/aries-bifold-verifier'
+import { ProofExchangeRecord, ProofState } from '@credo-ts/core'
+import { useConnectionById } from '@credo-ts/react-hooks'
+import { isPresentationReceived, useProofsByTemplateId } from '@hyperledger/aries-bifold-verifier'
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack'
 import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -70,7 +70,6 @@ const ProofRequestUsageHistoryRecord: React.FC<ProofRequestUsageHistoryRecordPro
     },
     valueText: {
       ...ListItems.requestTemplateTitle,
-      fontSize: 16,
       marginLeft: 4,
     },
     rightContainer: {
@@ -81,11 +80,9 @@ const ProofRequestUsageHistoryRecord: React.FC<ProofRequestUsageHistoryRecordPro
     },
     icon: {
       ...ListItems.requestTemplateIcon,
-      fontSize: 36,
     },
     date: {
       ...ListItems.requestTemplateDate,
-      fontSize: 10,
     },
   })
 

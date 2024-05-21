@@ -126,6 +126,8 @@ const translation = {
     "Message1044": "There was a problem while initializing onboarding.",
     "Title1045": "Unable to initialize agent.",
     "Message1045": "There was a problem while initializing agent.",
+    "Title1046": "Unable to fetch contacts.",
+    "Message1046": "There was a problem while fetching contacts.",
   },
   "ActivityLog": {
     "Your": "Your",
@@ -297,6 +299,22 @@ const translation = {
     "IssuedBy": "Issued by",
     "Credential": "credential"
   },
+  "PushNotifications": {
+    "EnableNotifiactions": "Enable Notifications to get instant alerts",
+    "BeNotified": "Be notified when you receive:",
+    "ReceiveNotifications": "Receive notifications",
+    "BulletFour": "new messages",
+    "BulletOne": "new credential offers",
+    "BulletThree": "updates to your credentials",
+    "BulletTwo": "new proof requests",
+    "NotificationsOffMessage": "Be notified when you receive new credential offers, proof requests, updates to your credentials, new messages and more.",
+    "NotificationsOffTitle": "Notifications for Bifold are turned off",
+    "NotificationsInstructionTitle": "To enable notifications:",
+    "InstructionsOne": "Open the app's settings",
+    "InstructionsTwo": "Tap Notifications",
+    "InstructionsThree": "Enable notifications",
+    "OpenSettings": "Open settings",
+  },
   "CredentialDetails": {
     "Id": "Id:",
     "CreatedAt": "Created At:",
@@ -419,6 +437,7 @@ const translation = {
     "DeleteOfferDescription": "Don't recognize the organization? Check your Contacts list. You only receive notifications from Contacts you've initiated",
   },
   "ProofRequest": {
+    "JustAMoment": "Just a moment while we prepare things for you...",
     "FromYourWallet": "From your wallet",
     "MissingCredentials": "Missing credentials",
     "PredicateGeDate": "is after",
@@ -431,6 +450,7 @@ const translation = {
     "RequestProcessing": "Just a moment...",
     "OfferDelay": "Offer delay",
     "ChangeCredential": "Change credential",
+    "GetThisCredential": "Get this credential",
     "RejectThisProof?": "Reject this Proof Request?",
     "DeclineThisProof?": "Decline this Proof Request?",
     "MultipleCredentials": "You have multiple credentials to choose from:",
@@ -442,6 +462,8 @@ const translation = {
     "ProofAccepted": "Proof Accepted",
     "ProofRejected": "Proof Rejected",
     "RequestedCredentialsCouldNotBeFound": "Requested credentials could not be found",
+    "PresentationMetadataNotFound": "Could not find presentation metadata",
+    "CredentialMetadataNotFound": "Could not find credential metadata",
     "NewProofRequest": "New Proof Request",
     "NotAvailableInYourWallet": "Not in your wallet",
     "PredicateNotSatisfied": "Requirement not met",
@@ -472,6 +494,8 @@ const translation = {
     "DeclineBulletPoint1": "Organizations and services require that you prove you're eligible to continue with their service or access.",
     "DeclineBulletPoint2": "In order to receive the proof request again, you will need to restart the process with the service.",
     "DeclineBulletPoint3": "Are you sure you want to decline this proof request?",
+    "NoInfoShared": "No information was shared",
+    "YourInfo": "Your information was not shared",
   },
   "Settings": {
     "Version": "Version",
@@ -490,7 +514,8 @@ const translation = {
     "ScanMyQR": "Scan my QR code",
     "Help": "Help",
     "MoreInformation": "More information",
-    "Developer": "Developer options"
+    "Developer": "Developer options",
+    "Notifications": "Notifications",
   },
   "TabStack": {
     "Home": "Notifications",
@@ -556,6 +581,7 @@ const translation = {
     "OnTheWay": 'On The Way',
     "Declined": 'Declined',
     "UseBiometry": 'Use Biometry',
+    "UsePushNotifications": 'Use Push Notifications',
     "CustomNotification": 'Custom Notification',
     "ProofRequesting": 'Proof Requesting',
     "NameWallet": "Name your wallet",

@@ -1,21 +1,20 @@
-import { INDY_PROOF_REQUEST_ATTACHMENT_ID, V1RequestPresentationMessage } from '@aries-framework/anoncreds'
-import { ProofExchangeRecord, ProofState } from '@aries-framework/core'
-import { Attachment, AttachmentData } from '@aries-framework/core/build/decorators/attachment/Attachment'
-import { useProofById } from '@aries-framework/react-hooks'
+import { AnonCredsProof, INDY_PROOF_REQUEST_ATTACHMENT_ID, V1RequestPresentationMessage } from '@credo-ts/anoncreds'
+import { ProofExchangeRecord, ProofRole, ProofState } from '@credo-ts/core'
+import { Attachment, AttachmentData } from '@credo-ts/core/build/decorators/attachment/Attachment'
+import { useProofById } from '@credo-ts/react-hooks'
+import * as verifier from '@hyperledger/aries-bifold-verifier'
 import mockRNCNetInfo from '@react-native-community/netinfo/jest/netinfo-mock'
 import { useNavigation } from '@react-navigation/core'
 import '@testing-library/jest-native/extend-expect'
-import { act, cleanup, fireEvent, render, RenderAPI } from '@testing-library/react-native'
+import { RenderAPI, cleanup, fireEvent, render } from '@testing-library/react-native'
 import React from 'react'
-
-import { testIdWithKey } from '../../App/utils/testable'
-import ProofDetails from '../../App/screens/ProofDetails'
-import * as verifier from '@hyperledger/aries-bifold-verifier'
-import { AnonCredsProof } from '@aries-framework/anoncreds'
-import configurationContext from '../contexts/configuration'
-import { NetworkProvider } from '../../App/contexts/network'
 import { ConfigurationContext } from '../../App/contexts/configuration'
+import { NetworkProvider } from '../../App/contexts/network'
+import ProofDetails from '../../App/screens/ProofDetails'
+import { testIdWithKey } from '../../App/utils/testable'
+import configurationContext from '../contexts/configuration'
 
+jest.mock('../../App/container-api')
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo)
 jest.mock('@react-navigation/core', () => {
@@ -24,12 +23,12 @@ jest.mock('@react-navigation/core', () => {
 jest.mock('@react-navigation/native', () => {
   return require('../../__mocks__/custom/@react-navigation/native')
 })
-jest.mock('@hyperledger/aries-bifold-verifier',() => {
-  const original = jest. requireActual('@hyperledger/aries-bifold-verifier')
+jest.mock('@hyperledger/aries-bifold-verifier', () => {
+  const original = jest.requireActual('@hyperledger/aries-bifold-verifier')
   return {
     ...original,
-     __esModule: true,
-     getProofData: jest.fn(original.getProofData)
+    __esModule: true,
+    getProofData: jest.fn(original.getProofData),
   }
 })
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -57,6 +56,7 @@ const proof: AnonCredsProof = {
     },
   },
   requested_proof: {
+    revealed_attrs: {},
     revealed_attr_groups: {
       attribute_1: {
         sub_proof_index: 0,
@@ -125,6 +125,7 @@ describe('ProofDetails Component', () => {
 
   describe('with a verified proof record', () => {
     const testVerifiedProofRequest = new ProofExchangeRecord({
+      role: ProofRole.Prover,
       connectionId: undefined,
       threadId: requestPresentationMessage.id,
       state: ProofState.Done,
@@ -133,9 +134,9 @@ describe('ProofDetails Component', () => {
     })
 
     const checkAttributes = async (tree: RenderAPI) => {
-      const firstNameAttribute = await tree.findByText('first_name', { exact: true })
+      const firstNameAttribute = await tree.findByText('First Name', { exact: true })
       const firstNameAttributeValue = await tree.findByText('Aries', { exact: true })
-      const secondNameAttribute = await tree.findByText('second_name', { exact: true })
+      const secondNameAttribute = await tree.findByText('Second Name', { exact: true })
       const secondNameAttributeValue = await tree.findByText('Bifold', { exact: true })
 
       expect(firstNameAttribute).not.toBe(null)
@@ -207,6 +208,7 @@ describe('ProofDetails Component', () => {
       state: ProofState.Done,
       protocolVersion: 'V1',
       isVerified: false,
+      role: ProofRole.Verifier,
     })
 
     beforeEach(() => {

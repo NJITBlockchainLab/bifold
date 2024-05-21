@@ -1,10 +1,14 @@
 export interface Onboarding {
   didSeePreface: boolean
   didCompleteTutorial: boolean
-  didAgreeToTerms: boolean
+  didAgreeToTerms: boolean | string
   didCreatePIN: boolean
   didConsiderBiometry: boolean
+  didConsiderPushNotifications: boolean
   didNameWallet: boolean
+  onboardingVersion: number
+  didCompleteOnboarding: boolean
+  postAuthScreens: string[]
 }
 
 export interface Migration {
@@ -13,6 +17,7 @@ export interface Migration {
 
 export interface Preferences {
   useBiometry: boolean
+  usePushNotifications: boolean
   biometryPreferencesUpdated: boolean
   developerModeEnabled: boolean
   useVerifierCapability?: boolean
@@ -54,6 +59,7 @@ export interface DeepLink {
 }
 
 export interface State {
+  stateLoaded: boolean
   onboarding: Onboarding
   authentication: Authentication
   lockout: Lockout

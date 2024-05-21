@@ -1,27 +1,19 @@
+import { CommonActions, useNavigation } from '@react-navigation/core'
+import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  StyleSheet,
-  Text,
-  View,
-  Modal,
-  Switch,
-  StatusBar,
-  Platform,
-  ScrollView,
-  Pressable,
-  DeviceEventEmitter,
-} from 'react-native'
+import { StyleSheet, Text, View, Modal, Switch, ScrollView, Pressable, DeviceEventEmitter } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import Button, { ButtonType } from '../components/buttons/Button'
 import { EventTypes } from '../constants'
 import { useAnimatedComponents } from '../contexts/animated-components'
 import { useAuth } from '../contexts/auth'
+import { useConfiguration } from '../contexts/configuration'
 import { DispatchAction } from '../contexts/reducers/store'
 import { useStore } from '../contexts/store'
 import { useTheme } from '../contexts/theme'
-import { statusBarStyleForColor, StatusBarStyles } from '../utils/luminance'
+import { OnboardingStackParams, Screens } from '../types/navigators'
 import { testIdWithKey } from '../utils/testable'
 
 import PINEnter, { PINEntryUsage } from './PINEnter'
@@ -34,6 +26,7 @@ enum UseBiometryUsage {
 const UseBiometry: React.FC = () => {
   const [store, dispatch] = useStore()
   const { t } = useTranslation()
+  const { enablePushNotifications } = useConfiguration()
   const { isBiometricsActive, commitPIN, disableBiometrics } = useAuth()
   const [biometryAvailable, setBiometryAvailable] = useState(false)
   const [biometryEnabled, setBiometryEnabled] = useState(store.preferences.useBiometry)
@@ -41,7 +34,8 @@ const UseBiometry: React.FC = () => {
   const [canSeeCheckPIN, setCanSeeCheckPIN] = useState<boolean>(false)
   const { ColorPallet, TextTheme, Assets } = useTheme()
   const { ButtonLoading } = useAnimatedComponents()
-  const screenUsage = store.onboarding.didConsiderBiometry
+  const navigation = useNavigation<StackNavigationProp<OnboardingStackParams>>()
+  const screenUsage = store.onboarding.didCompleteOnboarding
     ? UseBiometryUsage.ToggleOnOff
     : UseBiometryUsage.InitialSetup
 
@@ -95,6 +89,16 @@ const UseBiometry: React.FC = () => {
       type: DispatchAction.USE_BIOMETRY,
       payload: [biometryEnabled],
     })
+    if (enablePushNotifications) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: Screens.UsePushNotifications }],
+        })
+      )
+    } else {
+      dispatch({ type: DispatchAction.DID_COMPLETE_ONBOARDING, payload: [true] })
+    }
   }
 
   const toggleSwitch = () => {
@@ -120,9 +124,6 @@ const UseBiometry: React.FC = () => {
 
   return (
     <SafeAreaView edges={['left', 'right', 'bottom']}>
-      <StatusBar
-        barStyle={Platform.OS === 'android' ? StatusBarStyles.Light : statusBarStyleForColor(ColorPallet.brand.primary)}
-      />
       <ScrollView style={styles.container}>
         <View style={{ alignItems: 'center' }}>
           <Assets.svg.biometrics style={[styles.image]} />
@@ -172,7 +173,7 @@ const UseBiometry: React.FC = () => {
         </View>
       </ScrollView>
       <View style={{ marginTop: 'auto', margin: 20 }}>
-        {store.onboarding.didConsiderBiometry || (
+        {store.onboarding.didCompleteOnboarding || (
           <Button
             title={'Continue'}
             accessibilityLabel={'Continue'}

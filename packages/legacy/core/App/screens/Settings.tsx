@@ -14,6 +14,7 @@ import { getVersion, getBuildNumber } from 'react-native-device-info'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
+import HeaderButton, { ButtonLocation } from '../components/buttons/HeaderButton'
 import { useConfiguration } from '../contexts/configuration'
 import { DispatchAction } from '../contexts/reducers/store'
 import { useStore } from '../contexts/store'
@@ -33,7 +34,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
   const [store, dispatch] = useStore()
   const developerOptionCount = useRef(0)
   const { SettingsTheme, TextTheme, ColorPallet, Assets } = useTheme()
-  const { settings, enableTours } = useConfiguration()
+  const { settings, enableTours, enablePushNotifications } = useConfiguration()
   const defaultIconSize = 24
   const styles = StyleSheet.create({
     container: {
@@ -67,11 +68,6 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
       borderBottomColor: ColorPallet.brand.primaryBackground,
       marginHorizontal: 25,
     },
-    logo: {
-      height: 64,
-      width: '50%',
-      marginVertical: 16,
-    },
     footer: {
       marginVertical: 25,
       alignItems: 'center',
@@ -79,7 +75,6 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
   })
 
   const currentLanguage = i18n.t('Language.code', { context: i18n.language as Locales })
-
   const incrementDeveloperMenuCounter = () => {
     if (developerOptionCount.current >= touchCountToEnableBiometrics) {
       developerOptionCount.current = 0
@@ -170,6 +165,22 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
     },
     ...(settings || []),
   ]
+
+  // add optional push notifications menu to settings
+  if (enablePushNotifications) {
+    settingsSections
+      .find((item) => item.header.title === t('Settings.AppSettings'))
+      ?.data.push({
+        title: t('Settings.Notifications'),
+        value: undefined,
+        accessibilityLabel: t('Settings.Notifications'),
+        testID: testIdWithKey('Notifications'),
+        onPress: () =>
+          navigation
+            .getParent()
+            ?.navigate(Stacks.SettingStack, { screen: Screens.UsePushNotifications, params: { isMenu: true } }),
+      })
+  }
 
   if (enableTours) {
     const section = settingsSections.find((item) => item.header.title === t('Settings.AppSettings'))
@@ -277,18 +288,14 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
           </Text>
         </View>
         {iconRight && (
-          <TouchableOpacity
-            accessible={iconRight.action !== undefined}
-            accessibilityLabel={iconRight.action ? iconRight.accessibilityLabel : undefined}
-            testID={iconRight.testID ? iconRight.testID : undefined}
-            onPress={iconRight.action}
-          >
-            <Icon
-              name={iconRight.name}
-              size={iconRight.size ?? defaultIconSize}
-              style={[{ color: SettingsTheme.iconColor }, iconRight.style]}
-            ></Icon>
-          </TouchableOpacity>
+          <HeaderButton
+            buttonLocation={ButtonLocation.Right}
+            accessibilityLabel={iconRight.accessibilityLabel!}
+            testID={iconRight.testID!}
+            onPress={iconRight.action!}
+            icon={'pencil'}
+            iconTintColor={TextTheme.headingThree.color}
+          />
         )}
       </View>
     ) : (
@@ -360,7 +367,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
                 <Text style={TextTheme.normal} testID={testIdWithKey('Version')}>
                   {`${t('Settings.Version')} ${getVersion()} ${t('Settings.Build')} (${getBuildNumber()})`}
                 </Text>
-                <Assets.svg.logo {...styles.logo} />
+                <Assets.svg.logo style={{ alignSelf: 'center' }} width={150} height={75} />
               </View>
             </TouchableWithoutFeedback>
           </View>

@@ -1,5 +1,6 @@
-import { CredentialState } from '@aries-framework/core'
-import { useCredentialByState } from '@aries-framework/react-hooks'
+import { AnonCredsCredentialMetadataKey } from '@credo-ts/anoncreds'
+import { CredentialState } from '@credo-ts/core'
+import { useCredentialByState } from '@credo-ts/react-hooks'
 import { useNavigation } from '@react-navigation/core'
 import { useIsFocused } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
@@ -18,18 +19,29 @@ import { TourID } from '../types/tour'
 
 const ListCredentials: React.FC = () => {
   const { t } = useTranslation()
+  const [store, dispatch] = useStore()
   const {
     credentialListOptions: CredentialListOptions,
     credentialEmptyList: CredentialEmptyList,
     enableTours: enableToursConfig,
+    credentialHideList,
   } = useConfiguration()
-  const credentials = [
+
+  let credentials = [
     ...useCredentialByState(CredentialState.CredentialReceived),
     ...useCredentialByState(CredentialState.Done),
   ]
+
+  // Filter out hidden credentials when not in dev mode
+  if (!store.preferences.developerModeEnabled) {
+    credentials = credentials.filter((r) => {
+      const credDefId = r.metadata.get(AnonCredsCredentialMetadataKey)?.credentialDefinitionId
+      return !credentialHideList?.includes(credDefId)
+    })
+  }
+
   const navigation = useNavigation<StackNavigationProp<CredentialStackParams>>()
   const { ColorPallet } = useTheme()
-  const [store, dispatch] = useStore()
   const { start, stop } = useTour()
   const screenIsFocused = useIsFocused()
 

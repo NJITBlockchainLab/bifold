@@ -1,13 +1,21 @@
-import { INDY_PROOF_REQUEST_ATTACHMENT_ID, V1RequestPresentationMessage } from '@aries-framework/anoncreds'
-import { CredentialExchangeRecord, CredentialState, ProofExchangeRecord, ProofState } from '@aries-framework/core'
-import { Attachment, AttachmentData } from '@aries-framework/core/build/decorators/attachment/Attachment'
-import { useAgent, useProofById } from '@aries-framework/react-hooks'
+import { INDY_PROOF_REQUEST_ATTACHMENT_ID, V1RequestPresentationMessage } from '@credo-ts/anoncreds'
+import {
+  CredentialExchangeRecord,
+  CredentialRole,
+  CredentialState,
+  ProofExchangeRecord,
+  ProofRole,
+  ProofState,
+} from '@credo-ts/core'
+import { Attachment, AttachmentData } from '@credo-ts/core/build/decorators/attachment/Attachment'
+import { useAgent, useProofById } from '@credo-ts/react-hooks'
 import mockRNCNetInfo from '@react-native-community/netinfo/jest/netinfo-mock'
 import { useNavigation } from '@react-navigation/core'
 import '@testing-library/jest-native/extend-expect'
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/react-native'
 import React from 'react'
 
+import { useTranslation } from 'react-i18next'
 import { ConfigurationContext } from '../../App/contexts/configuration'
 import { NetworkContext, NetworkProvider } from '../../App/contexts/network'
 import ProofRequest from '../../App/screens/ProofRequest'
@@ -15,8 +23,8 @@ import { testIdWithKey } from '../../App/utils/testable'
 import configurationContext from '../contexts/configuration'
 import networkContext from '../contexts/network'
 import timeTravel from '../helpers/timetravel'
-import { useTranslation } from '../../__mocks__/react-i18next'
 
+jest.mock('../../App/container-api')
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo)
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -62,6 +70,7 @@ describe('displays a proof request screen', () => {
     const { t } = useTranslation()
 
     const { id: credentialId } = new CredentialExchangeRecord({
+      role: CredentialRole.Holder,
       threadId: '1',
       state: CredentialState.Done,
       credentialAttributes: [
@@ -117,6 +126,7 @@ describe('displays a proof request screen', () => {
     })
 
     const testProofRequest = new ProofExchangeRecord({
+      role: ProofRole.Prover,
       connectionId: '',
       threadId: presentationMessageId,
       state: ProofState.RequestReceived,
@@ -227,15 +237,12 @@ describe('displays a proof request screen', () => {
         timeTravel(1000)
       })
 
-      const shareButton = tree.getByTestId(testIdWithKey('Share'))
-      const declineButton = tree.getByTestId(testIdWithKey('Decline'))
+      const cancelButton = tree.getByTestId(testIdWithKey('Cancel'))
       const recordLoading = tree.getByTestId(testIdWithKey('RecordLoading'))
 
       expect(recordLoading).not.toBeNull()
-      expect(shareButton).not.toBeNull()
-      expect(shareButton).toBeDisabled()
-      expect(declineButton).not.toBeNull()
-      expect(declineButton).not.toBeDisabled()
+      expect(cancelButton).not.toBeNull()
+      expect(cancelButton).not.toBeDisabled()
     })
 
     test('displays a proof request with all claims available', async () => {
@@ -293,6 +300,7 @@ describe('displays a proof request screen', () => {
       const testAge2 = '17'
 
       const { id: credentialId2 } = new CredentialExchangeRecord({
+        role: CredentialRole.Holder,
         threadId: '1',
         state: CredentialState.Done,
         credentialAttributes: [
@@ -406,7 +414,7 @@ describe('displays a proof request screen', () => {
         Promise.resolve()
       })
       const changeCred = getByText('ProofRequest.ChangeCredential', { exact: false })
-      const changeCredButton = getByTestId(testIdWithKey('changeCredential'))
+      const changeCredButton = getByTestId(testIdWithKey('ChangeCredential'))
       const contact = getByText('ContactDetails.AContact', { exact: false })
       const missingInfo = queryByText('ProofRequest.IsRequestingSomethingYouDontHaveAvailable', { exact: false })
       const missingClaim = queryByText('ProofRequest.NotAvailableInYourWallet', { exact: false })
@@ -470,12 +478,10 @@ describe('displays a proof request screen', () => {
         timeTravel(1000)
       })
 
-      const shareButton = tree.getByTestId(testIdWithKey('Share'))
-      const declineButton = tree.getByTestId(testIdWithKey('Decline'))
+      const cancelButton = tree.getByTestId(testIdWithKey('Cancel'))
 
-      expect(shareButton).not.toBeNull()
-      expect(shareButton).toBeDisabled()
-      expect(declineButton).not.toBeNull()
+      expect(cancelButton).not.toBeNull()
+      expect(cancelButton).not.toBeDisabled()
     })
 
     test('displays a proof request with one or more predicates not satisfied', async () => {
@@ -525,8 +531,7 @@ describe('displays a proof request screen', () => {
       const ageLabel = getByText(/Age/, { exact: false })
       const ageValue = getByText(t('ProofRequest.PredicateLe') + ' 18')
       const ageNotSatisfied = getByText('ProofRequest.PredicateNotSatisfied', { exact: false })
-      const shareButton = getByTestId(testIdWithKey('Share'))
-      const declineButton = getByTestId(testIdWithKey('Decline'))
+      const cancelButton = getByTestId(testIdWithKey('Cancel'))
 
       expect(predicateMessage).not.toBeNull()
       expect(predicateMessage).toBeTruthy()
@@ -542,9 +547,8 @@ describe('displays a proof request screen', () => {
       expect(ageValue).toBeTruthy()
       expect(ageNotSatisfied).not.toBeNull()
       expect(ageNotSatisfied).toBeTruthy()
-      expect(shareButton).not.toBeNull()
-      expect(shareButton).toBeDisabled()
-      expect(declineButton).not.toBeNull()
+      expect(cancelButton).not.toBeNull()
+      expect(cancelButton).not.toBeDisabled()
     })
   })
 })

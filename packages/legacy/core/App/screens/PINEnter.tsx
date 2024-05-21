@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/core'
 import { CommonActions } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StatusBar, Keyboard, StyleSheet, Text, Image, View, DeviceEventEmitter } from 'react-native'
+import { Keyboard, StyleSheet, Text, Image, View, DeviceEventEmitter } from 'react-native'
 
 import Button, { ButtonType } from '../components/buttons/Button'
 import PINInput from '../components/inputs/PINInput'
@@ -18,7 +18,6 @@ import { useTheme } from '../contexts/theme'
 import { BifoldError } from '../types/error'
 import { Screens } from '../types/navigators'
 import { hashPIN } from '../utils/crypto'
-import { StatusBarStyles } from '../utils/luminance'
 import { testIdWithKey } from '../utils/testable'
 
 interface PINEnterProps {
@@ -77,6 +76,15 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
       resizeMode: Assets.img.logoSecondary.resizeMode,
     },
   })
+
+  const gotoPostAuthScreens = () => {
+    if (store.onboarding.postAuthScreens.length) {
+      const screen = store.onboarding.postAuthScreens[0]
+      if (screen) {
+        navigation.navigate(screen as never)
+      }
+    }
+  }
 
   // listen for biometrics error event
   useEffect(() => {
@@ -152,6 +160,7 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
       })
 
       setAuthenticated(true)
+      gotoPostAuthScreens()
     }
   }
 
@@ -226,6 +235,7 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
       })
 
       setAuthenticated(true)
+      gotoPostAuthScreens()
     } catch (err: unknown) {
       const error = new BifoldError(t('Error.Title1041'), t('Error.Message1041'), (err as Error)?.message ?? err, 1041)
       DeviceEventEmitter.emit(EventTypes.ERROR_ADDED, error)
@@ -297,7 +307,6 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated, usage = PINEntryU
 
   return (
     <KeyboardView>
-      <StatusBar barStyle={StatusBarStyles.Light} />
       <View style={style.screenContainer}>
         <View style={style.contentContainer}>
           <Image source={Assets.img.logoSecondary.src} style={style.image} />

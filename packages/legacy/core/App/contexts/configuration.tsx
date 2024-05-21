@@ -1,13 +1,13 @@
-import { IndyVdrPoolConfig } from '@aries-framework/indy-vdr'
+import { Agent } from '@credo-ts/core'
 import { ProofRequestTemplate } from '@hyperledger/aries-bifold-verifier'
-import { OCABundleResolverType } from '@hyperledger/aries-oca/build/legacy'
 import { StackNavigationOptions, StackScreenProps } from '@react-navigation/stack'
-import { createContext, ReducerAction, useContext } from 'react'
+import { ReducerAction, createContext, useContext } from 'react'
 
 import { EmptyListProps } from '../components/misc/EmptyList'
 import { RecordProps } from '../components/record/Record'
 import { Locales } from '../localization'
 import OnboardingPages from '../screens/OnboardingPages'
+import { GetCredentialHelpEntry } from '../types/get-credential-help'
 import { ConnectStackParams } from '../types/navigators'
 import { PINSecurityParams } from '../types/security'
 import { SettingSection } from '../types/settings'
@@ -21,6 +21,15 @@ interface NotificationConfiguration {
   pageTitle: string
 }
 
+interface PushNotificationConfiguration {
+  // function to get the current push notification permission status
+  status: () => Promise<'denied' | 'granted' | 'unknown'>
+  // function to request permission for push notifications
+  setup: () => Promise<'denied' | 'granted' | 'unknown'>
+  //function to call when the user changes the push notification setting
+  toggle: (state: boolean, agent: Agent<any>) => Promise<void>
+}
+
 export interface ConfigurationContext {
   pages: typeof OnboardingPages
   splash: React.FC
@@ -32,12 +41,10 @@ export interface ConfigurationContext {
   credentialListOptions: React.FC
   credentialEmptyList: React.FC<EmptyListProps>
   developer: React.FC
-  OCABundleResolver: OCABundleResolverType
   proofTemplateBaseUrl?: string
   scan: React.FC<StackScreenProps<ConnectStackParams>>
   record: React.FC<RecordProps>
   PINSecurity: PINSecurityParams
-  indyLedgers: IndyVdrPoolConfig[]
   settings: SettingSection[]
   customNotification: NotificationConfiguration
   supportedLanguages: Locales[]
@@ -50,6 +57,7 @@ export interface ConfigurationContext {
   showPreface?: boolean
   disableOnboardingSkip?: boolean
   useBiometry: React.FC
+  enablePushNotifications?: PushNotificationConfiguration
   useCustomNotifications: () => { total: number; notifications: any }
   useAttestation?: () => { start: () => void; stop: () => void; loading: boolean }
   whereToUseWalletUrl: string
@@ -57,6 +65,10 @@ export interface ConfigurationContext {
   showScanButton?: boolean
   globalScreenOptions?: StackNavigationOptions
   showDetailsInfo?: boolean
+  getCredentialHelpDictionary?: GetCredentialHelpEntry[]
+  contactHideList?: string[]
+  credentialHideList?: string[]
+  enableUseMultUseInvitation?: boolean
 }
 
 export const ConfigurationContext = createContext<ConfigurationContext>(null as unknown as ConfigurationContext)

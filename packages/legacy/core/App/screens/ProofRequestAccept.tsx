@@ -1,16 +1,15 @@
-import { ProofState } from '@aries-framework/core'
-import { useProofById } from '@aries-framework/react-hooks'
+import { ProofState } from '@credo-ts/core'
+import { useProofById } from '@credo-ts/react-hooks'
 import { useNavigation } from '@react-navigation/core'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Modal, StatusBar, StyleSheet, Text, View, ScrollView } from 'react-native'
+import { Modal, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import Button, { ButtonType } from '../components/buttons/Button'
 import { useAnimatedComponents } from '../contexts/animated-components'
 import { useTheme } from '../contexts/theme'
 import { Screens, TabStacks } from '../types/navigators'
-import { statusBarStyleForColor, StatusBarStyles } from '../utils/luminance'
 import { testIdWithKey } from '../utils/testable'
 
 export interface ProofRequestAcceptProps {
@@ -54,7 +53,7 @@ const ProofRequestAccept: React.FC<ProofRequestAcceptProps> = ({ visible, proofI
   })
 
   if (!proof) {
-    throw new Error('Unable to fetch proof from AFJ')
+    throw new Error('Unable to fetch proof from Credo')
   }
 
   const onBackToHomeTouched = () => {
@@ -73,11 +72,6 @@ const ProofRequestAccept: React.FC<ProofRequestAcceptProps> = ({ visible, proofI
 
   return (
     <Modal visible={visible} transparent={true} animationType={'none'}>
-      <StatusBar
-        barStyle={
-          Platform.OS === 'android' ? StatusBarStyles.Light : statusBarStyleForColor(styles.container.backgroundColor)
-        }
-      />
       <SafeAreaView style={{ backgroundColor: ColorPallet.brand.modalPrimaryBackground }}>
         <ScrollView style={[styles.container]}>
           <View style={[styles.messageContainer]}>

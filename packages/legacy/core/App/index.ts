@@ -1,11 +1,12 @@
 /* eslint-disable import/no-cycle */
 import type { OnboardingStyleSheet } from './screens/Onboarding'
 
-import { Agent } from '@aries-framework/core'
-import AgentProvider from '@aries-framework/react-hooks'
+import { Agent } from '@credo-ts/core'
+import AgentProvider from '@credo-ts/react-hooks'
 
+import App from './App'
 import * as components from './components'
-import Button, { ButtonType } from './components/buttons/Button'
+import { Button as IButton, ButtonImpl as Button, ButtonType } from './components/buttons/Button'
 import HeaderButton, { ButtonLocation } from './components/buttons/HeaderButton'
 import CheckBoxRow from './components/inputs/CheckBoxRow'
 import ContentGradient from './components/misc/ContentGradient'
@@ -26,10 +27,8 @@ import { homeTourSteps } from './components/tour/HomeTourSteps'
 import { proofRequestTourSteps } from './components/tour/ProofRequestTourSteps'
 import { TourBox } from './components/tour/TourBox'
 import HomeFooterView from './components/views/HomeFooterView'
-import indyLedgers from './configs/ledgers/indy'
 import * as contexts from './contexts'
 import { AuthProvider } from './contexts/auth'
-import { CommonUtilProvider } from './contexts/commons'
 import { NetworkProvider } from './contexts/network'
 import { useTour } from './contexts/tour/tour-context'
 import { TourProvider } from './contexts/tour/tour-provider'
@@ -42,6 +41,7 @@ import Preface from './screens/Preface'
 import Splash from './screens/Splash'
 import Terms from './screens/Terms'
 import UseBiometry from './screens/UseBiometry'
+import { loadLoginAttempt } from './services/keychain'
 import * as types from './types'
 
 export { LocalStorageKeys } from './constants'
@@ -98,11 +98,12 @@ export type {
   Migration as MigrationState,
   Tours as ToursState,
 } from './types/state'
+export * from './container-api'
+export { MainContainer } from './container-impl'
 
 export {
-  indyLedgers,
+  App,
   Agent,
-  CommonUtilProvider,
   AgentProvider,
   AuthProvider,
   NetworkProvider,
@@ -114,7 +115,6 @@ export {
   credentialsTourSteps,
   credentialOfferTourSteps,
   proofRequestTourSteps,
-  Button,
   ButtonType,
   HeaderButton,
   ButtonLocation,
@@ -144,4 +144,7 @@ export {
   components,
   contexts,
   Text,
+  loadLoginAttempt,
+  Button,
 }
+export type { IButton }

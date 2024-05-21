@@ -1,5 +1,5 @@
-import { CredentialExchangeRecord, ConnectionRecord } from '@aries-framework/core'
-import { useCredentialById, useConnectionById } from '@aries-framework/react-hooks'
+import { ConnectionRecord, CredentialExchangeRecord } from '@credo-ts/core'
+import { useConnectionById, useCredentialById } from '@credo-ts/react-hooks'
 import mockRNCNetInfo from '@react-native-community/netinfo/jest/netinfo-mock'
 import { useNavigation } from '@react-navigation/core'
 import { act, fireEvent, render } from '@testing-library/react-native'
@@ -13,6 +13,7 @@ import CredentialOffer from '../../App/screens/CredentialOffer'
 import { testIdWithKey } from '../../App/utils/testable'
 import configurationContext from '../contexts/configuration'
 
+jest.mock('../../App/container-api')
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo)
 jest.mock('@react-navigation/core', () => {

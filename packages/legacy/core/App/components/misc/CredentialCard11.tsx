@@ -1,21 +1,27 @@
-import { CredentialExchangeRecord } from '@aries-framework/core'
+import { CredentialExchangeRecord } from '@credo-ts/core'
 import { BrandingOverlay } from '@hyperledger/aries-oca'
 import { Attribute, CredentialOverlay, Predicate } from '@hyperledger/aries-oca/build/legacy'
+import { useNavigation } from '@react-navigation/core'
+import { StackNavigationProp } from '@react-navigation/stack'
 import startCase from 'lodash.startcase'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useWindowDimensions, FlatList, Image, ImageBackground, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import { FlatList, Image, ImageBackground, StyleSheet, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
+import { TOKENS, useContainer } from '../../container-api'
 import { useConfiguration } from '../../contexts/configuration'
 import { useTheme } from '../../contexts/theme'
 import { GenericFn } from '../../types/fn'
+import { NotificationStackParams, Screens } from '../../types/navigators'
 import { credentialTextColor, getCredentialIdentifiers, toImageSource } from '../../utils/credential'
 import { formatIfDate, getCredentialConnectionLabel, isDataUrl, pTypeToText } from '../../utils/helpers'
+import { shadeIsLightOrDark, Shade } from '../../utils/luminance'
 import { testIdWithKey } from '../../utils/testable'
 
 import CardWatermark from './CardWatermark'
+import CredentialActionFooter from './CredentialCard11ActionFooter'
 
 interface CredentialCard11Props {
   credential?: CredentialExchangeRecord
@@ -29,6 +35,8 @@ interface CredentialCard11Props {
   credName?: string
   credDefId?: string
   schemaId?: string
+  proofCredDefId?: string
+  proofSchemaId?: string
   proof?: boolean
   hasAltCredentials?: boolean
   handleAltCredChange?: () => void
@@ -74,6 +82,8 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
   credName,
   credDefId,
   schemaId,
+  proofCredDefId,
+  proofSchemaId,
   proof,
   hasAltCredentials,
   handleAltCredChange,
@@ -82,9 +92,9 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
   const borderRadius = 10
   const padding = width * 0.05
   const logoHeight = width * 0.12
+  const [dimensions, setDimensions] = useState({ cardWidth: 0, cardHeight: 0 })
   const { i18n, t } = useTranslation()
   const { ColorPallet, TextTheme, ListItems } = useTheme()
-  const { OCABundleResolver } = useConfiguration()
   const [isRevoked, setIsRevoked] = useState<boolean>(credential?.revocationNotification !== undefined)
   const [flaggedAttributes, setFlaggedAttributes] = useState<string[]>()
   const [allPI, setAllPI] = useState<boolean>()
@@ -92,16 +102,18 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
   const [isProofRevoked, setIsProofRevoked] = useState<boolean>(
     credential?.revocationNotification !== undefined && !!proof
   )
-
+  const { getCredentialHelpDictionary } = useConfiguration()
+  const bundleResolver = useContainer().resolve(TOKENS.UTIL_OCA_RESOLVER)
+  const [helpAction, setHelpAction] = useState<GenericFn>()
   const [overlay, setOverlay] = useState<CredentialOverlay<BrandingOverlay>>({})
-
+  // below navigation only to be used from proof request screen
+  const navigation = useNavigation<StackNavigationProp<NotificationStackParams, Screens.ProofRequest>>()
   const primaryField = overlay?.presentationFields?.find(
     (field) => field.name === overlay?.brandingOverlay?.primaryAttribute
   )
   const secondaryField = overlay?.presentationFields?.find(
     (field) => field.name === overlay?.brandingOverlay?.secondaryAttribute
   )
-
   const attributeTypes = overlay.bundle?.captureBase.attributes
   const attributeFormats: Record<string, string | undefined> = (overlay.bundle as any)?.bundle.attributes
     .map((attr: any) => {
@@ -110,7 +122,6 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
     .reduce((prev: { [key: string]: string }, curr: { name: string; format?: string }) => {
       return { ...prev, [curr.name]: curr.format }
     }, {})
-
   const cardData = [...(displayItems ?? []), primaryField, secondaryField]
 
   const getSecondaryBackgroundColor = () => {
@@ -122,8 +133,6 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
         : overlay.brandingOverlay?.secondaryBackgroundColor
     }
   }
-
-  const [dimensions, setDimensions] = useState({ cardWidth: 0, cardHeight: 0 })
 
   const styles = StyleSheet.create({
     container: {
@@ -200,11 +209,6 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
     errorIcon: {
       color: ListItems.proofError.color,
     },
-    watermark: {
-      opacity: 0.16,
-      fontSize: 22,
-      transform: [{ rotate: '-30deg' }],
-    },
     selectedCred: {
       borderWidth: 5,
       borderRadius: 15,
@@ -222,6 +226,21 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
       color: ColorPallet.brand.link,
     },
   })
+
+  const backgroundColorIfErrorState = (backgroundColor?: string) =>
+    error || predicateError || isProofRevoked ? ColorPallet.notification.errorBorder : backgroundColor
+
+  const fontColorWithHighContrast = () => {
+    if (proof) {
+      return ColorPallet.grayscale.mediumGrey
+    }
+
+    const c =
+      backgroundColorIfErrorState(overlay.brandingOverlay?.primaryBackgroundColor) ?? ColorPallet.grayscale.lightGrey
+    const shade = shadeIsLightOrDark(c)
+
+    return shade == Shade.Light ? ColorPallet.grayscale.darkGrey : ColorPallet.grayscale.lightGrey
+  }
 
   const parseAttribute = (item: (Attribute & Predicate) | undefined) => {
     let parsedItem = item
@@ -265,7 +284,7 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
       },
       language: i18n.language,
     }
-    OCABundleResolver.resolveAllBundles(params).then((bundle) => {
+    bundleResolver.resolveAllBundles(params).then((bundle) => {
       if (proof) {
         setFlaggedAttributes((bundle as any).bundle.bundle.flaggedAttributes.map((attr: any) => attr.name))
       }
@@ -281,6 +300,27 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
     setIsRevoked(credential?.revocationNotification !== undefined && !proof)
     setIsProofRevoked(credential?.revocationNotification !== undefined && !!proof)
   }, [credential?.revocationNotification])
+
+  useEffect(() => {
+    if (!error) {
+      return
+    }
+
+    getCredentialHelpDictionary?.some((entry) => {
+      if (proofCredDefId && entry.credDefIds.includes(proofCredDefId)) {
+        setHelpAction(() => () => {
+          entry.action(navigation)
+        })
+        return true
+      }
+      if (proofSchemaId && entry.schemaIds.includes(proofSchemaId)) {
+        setHelpAction(() => () => {
+          entry.action(navigation)
+        })
+        return true
+      }
+    })
+  }, [proofCredDefId, proofSchemaId])
 
   const CredentialCardLogo: React.FC = () => {
     return (
@@ -461,23 +501,18 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
             return renderCardAttribute(item as Attribute & Predicate)
           }}
           ListFooterComponent={
-            hasAltCredentials ? (
-              <View>
-                <View style={styles.seperator}></View>
-                <View>
-                  <TouchableOpacity
-                    onPress={handleAltCredChange}
-                    testID={testIdWithKey('changeCredential')}
-                    style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
-                  >
-                    <Text style={styles.credActionText}>{t('ProofRequest.ChangeCredential')}</Text>
-                    <Icon
-                      style={{ ...styles.credActionText, fontSize: styles.credActionText.fontSize + 5 }}
-                      name="chevron-right"
-                    ></Icon>
-                  </TouchableOpacity>
-                </View>
-              </View>
+            hasAltCredentials && handleAltCredChange ? (
+              <CredentialActionFooter
+                onPress={handleAltCredChange}
+                text={t('ProofRequest.ChangeCredential')}
+                testID={'ChangeCredential'}
+              />
+            ) : error && helpAction ? (
+              <CredentialActionFooter
+                onPress={helpAction}
+                text={t('ProofRequest.GetThisCredential')}
+                testID={'GetThisCredential'}
+              />
             ) : null
           }
         />
@@ -492,10 +527,8 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
         style={[
           styles.secondaryBodyContainer,
           {
-            backgroundColor:
-              error || predicateError || isProofRevoked
-                ? ColorPallet.notification.errorBorder
-                : styles.secondaryBodyContainer.backgroundColor,
+            backgroundColor: backgroundColorIfErrorState(styles.secondaryBodyContainer.backgroundColor),
+            overflow: 'hidden',
           },
         ]}
       >
@@ -507,9 +540,7 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
               borderTopLeftRadius: borderRadius,
               borderBottomLeftRadius: borderRadius,
             }}
-          >
-            {null}
-          </ImageBackground>
+          />
         ) : (
           !(error || predicateError || proof || getSecondaryBackgroundColor()) && (
             <View
@@ -523,7 +554,7 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
                   backgroundColor: 'rgba(0,0,0,0.24)',
                 },
               ]}
-            ></View>
+            />
           )
         )}
       </View>
@@ -619,7 +650,7 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
             <CardWatermark
               width={dimensions.cardWidth}
               height={dimensions.cardHeight}
-              style={styles.watermark}
+              style={{ color: fontColorWithHighContrast() }}
               watermark={overlay.metaOverlay?.watermark}
             />
           )}

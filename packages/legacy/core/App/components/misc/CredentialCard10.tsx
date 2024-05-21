@@ -1,12 +1,12 @@
-import { CredentialExchangeRecord } from '@aries-framework/core'
+import { CredentialExchangeRecord } from '@credo-ts/core'
 import { LegacyBrandingOverlay } from '@hyperledger/aries-oca'
 import { CredentialOverlay } from '@hyperledger/aries-oca/build/legacy'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useWindowDimensions, Image, ImageBackground, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import { Image, ImageBackground, StyleSheet, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-import { useConfiguration } from '../../contexts/configuration'
+import { TOKENS, useContainer } from '../../container-api'
 import { useTheme } from '../../contexts/theme'
 import { GenericFn } from '../../types/fn'
 import {
@@ -72,10 +72,10 @@ const CredentialCard10: React.FC<CredentialCard10Props> = ({ credential, style =
   const cardHeaderHeight = cardHeight / 4 // a card has a total of 4 rows, and the header occupy 1 row
   const { t, i18n } = useTranslation()
   const { ColorPallet, TextTheme } = useTheme()
-  const { OCABundleResolver } = useConfiguration()
   const [overlay, setOverlay] = useState<CredentialOverlay<LegacyBrandingOverlay>>({})
   const [isRevoked, setIsRevoked] = useState<boolean>(false)
   const credentialConnectionLabel = getCredentialConnectionLabel(credential)
+  const bundleResolver = useContainer().resolve(TOKENS.UTIL_OCA_RESOLVER)
 
   const styles = StyleSheet.create({
     container: {
@@ -144,7 +144,7 @@ const CredentialCard10: React.FC<CredentialCard10Props> = ({ credential, style =
       },
       language: i18n.language,
     }
-    OCABundleResolver.resolveAllBundles(params).then((bundle) => {
+    bundleResolver.resolveAllBundles(params).then((bundle) => {
       setOverlay({
         ...overlay,
         ...bundle,
