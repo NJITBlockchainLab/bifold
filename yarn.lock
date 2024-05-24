@@ -4178,6 +4178,8 @@ __metadata:
     react-native-gifted-chat: "*"
     react-native-keychain: ^8.1.1
     react-native-localize: ^2.2.4
+    react-native-maps: ^1.13.0
+    react-native-onesignal: ^5.1.0
     react-native-orientation-locker: ^1.6.0
     react-native-permissions: ^3.8.4
     react-native-qrcode-svg: ^6.2.0
@@ -6660,6 +6662,13 @@ __metadata:
     "@types/qs": "*"
     "@types/serve-static": "*"
   checksum: 0196dacc275ac3ce89d7364885cb08e7fb61f53ca101f65886dbf1daf9b7eb05c0943e2e4bbd01b0cc5e50f37e0eea7e4cbe97d0304094411ac73e1b7998f4da
+  languageName: node
+  linkType: hard
+
+"@types/geojson@npm:^7946.0.13":
+  version: 7946.0.14
+  resolution: "@types/geojson@npm:7946.0.14"
+  checksum: ae511bee6488ae3bd5a3a3347aedb0371e997b14225b8983679284e22fa4ebd88627c6e3ff8b08bf4cc35068cb29310c89427311ffc9322c255615821a922e71
   languageName: node
   linkType: hard
 
@@ -13274,7 +13283,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"invariant@npm:*, invariant@npm:2.2.4, invariant@npm:^2.2.4":
+"invariant@npm:*, invariant@npm:2.2.4, invariant@npm:^2.2.2, invariant@npm:^2.2.4":
   version: 2.2.4
   resolution: "invariant@npm:2.2.4"
   dependencies:
@@ -18890,6 +18899,31 @@ __metadata:
   version: 5.0.1
   resolution: "react-native-logs@npm:5.0.1"
   checksum: 71af385c85a7d45d2046ee9fa05ec49e989a446660742d732e2ba210528fb5145f81308af3f65be607bbf207a875480344cca3ec5e7943a7c10ba2d882f28266
+  languageName: node
+  linkType: hard
+
+"react-native-maps@npm:^1.13.0":
+  version: 1.13.0
+  resolution: "react-native-maps@npm:1.13.0"
+  dependencies:
+    "@types/geojson": ^7946.0.13
+  peerDependencies:
+    react: ">= 17.0.1"
+    react-native: ">= 0.64.3"
+    react-native-web: ">= 0.11"
+  peerDependenciesMeta:
+    react-native-web:
+      optional: true
+  checksum: f8dcb281eab707ed9bf283289413f84f5969a92759eccf5c82f660baaf8f19d7230e127316b1281658bedfc9babe5d9cdbd42752707bcd03cc53882f4cdd0e1d
+  languageName: node
+  linkType: hard
+
+"react-native-onesignal@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "react-native-onesignal@npm:5.1.0"
+  dependencies:
+    invariant: ^2.2.2
+  checksum: 18e2143b27cc072aa2b102e560559b9239d2799c16ccfb71fcd33a0828109a8255ee53580edc181d7671e4aa575d4f84e03342aec05da8e9cbdbcf671990c2c2
   languageName: node
   linkType: hard
 
