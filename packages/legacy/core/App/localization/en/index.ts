@@ -487,6 +487,7 @@ const translation = {
     "Build": "Build",
     "WhatAreContacts": "What are Contacts?",
     "QRCodeGen": "Generate QR Code",
+    "ScanBLE": "Bluetooth",
     "ProofRequestDetails":"Proof Request Details",
     "ScanMyQR": "Scan my QR code",
     "Help": "Help",

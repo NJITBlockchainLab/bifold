@@ -221,5 +221,10 @@
       "module",
       "typescript"
     ]
+  },
+  "dependencies": {
+    "react-native-ble-advertise": "^0.4.0",
+    "react-native-ble-manager": "^11.5.3",
+    "react-native-ble-plx": "^3.1.2"
   }
 }

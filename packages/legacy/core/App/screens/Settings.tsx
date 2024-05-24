@@ -134,6 +134,13 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
           onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.QRCodeGen }),
           value: undefined,
         },
+        {
+          title: t('Settings.ScanBLE'),
+          accessibilityLabel: t('Settings.ScanBLE'),
+          testID: testIdWithKey('ScanBLE'),
+          onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.ScanBLE }),
+          value: undefined,
+        },
         // {
         //   title: t('Screens.ProofRequestDetails'),
         //   accessibilityLabel: t('Screens.ProofRequestDetails'),

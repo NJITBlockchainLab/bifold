@@ -97,7 +97,7 @@ const Scan: React.FC<ScanProps> = ({ navigation, route }) => {
     setQrCodeScanError(null)
     try {
       const uri =
-        'didcomm://invite?oob=eyJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvb3V0LW9mLWJhbmQvMS4xL2ludml0YXRpb24iLCJAaWQiOiJmYWNiZDQzMS05YzE1LTQxMGMtYmVhMy0wMDBkNjYyOTczMWUiLCJsYWJlbCI6Ik15IFdhbGxldCAtIDQyMTIiLCJhY2NlcHQiOlsiZGlkY29tbS9haXAxIiwiZGlkY29tbS9haXAyO2Vudj1yZmMxOSJdLCJoYW5kc2hha2VfcHJvdG9jb2xzIjpbImh0dHBzOi8vZGlkY29tbS5vcmcvZGlkZXhjaGFuZ2UvMS4wIiwiaHR0cHM6Ly9kaWRjb21tLm9yZy9jb25uZWN0aW9ucy8xLjAiXSwic2VydmljZXMiOlt7ImlkIjoiI2lubGluZS0wIiwic2VydmljZUVuZHBvaW50IjoiaHR0cHM6Ly9wdWJsaWMubWVkaWF0b3IuaW5kaWNpb3RlY2guaW8iLCJ0eXBlIjoiZGlkLWNvbW11bmljYXRpb24iLCJyZWNpcGllbnRLZXlzIjpbImRpZDprZXk6ejZNa25xUVpyRkEzbUJ5M3JrVVZZS3gxRzhhSmh0c2NFWnVWendidzJXd3ZXRWZGIl0sInJvdXRpbmdLZXlzIjpbImRpZDprZXk6ejZNa3Jpb2FkRmFGVmlwdkJVVTR5VnhyaFhMZTN1UVJUdG1SWjdzbWd1emQ1VFBBIl19XX0'
+        'http://52.14.38.49:8051?c_i=eyJAdHlwZSI6ICJkaWQ6c292OkJ6Q2JzTlloTXJqSGlxWkRUVUFTSGc7c3BlYy9jb25uZWN0aW9ucy8xLjAvaW52aXRhdGlvbiIsICJAaWQiOiAiMmEwZWQyNjktN2I0Zi00Y2IzLWI0OTItMjRjYWZmNTJmOTEwIiwgImxhYmVsIjogImluZnJhc3RydWN0dXJlIiwgInJlY2lwaWVudEtleXMiOiBbIjhOaUtXZE5KVGpBeGJUZm15ck1HanQ1MW1yRVdBWnlnV0gxZnNQcWRncUZ0Il0sICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cDovLzUyLjE0LjM4LjQ5OjgwNTEifQ=='
       await handleInvitation(uri)
     } catch (e: unknown) {
       const error = new QrCodeScanError(t('Scan.InvalidQrCode'), value)

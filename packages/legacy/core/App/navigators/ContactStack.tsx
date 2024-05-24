@@ -14,6 +14,7 @@ import ProofRequest from '../screens/ProofRequest'
 import ProofRequestDetails from '../screens/ProofRequestDetails'
 import QRCodeGen from '../screens/QRCodeGen'
 import RenameContact from '../screens/RenameContact'
+import ScanBLE from '../screens/ScanBLE'
 import SelectProofRequest from '../screens/SelectProofRequest'
 import WhatAreContacts from '../screens/WhatAreContacts'
 import { ContactStackParams, Screens } from '../types/navigators'
@@ -48,6 +49,7 @@ const ContactStack: React.FC = () => {
       />
       <Stack.Screen name={Screens.Chat} component={Chat} />
       <Stack.Screen name={Screens.QRCodeGen} component={QRCodeGen} options={{ title: 'QR Code' }} />
+      <Stack.Screen name={Screens.ScanBLE} component={ScanBLE} options={{ title: 'QR Code' }} />
       <Stack.Screen
         name={Screens.ProofRequestDetails}
         component={ProofRequestDetails}
