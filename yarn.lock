@@ -4178,8 +4178,6 @@ __metadata:
     react-native-gifted-chat: "*"
     react-native-keychain: ^8.1.1
     react-native-localize: ^2.2.4
-    react-native-maps: ^1.13.0
-    react-native-onesignal: ^5.1.0
     react-native-orientation-locker: ^1.6.0
     react-native-permissions: ^3.8.4
     react-native-qrcode-svg: ^6.2.0
@@ -7719,6 +7717,7 @@ __metadata:
     react-native-ble-advertise: ^0.4.0
     react-native-ble-manager: ^11.5.3
     react-native-ble-plx: ^3.1.2
+    react-native-maps: ^1.15.4
     react-native-qrcode-svg: ^6.2.0
     react-native-svg: ^14.1.0
     ts-node: ^10.0.0
@@ -13283,7 +13282,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"invariant@npm:*, invariant@npm:2.2.4, invariant@npm:^2.2.2, invariant@npm:^2.2.4":
+"invariant@npm:*, invariant@npm:2.2.4, invariant@npm:^2.2.4":
   version: 2.2.4
   resolution: "invariant@npm:2.2.4"
   dependencies:
@@ -18902,9 +18901,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-maps@npm:^1.13.0":
-  version: 1.13.0
-  resolution: "react-native-maps@npm:1.13.0"
+"react-native-maps@npm:^1.15.4":
+  version: 1.15.4
+  resolution: "react-native-maps@npm:1.15.4"
   dependencies:
     "@types/geojson": ^7946.0.13
   peerDependencies:
@@ -18914,16 +18913,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-web:
       optional: true
-  checksum: f8dcb281eab707ed9bf283289413f84f5969a92759eccf5c82f660baaf8f19d7230e127316b1281658bedfc9babe5d9cdbd42752707bcd03cc53882f4cdd0e1d
-  languageName: node
-  linkType: hard
-
-"react-native-onesignal@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "react-native-onesignal@npm:5.1.0"
-  dependencies:
-    invariant: ^2.2.2
-  checksum: 18e2143b27cc072aa2b102e560559b9239d2799c16ccfb71fcd33a0828109a8255ee53580edc181d7671e4aa575d4f84e03342aec05da8e9cbdbcf671990c2c2
+  checksum: 377c4631b6bc5d2671936eccb37ee69898778ff907df08c56fab85dd7ea14051d57e5a3bf5213b2dc7421f5661f963a25f73f6a65b70893d997bed8640f8b391
   languageName: node
   linkType: hard
 
