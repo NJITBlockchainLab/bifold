@@ -30,6 +30,7 @@ export const canConnectToLedgerNode = async (node: { host: string; port: number 
     client.setTimeout(socketTimeoutInMs)
   })
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const fetchLedgerNodes = (indyNamespace = 'sovrin'): Array<{ host: string; port: number }> => {
   // const [pool] = pools.filter((p) => p.indyNamespace === indyNamespace)
   const [pool] = pools

@@ -42,7 +42,6 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
   const { ChatTheme: theme, Assets } = useTheme()
   const [theirLabel, setTheirLabel] = useState(getConnectionName(connection, store.preferences.alternateContactNames))
 
-  // This useEffect is for properly rendering changes to the alt contact name, useMemo did not pick them up
   useEffect(() => {
     setTheirLabel(getConnectionName(connection, store.preferences.alternateContactNames))
   }, [isFocused, connection, store.preferences.alternateContactNames])
@@ -70,8 +69,188 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
     })
   }, [basicMessages])
 
+  // useEffect(() => {
+  //   const transformedMessages: Array<ExtendedChatMessage> = basicMessages.map((record: BasicMessageRecord) => {
+  //     const role = getMessageEventRole(record)
+  //     // eslint-disable-next-line
+  //     const linkRegex = /(?:https?\:\/\/\w+(?:\.\w+)+\S*)|(?:[\w\d\.\_\-]+@\w+(?:\.\w+)+)/gm
+  //     // eslint-disable-next-line
+  //     const mailRegex = /^[\w\d\.\_\-]+@\w+(?:\.\w+)+$/gm
+  //     const links = record.content.match(linkRegex) ?? []
+  //     const handleLinkPress = (link: string) => {
+  //       if (link.match(mailRegex)) {
+  //         link = 'mailto:' + link
+  //       }
+  //       Linking.openURL(link)
+  //     }
+  //     const msgText = (
+  //       <Text style={role === Role.me ? theme.rightText : theme.leftText}>
+  //         {record.content.split(linkRegex).map((split, i) => {
+  //           if (i < links.length) {
+  //             const link = links[i]
+  //             return (
+  //               <React.Fragment key={i}>
+  //                 <Text>{split}</Text>
+  //                 <Text
+  //                   onPress={() => handleLinkPress(link)}
+  //                   style={{ color: ColorPallet.brand.link, textDecorationLine: 'underline' }}
+  //                   accessibilityRole={'link'}
+  //                 >
+  //                   {link}
+  //                 </Text>
+  //               </React.Fragment>
+  //             )
+  //           }
+  //           return <Text>{split}</Text>
+  //         })}
+  //       </Text>
+  //     )
+
+  //     return {
+  //       _id: record.id,
+  //       text: record.content,
+  //       renderEvent: () => msgText,
+  //       createdAt: record.updatedAt || record.createdAt,
+  //       type: record.type,
+  //       user: { _id: role },
+  //     }
+  //   })
+
+  //   const callbackTypeForMessage = (record: CredentialExchangeRecord | ProofExchangeRecord) => {
+  //     if (
+  //       record instanceof CredentialExchangeRecord &&
+  //       (record.state === CredentialState.Done || record.state === CredentialState.OfferReceived)
+  //     ) {
+  //       return CallbackType.CredentialOffer
+  //     }
+
+  //     if (
+  //       (record instanceof ProofExchangeRecord && isPresentationReceived(record) && record.isVerified !== undefined) ||
+  //       record.state === ProofState.RequestReceived ||
+  //       (record.state === ProofState.Done && record.isVerified === undefined)
+  //     ) {
+  //       return CallbackType.ProofRequest
+  //     }
+
+  //     if (
+  //       record instanceof ProofExchangeRecord &&
+  //       (record.state === ProofState.PresentationSent || record.state === ProofState.Done)
+  //     ) {
+  //       return CallbackType.PresentationSent
+  //     }
+  //   }
+
+  //   transformedMessages.push(
+  //     ...credentials.map((record: CredentialExchangeRecord) => {
+  //       const role = getCredentialEventRole(record)
+  //       const userLabel = role === Role.me ? t('Chat.UserYou') : theirLabel
+  //       const actionLabel = t(getCredentialEventLabel(record) as any)
+
+  //       return {
+  //         _id: record.id,
+  //         text: actionLabel,
+  //         renderEvent: () => <ChatEvent role={role} userLabel={userLabel} actionLabel={actionLabel} />,
+  //         createdAt: record.updatedAt || record.createdAt,
+  //         type: record.type,
+  //         user: { _id: role },
+  //         messageOpensCallbackType: callbackTypeForMessage(record),
+  //         onDetails: () => {
+  //           const navMap: { [key in CredentialState]?: () => void } = {
+  //             [CredentialState.Done]: () => {
+  //               navigation.navigate(Stacks.ContactStack as any, {
+  //                 screen: Screens.CredentialDetails,
+  //                 params: { credential: record },
+  //               })
+  //             },
+  //             [CredentialState.OfferReceived]: () => {
+  //               navigation.navigate(Stacks.ContactStack as any, {
+  //                 screen: Screens.CredentialOffer,
+  //                 params: { credentialId: record.id },
+  //               })
+  //             },
+  //           }
+  //           const nav = navMap[record.state]
+  //           if (nav) {
+  //             nav()
+  //           }
+  //         },
+  //       }
+  //     })
+  //   )
+
+  //   transformedMessages.push(
+  //     ...proofs.map((record: ProofExchangeRecord) => {
+  //       const role = getProofEventRole(record)
+  //       const userLabel = role === Role.me ? t('Chat.UserYou') : theirLabel
+  //       const actionLabel = t(getProofEventLabel(record) as any)
+
+  //       return {
+  //         _id: record.id,
+  //         text: actionLabel,
+  //         renderEvent: () => <ChatEvent role={role} userLabel={userLabel} actionLabel={actionLabel} />,
+  //         createdAt: record.updatedAt || record.createdAt,
+  //         type: record.type,
+  //         user: { _id: role },
+  //         messageOpensCallbackType: callbackTypeForMessage(record),
+  //         onDetails: () => {
+  //           const toProofDetails = () => {
+  //             navigation.navigate(Stacks.ContactStack as any, {
+  //               screen: Screens.ProofDetails,
+  //               params: {
+  //                 recordId: record.id,
+  //                 isHistory: true,
+  //                 senderReview:
+  //                   record.state === ProofState.PresentationSent ||
+  //                   (record.state === ProofState.Done && record.isVerified === undefined),
+  //               },
+  //             })
+  //           }
+  //           const navMap: { [key in ProofState]?: () => void } = {
+  //             [ProofState.Done]: toProofDetails,
+  //             [ProofState.PresentationSent]: toProofDetails,
+  //             [ProofState.PresentationReceived]: toProofDetails,
+  //             [ProofState.RequestReceived]: () => {
+  //               navigation.navigate(Stacks.ContactStack as any, {
+  //                 screen: Screens.ProofRequest,
+  //                 params: { proofId: record.id },
+  //               })
+  //             },
+  //           }
+  //           const nav = navMap[record.state]
+  //           if (nav) {
+  //             nav()
+  //           }
+  //         },
+  //       }
+  //     })
+  //   )
+
+  //   const connectedMessage = connection
+  //     ? {
+  //         _id: 'connected',
+  //         text: `${t('Chat.YouConnected')} ${theirLabel}`,
+  //         renderEvent: () => (
+  //           <Text style={theme.rightText}>
+  //             {t('Chat.YouConnected')}
+  //             <Text style={[theme.rightText, theme.rightTextHighlighted]}> {theirLabel}</Text>
+  //           </Text>
+  //         ),
+  //         createdAt: connection.createdAt,
+  //         user: { _id: Role.me },
+  //       }
+  //     : undefined
+
+  //   setMessages(
+  //     connectedMessage
+  //       ? [...transformedMessages.sort((a: any, b: any) => b.createdAt - a.createdAt), connectedMessage]
+  //       : transformedMessages.sort((a: any, b: any) => b.createdAt - a.createdAt)
+  //   )
+  // }, [basicMessages, credentials, proofs, theirLabel])
+
   const onSend = useCallback(
     async (messages: IMessage[]) => {
+      // eslint-disable-next-line no-console
+      // console.error(messages)
       await agent?.basicMessages.sendMessage(connectionId, messages[0].text)
     },
     [agent, connectionId]
@@ -79,24 +258,23 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
 
   const onSendRequest = useCallback(async () => {
     navigation.navigate(Stacks.ProofRequestsStack as any, {
-      screen: Screens.ProofRequests,
+      // screen: Screens.ProofRequests,
+      screen: Screens.SelectProofRequest,
       params: { navigation: navigation, connectionId },
     })
   }, [navigation, connectionId])
 
   const actions = useMemo(() => {
-    return store.preferences.useVerifierCapability
-      ? [
-          {
-            text: t('Verifier.SendProofRequest'),
-            onPress: () => {
-              setShowActionSlider(false)
-              onSendRequest()
-            },
-            icon: () => <Assets.svg.iconInfoSentDark height={30} width={30} />,
-          },
-        ]
-      : undefined
+    return [
+      {
+        text: t('Verifier.SendProofRequest'),
+        onPress: () => {
+          setShowActionSlider(false)
+          onSendRequest()
+        },
+        icon: () => <Assets.svg.iconInfoSentDark height={30} width={30} />,
+      },
+    ]
   }, [t, store.preferences.useVerifierCapability, onSendRequest])
 
   const onDismiss = () => {
@@ -111,7 +289,7 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
         alignTop
         renderAvatar={() => null}
         messageIdGenerator={(msg) => msg?._id.toString() || '0'}
-        renderMessage={(props) => <ChatMessage messageProps={props} />}
+        renderMessage={(props) => <ChatMessage key={props.currentMessage?._id} messageProps={props} />}
         renderInputToolbar={(props) => renderInputToolbar(props, theme)}
         renderSend={(props) => renderSend(props, theme)}
         renderComposer={(props) => renderComposer(props, theme, t('Contacts.TypeHere'))}

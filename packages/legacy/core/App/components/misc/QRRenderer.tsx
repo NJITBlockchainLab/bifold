@@ -39,11 +39,20 @@ const QRRenderer: React.FC<QRRendererProps> = ({ value, onError, size }) => {
     }
   }, [onError])
 
-  const qrSize = size ?? width - 80
+  const qrSize = (size ?? width - 80) > 500 ? 500 : size ?? width - 80
 
   return (
     <View style={styles.container} testID={testIdWithKey('QRRenderer')}>
-      {<QRCode ecl="L" value={value} size={qrSize} onError={handleQRCodeGenerationError} />}
+      <QRCode
+        ecl="L"
+        value={value}
+        size={qrSize}
+        onError={handleQRCodeGenerationError}
+        // backgroundColor="black"
+        // color="white"
+        // logo={logo}
+        // logoSize={150}
+      />
       {isInvalidQR && <Text style={styles.errorMessage}>{t('QRRender.GenerationError')}</Text>}
     </View>
   )

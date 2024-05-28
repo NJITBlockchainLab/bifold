@@ -11,6 +11,7 @@ import ProofDetails from '../screens/ProofDetails'
 import ProofRequestDetails from '../screens/ProofRequestDetails'
 import ProofRequestUsageHistory from '../screens/ProofRequestUsageHistory'
 import ProofRequesting from '../screens/ProofRequesting'
+import SelectProofRequest from '../screens/SelectProofRequest'
 import { ProofRequestsStackParams, Screens } from '../types/navigators'
 import { testIdWithKey } from '../utils/testable'
 
@@ -28,6 +29,11 @@ const ProofRequestStack: React.FC = () => {
         name={Screens.ProofRequests}
         component={ListProofRequests}
         options={{ title: t('Screens.ChooseProofRequest') }}
+      />
+      <Stack.Screen
+        name={Screens.SelectProofRequest}
+        component={SelectProofRequest}
+        options={{ title: t('Screens.SelectProofRequest') }}
       />
       <Stack.Screen
         name={Screens.ProofRequestDetails}

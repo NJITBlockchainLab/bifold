@@ -19,7 +19,7 @@ export const migrateToAskar = async (walletId: string, key: string, agent?: Agen
     agent ??
     new Agent({
       config: {
-        label: 'Aries Bifold',
+        label: 'FHWA',
         walletConfig: {
           id: walletId,
           key,

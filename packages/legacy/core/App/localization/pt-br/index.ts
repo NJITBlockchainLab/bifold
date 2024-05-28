@@ -138,8 +138,8 @@ const translation = {
     "Attestation": "Eu li, entendo e aceito os termos e condições.",
   },
   "Tour": {
-    "GuideTitle": "Bem-vindo a Aries Bifold",
-    "WouldYouLike": "Gostaria de ver algumas instruções sobre como usar a Aries Bifold?",
+    "GuideTitle": "Bem-vindo a FHWA",
+    "WouldYouLike": "Gostaria de ver algumas instruções sobre como usar a FHWA?",
     "UseAppGuides": "Usar o guia do app",
     "DoNotUseAppGuides": "Não usar o guia do app",
     "AddAndShare": "Adicionar e compartilhar credenciais",
@@ -162,7 +162,7 @@ const translation = {
   "CameraDisclosure": {
     "AllowCameraUse": "Permitir uso da câmera",
     "CameraDisclosure": "A câmera é usada para escanear QR Codes para processamento imediato no dispositivo. Nenhuma informação sobre as imagens é armazenada, usada para análise, ou compartilhada.",
-    "ToContinueUsing": "Para continuar usando a funcionalidade de scan da Aries Bifold, favor permitir o uso da câmera.",
+    "ToContinueUsing": "Para continuar usando a funcionalidade de scan da FHWA, favor permitir o uso da câmera.",
     "OpenSettings": "Abrir as configurações",
   },
   "PINCreate": {
@@ -351,12 +351,12 @@ const translation = {
     "Torch": "Flash",
     "ScanHelp": "Ajuda do Scan",
     "ScanNow": "Scaneie Agora",
-    "ScanOnySpecial": "Apenas QR codes especiais podem ser escaneados pela Bifold Wallet.",
+    "ScanOnySpecial": "Apenas QR codes especiais podem ser escaneados pela FHWA Wallet.",
     "ScanOnlySpecial2": "Estes são apresentados pelos serviços ou pessoas participantes para receber uma oferta de credenciais, solicitar informações ou para se conectar.",
-    "ScanOnlySpecial3": "No momento a Bifold Wallet não suporta a adição de credenciais digitais escaneando ou tirando fotos de credenciais físicas.",
-    "WhereToUseLink": "Veja onde você pode usar a Bifold Wallet",
+    "ScanOnlySpecial3": "No momento a FHWA Wallet não suporta a adição de credenciais digitais escaneando ou tirando fotos de credenciais físicas.",
+    "WhereToUseLink": "Veja onde você pode usar a FHWA Wallet",
     "BadQRCode": "QR Code não reconhecido",
-    "BadQRCodeDescription": "O QR code escaneado não funciona com a Bifold Wallet. A Bifold Wallet só funciona com serviços participantes.\n\nEla não pode adicionar credenciais digitais tirando fotos de credenciais físicas no momento.",
+    "BadQRCodeDescription": "O QR code escaneado não funciona com a FHWA Wallet. A FHWA Wallet só funciona com serviços participantes.\n\nEla não pode adicionar credenciais digitais tirando fotos de credenciais físicas no momento.",
   },
   "Connection": {
     "JustAMoment": "Aguarde um momento enquanto fazemos uma conexão segura...",
@@ -515,7 +515,7 @@ const translation = {
   "Screens": {
     "Splash": "Splash",
     "Onboarding": "Onboarding",
-    "Preface": "Aries Bifold",
+    "Preface": "FHWA",
     "Terms": "Termos & Condições",
     "CreatePIN": "Criar um PIN",
     "EnterPIN": "Digitar o PIN",
@@ -569,16 +569,16 @@ const translation = {
   },
   "NetInfo": {
     "NoInternetConnectionTitle": "Sem conexão com a internet",
-    "NoInternetConnectionMessage": "Não é possivel acessar serviços utilizando a Bifold ou receber credenciais até você voltar a estar online.\n\nFavor checkar sua conexão com a internet.",
+    "NoInternetConnectionMessage": "Não é possivel acessar serviços utilizando a FHWA ou receber credenciais até você voltar a estar online.\n\nFavor checkar sua conexão com a internet.",
     "LedgerConnectivityIssueTitle": "Serviços de Carteira",
     "LedgerConnectivityIssueMessage": "Um firewall pode estar te impedindo de conectar-se a serviços relacionados a carteira.",
   },
   "Onboarding": {
-    "SkipA11y": "Pular introdução a Aries Bifold",
+    "SkipA11y": "Pular introdução a FHWA",
   },
   "Preface": {
     "PrimaryHeading": "Esse app é para você?",
-    "Paragraph1": "Muitas pessoas não precisarão da Aries Bifold pois pouquíssimas credenciais digitais estão disponíveis nesse momento.",
+    "Paragraph1": "Muitas pessoas não precisarão da Aries FHWA pois pouquíssimas credenciais digitais estão disponíveis nesse momento.",
     "Confirmed": "Eu confirmo que este app é para mim.",
   },
   "Chat": {

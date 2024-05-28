@@ -9,7 +9,7 @@ describe('Helpers', () => {
   beforeAll(() => {
     spy = jest.spyOn(Date, 'now').mockImplementation(() => 1677766511505)
   })
-  const templates = useProofRequestTemplates(false)
+  const templates = useProofRequestTemplates(false, [])
 
   test('Build anoncreds proof request from template containing two requested attributes', async () => {
     const template = templates[0]

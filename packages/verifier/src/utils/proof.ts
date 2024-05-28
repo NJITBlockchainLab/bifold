@@ -70,6 +70,8 @@ export const parseAnonCredsProof = (request: AnonCredsProofRequest, proof: AnonC
 
   for (const [referent, requestedPredicate] of Object.entries(request.requested_predicates)) {
     // @ts-ignore Mistake in Credo type definition
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore Mistake in AFJ type definition
     const shared = proof.requested_proof.predicates[referent]
     if (shared) {
       const identifiers = getProofIdentifiers(proof, shared.sub_proof_index)

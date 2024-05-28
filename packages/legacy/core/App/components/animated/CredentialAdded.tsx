@@ -1,23 +1,21 @@
 import React, { useEffect, useRef } from 'react'
 import { View, StyleSheet, Animated } from 'react-native'
 
-import CheckInCircle from '../../assets/img/check-in-circle.svg'
-import CredentialCard from '../../assets/img/credential-card.svg'
-import WalletBack from '../../assets/img/wallet-back.svg'
-import WalletFront from '../../assets/img/wallet-front.svg'
+import CarImage from '../../assets/img/carfront.svg'
+import ShieldImage from '../../assets/img/shield.svg'
 
 const CredentialAdded: React.FC = () => {
   const cardFadeAnim = useRef(new Animated.Value(0)).current
   const checkFadeAnim = useRef(new Animated.Value(0)).current
-  const tranAnim = useRef(new Animated.Value(-90)).current
+  const tranAnim = useRef(new Animated.Value(0)).current // Start the shield above the screen
   const slideTiming: Animated.TimingAnimationConfig = {
-    toValue: -15,
-    duration: 1200,
+    toValue: 60, // Slide the shield down by 90 units
+    duration: 200,
     useNativeDriver: true,
   }
   const fadeTiming: Animated.TimingAnimationConfig = {
     toValue: 1,
-    duration: 600,
+    duration: 200,
     useNativeDriver: true,
   }
   const style = StyleSheet.create({
@@ -39,7 +37,8 @@ const CredentialAdded: React.FC = () => {
     },
     check: {
       alignItems: 'center',
-      marginBottom: 10,
+      marginRight: -180,
+      zIndex: 100,
     },
   })
 
@@ -49,7 +48,7 @@ const CredentialAdded: React.FC = () => {
     setTimeout(() => {
       Animated.sequence([
         Animated.timing(cardFadeAnim, fadeTiming),
-        Animated.timing(tranAnim, slideTiming),
+        Animated.timing(tranAnim, slideTiming), // Apply the slide timing animation here
         Animated.timing(checkFadeAnim, fadeTiming),
       ]).start()
     }, animationDelay)
@@ -57,15 +56,11 @@ const CredentialAdded: React.FC = () => {
 
   return (
     <View style={[style.container]}>
-      <Animated.View style={[{ opacity: checkFadeAnim }, style.check]}>
-        <CheckInCircle {...{ height: 45, width: 45 }} />
+      <Animated.View style={[{ opacity: checkFadeAnim, transform: [{ translateY: tranAnim }] }, style.check]}>
+        <ShieldImage {...{ height: 100, width: 100 }} />
       </Animated.View>
       <View>
-        <WalletBack style={[style.back]} {...{ height: 110, width: 110 }} />
-        <Animated.View style={[{ opacity: cardFadeAnim, transform: [{ translateY: tranAnim }] }]}>
-          <CredentialCard style={[style.card]} {...{ height: 110, width: 110 }} />
-        </Animated.View>
-        <WalletFront style={[style.front]} {...{ height: 140, width: 140 }} />
+        <CarImage {...{ height: 220, width: 220 }} />
       </View>
     </View>
   )

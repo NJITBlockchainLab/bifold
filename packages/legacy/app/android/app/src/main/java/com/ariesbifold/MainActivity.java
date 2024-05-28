@@ -27,7 +27,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "aries-bifold";
+    return "fhwa-wallet";
   }
 
   /**

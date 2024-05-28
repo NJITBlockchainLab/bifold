@@ -134,9 +134,11 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
     }
   }
 
+  // const [dimensions, setDimensions] = useState({ cardWidth: 0, cardHeight: 0 })
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: overlay.brandingOverlay?.primaryBackgroundColor,
+      backgroundColor: '#113B51', //hardcode overlay.brandingOverlay?.primaryBackgroundColor,
+
       borderRadius: borderRadius,
     },
     cardContainer: {
@@ -147,7 +149,7 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
       width: logoHeight,
       borderTopLeftRadius: borderRadius,
       borderBottomLeftRadius: borderRadius,
-      backgroundColor: getSecondaryBackgroundColor() ?? overlay.brandingOverlay?.primaryBackgroundColor,
+      backgroundColor: '#0D2D3E', //hardcode getSecondaryBackgroundColor() ?? overlay.brandingOverlay?.primaryBackgroundColor
     },
     primaryBodyContainer: {
       flex: 1,
@@ -480,7 +482,7 @@ const CredentialCard11: React.FC<CredentialCard11Props> = ({
                 },
               ]}
             >
-              {overlay.metaOverlay?.name}
+              {overlay.metaOverlay?.name?.toUpperCase()}
             </Text>
           </View>
         </View>
