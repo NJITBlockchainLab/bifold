@@ -6,14 +6,22 @@ import {
   SafeAreaView,
   View,
   Text,
-  Button,
   FlatList,
   StyleSheet,
   Alert,
   Platform,
+  Pressable,
+  Switch,
+  NativeModules,
+  NativeEventEmitter,
 } from 'react-native'
+import Button, { ButtonType } from '../components/buttons/Button'
 import BleAdvertise from 'react-native-ble-advertise'
 import BleManager from 'react-native-ble-manager'
+import { useTranslation } from 'react-i18next'
+import { useTheme } from '../contexts/theme'
+import { testIdWithKey } from '../utils/testable'
+import { useAnimatedComponents } from '../contexts/animated-components'
 
 // Define the local device interface for TypeScript
 interface LocalDevice {
@@ -25,16 +33,15 @@ interface LocalDevice {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: 10
   },
   device: {
-    padding: 10,
     marginVertical: 5,
-    borderWidth: 1,
-    borderColor: '#ccc',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   deviceName: {
-    color: '#000000',
     fontWeight: 'bold',
   },
   noDevicesText: {
@@ -46,12 +53,18 @@ const styles = StyleSheet.create({
 const ScanBLE = () => {
   const [isScanning, setIsScanning] = useState(false)
   const [devices, setDevices] = useState<LocalDevice[]>([])
-  const [scanFinished, setScanFinished] = useState(false)
+  const [discoverable, setDiscoverable] = useState<boolean>()
   const [connectedDeviceId, setConnectedDeviceId] = useState<string | null>(null)
+  const BleManagerModule = NativeModules.BleManager;
+  const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+  const { ColorPallet, TextTheme } = useTheme()
+  const { ButtonLoading } = useAnimatedComponents()
+  const { t } = useTranslation()
 
   const handleDiscoverPeripheral = (peripheral: { id: string; name: any }) => {
     if (peripheral && peripheral.id && peripheral.name) {
       setDevices((prevDevices) => {
+        console.log(prevDevices)
         const deviceExists = prevDevices.some((device) => device.id === peripheral.id)
         return deviceExists ? prevDevices : [...prevDevices, { id: peripheral.id, name: peripheral.name }]
       })
@@ -63,10 +76,20 @@ const ScanBLE = () => {
       console.error('BleManager initialization error:', error)
     })
 
+    let stopListener = BleManagerEmitter.addListener(
+      'BleManagerStopScan',
+      () => {
+        setIsScanning(false);
+        console.log('Scan is stopped');
+      },
+    );
+
     const subscription = BleManager.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral)
     return () => {
+      stopListener.remove()
       subscription.remove()
     }
+
   }, [])
 
   const requestPermissions = useCallback(async () => {
@@ -90,26 +113,16 @@ const ScanBLE = () => {
 
   const startScan = useCallback(async () => {
     const permissionsGranted = await requestPermissions()
+    console.log(permissionsGranted)
     if (permissionsGranted) {
       setDevices([]) // Clear devices list before scanning
-      setIsScanning(true)
-      setScanFinished(false)
       BleManager.scan([], 10, true)
-        .then(() => {
-          console.log('Scanning...')
-          setTimeout(() => {
-            setIsScanning(false)
-            setScanFinished(true)
-            if (devices.length === 0) {
-              Alert.alert('Scan Complete', 'No devices found.')
-            }
-            console.log('Scan complete')
-          }, 10000) // Adjusted timeout to match scan duration
+      .then(() => {
+          setIsScanning(true)
         })
         .catch((err: any) => {
           console.error('Scan failed', err)
           setIsScanning(false)
-          setScanFinished(true)
         })
     } else {
       console.log('Permissions not granted')
@@ -131,9 +144,8 @@ const ScanBLE = () => {
 
   const renderItem = ({ item }: { item: LocalDevice }) => (
     <View style={styles.device}>
-      <Text style={styles.deviceName}>{item.name}</Text>
-      <Text style={styles.deviceName}>ID: {item.id}</Text>
-      <Button title="Connect" onPress={() => connectToDevice(item.id)} />
+      <Text style={[TextTheme.title]}>{item.name}</Text>
+      <Button title="Connect" onPress={() => connectToDevice(item.id)} buttonType={ButtonType.Secondary} />
     </View>
   )
 
@@ -160,11 +172,44 @@ const ScanBLE = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Button title="Scan for devices" onPress={startScan} disabled={isScanning} />
-      <Button title="Advertise as peripheral" onPress={startBLEAdvertising} />
-      {scanFinished && devices.length === 0 && <Text style={styles.noDevicesText}>No devices found.</Text>}
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginVertical: 20,
+        }}
+      >
+        <View style={{ flexShrink: 1, marginRight: 10, justifyContent: 'center' }}>
+          <Text style={[TextTheme.bold]}>{t('ScanBLE.MakeDiscoverable')}</Text>
+        </View>
+        <View style={{ justifyContent: 'center' }}>
+          <Pressable
+            testID={testIdWithKey('ToggleBluetooth')}
+            accessible
+            accessibilityLabel={t('ScanBLE.Toggle')}
+            accessibilityRole={'switch'}
+          >
+            <Switch
+              trackColor={{ false: ColorPallet.grayscale.lightGrey, true: ColorPallet.brand.primaryDisabled }}
+              thumbColor={discoverable ? ColorPallet.brand.primary : ColorPallet.grayscale.mediumGrey}
+              ios_backgroundColor={ColorPallet.grayscale.lightGrey}
+              onValueChange={(value) => setDiscoverable(value)}
+              value={discoverable}
+              // disabled={!biometryAvailable}
+            />
+          </Pressable>
+        </View>
+      </View>
+      <View style={{marginBottom: 10}}>
+        <Text style={[TextTheme.normal]}>{t('ScanBLE.Text1')}</Text>
+      </View>
+      {!isScanning && devices.length === 0 && <Text style={styles.noDevicesText}>No devices found.</Text>}
       <FlatList data={devices} renderItem={renderItem} keyExtractor={(item) => item.id} />
       {connectedDeviceId && <Text>Connected to device: {connectedDeviceId}</Text>}
+      <Button title={t('ScanBLE.ScanDevices')} onPress={startScan} disabled={isScanning} buttonType={ButtonType.Primary}>
+        {isScanning && <ButtonLoading />}
+      </Button>
+      {/* <Button title="Advertise as peripheral" onPress={startBLEAdvertising} buttonType={ButtonType.Primary} /> */}
     </SafeAreaView>
   )
 }

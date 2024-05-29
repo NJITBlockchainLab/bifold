@@ -211,6 +211,12 @@ const translation = {
     "Continue": "Continuar",
     "EnterYourCurrentPIN": "Digite seu PIN atual."
   },
+  "ScanBLE": {
+    "Text1": "Certifique-se de que o Bluetooth esteja ativado em ambos os dispositivos. Use o botão abaixo para procurar dispositivos disponíveis e enviar um convite para conexão.",
+    "Toggle": "Alternar descoberta de Bluetooth",
+    "ScanDevices": "Procurar dispositivos",
+    "MakeDiscoverable": "Tornar detectável"
+  },
   "PINEnter": {
     "EnterPIN": "Digitar PIN",
     "Unlock": "Destravar",
