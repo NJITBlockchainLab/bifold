@@ -49,7 +49,7 @@ const ContactStack: React.FC = () => {
       />
       <Stack.Screen name={Screens.Chat} component={Chat} />
       <Stack.Screen name={Screens.QRCodeGen} component={QRCodeGen} options={{ title: 'QR Code' }} />
-      <Stack.Screen name={Screens.ScanBLE} component={ScanBLE} options={{ title: 'QR Code' }} />
+      <Stack.Screen name={Screens.ScanBLE} component={ScanBLE} options={{ title: 'Bluetooth' }} />
       <Stack.Screen
         name={Screens.ProofRequestDetails}
         component={ProofRequestDetails}
