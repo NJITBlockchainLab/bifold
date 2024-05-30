@@ -6,8 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Agent } from '@credo-ts/core'
-import { agentDependencies } from '@credo-ts/react-native'
+import { useAgent } from '@credo-ts/react-hooks'
 import Button, { ButtonType } from '../components/buttons/Button'
 import CheckBoxRow from '../components/inputs/CheckBoxRow'
 import { useTheme } from '../contexts/theme'
@@ -53,12 +52,7 @@ const SelectProofRequest = ({ navigation, route }: { navigation: any; route: any
   })
 
   // const { agent } = useAgent()
-  const agent = new Agent({
-    config: {
-      label: 'FHWA Wallet',
-    },
-    dependencies: agentDependencies,
-  })
+  const {agent} = useAgent()
   if (!agent) {
     throw new Error('Unable to fetch agent from AFJ')
   }

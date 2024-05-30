@@ -1,5 +1,5 @@
 import { DidExchangeState } from '@aries-framework/core'
-import { Agent } from '@credo-ts/core'
+import { useAgent } from '@credo-ts/react-hooks'
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,7 +8,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import { agentDependencies } from '@credo-ts/react-native'
 import LoadingIndicator from '../components/animated/LoadingIndicator'
 import QRRenderer from '../components/misc/QRRenderer'
 import { domain } from '../constants'
@@ -37,12 +36,7 @@ const QRCodeGen: React.FC<Props> = ({ navigation }) => {
   const [recordId, setRecordId] = useState<string | undefined>(undefined)
   const { t } = useTranslation()
   const { ColorPallet, TextTheme, TabTheme } = useTheme()
-  const agent = new Agent({
-    config: {
-      label: 'FHWA Wallet',
-    },
-    dependencies: agentDependencies,
-  })
+  const {agent} = useAgent()
 
   const styles = StyleSheet.create({
     container: {
