@@ -142,8 +142,8 @@ const translation = {
         "Attestation": "J'ai lu, je comprends et j'accepte les conditions."
     },
     "Tour": {
-        "GuideTitle": "Bienvenue à Aries Bifold",
-        "WouldYouLike": "Souhaitez-vous des conseils sur la façon d'utiliser Aries Bifold?",
+        "GuideTitle": "Bienvenue à FHWA",
+        "WouldYouLike": "Souhaitez-vous des conseils sur la façon d'utiliser FHWA?",
         "UseAppGuides": "Utiliser les conseils",
         "DoNotUseAppGuides": "Ne pas utiliser les conseils",
         "AddAndShare": "Ajouter et partager des justificatifs d'identité",
@@ -216,6 +216,12 @@ const translation = {
         "ChangePIN": "Changer votre NIP",
         "Continue": "Continuer",
         "EnterYourCurrentPIN": "Entrez votre NIP actuel"
+    },
+    "ScanBLE": {
+        "Text1": "Assurez-vous que Bluetooth est activé sur les deux appareils. Utilisez le bouton ci-dessous pour rechercher les appareils disponibles et envoyer une invitation à vous connecter.",
+        "Toggle": "Activer/Désactiver la découverte Bluetooth",
+        "ScanDevices": "Rechercher des appareils",
+        "MakeDiscoverable": "Rendre visible"
     },
     "PINEnter": {
         "EnterPIN": "Veuillez saisir votre NIP",
@@ -351,12 +357,12 @@ const translation = {
         "Torch": "Flash",
         "ScanHelp": "Scan Help (FR)",
         "ScanNow": "Scan Now (FR)",
-        "ScanOnySpecial": "Only special QR codes can be scanned by Bifold Wallet. (FR)",
+        "ScanOnySpecial": "Only special QR codes can be scanned by FHWA Wallet. (FR)",
         "ScanOnlySpecial2": "These are presented by participating services or people to receive a credential offer, request for information or to connect. (FR)",
-        "ScanOnlySpecial3": "Bifold Wallet currently doesn't support adding digital credential by scanning or taking photos of physical ones. (FR)",
-        "WhereToUseLink": "See where you can use Bifold Wallet (FR)",    
+        "ScanOnlySpecial3": "FHWA Wallet currently doesn't support adding digital credential by scanning or taking photos of physical ones. (FR)",
+        "WhereToUseLink": "See where you can use FHWA Wallet (FR)",    
         "BadQRCode": "QR Code Not Recognized (FR)",
-        "BadQRCodeDescription": "Ths QR code scanned doesn't work with Bifold Wallet. Bifold Wallet only works with participating services.\n\nIt currently can't add digital credentials by taking photos of physical ones. (FR)",
+        "BadQRCodeDescription": "This QR code scanned doesn't work with FHWA Wallet. FHWA Wallet only works with participating services.\n\nIt currently can't add digital credentials by taking photos of physical ones. (FR)",
     },
     "Connection": {
         "JustAMoment": "Veuillez patienter pendant que nous établissons une connexion sécurisée...",
@@ -506,7 +512,7 @@ const translation = {
     "Screens": {
         "Splash": "Page de garde",
         "Onboarding": "Inscription",
-        "Preface": "Aries Bifold",
+        "Preface": "FHWA",
         "Terms": "Conditions d'utilisation",
         "CreatePIN": "Créer un NIP à 6 chiffres",
         "EnterPIN": "Saisir le NIP",
@@ -567,16 +573,16 @@ const translation = {
     },
     "NetInfo": {
         "NoInternetConnectionTitle": "Aucune connexion Internet",
-        "NoInternetConnectionMessage": "Vous ne pouvez pas accéder aux services à l'aide de Bifold ou recevoir des informations d'identification tant que vous n'êtes pas de nouveau en ligne.\n\nS'il vous plait, vérifiez votre connexion internet.",
+        "NoInternetConnectionMessage": "Vous ne pouvez pas accéder aux services à l'aide de FHWA ou recevoir des informations d'identification tant que vous n'êtes pas de nouveau en ligne.\n\nS'il vous plait, vérifiez votre connexion internet.",
         "LedgerConnectivityIssueTitle": "Services de portefeuille",
         "LedgerConnectivityIssueMessage": "Il se peut qu'un pare-feu vous empêche de vous connecter aux services liés au portefeuille.",
     },
     "Onboarding": {
-        "SkipA11y": "Skip introduction to Aries Bifold (FR)",
+        "SkipA11y": "Skip introduction to FHWA (FR)",
     },
     "Preface": {
         "PrimaryHeading": "Is this app for you? (FR)",
-        "Paragraph1": "Most people will not have a need for Aries Bifold because very few digital credentials are currently available. (FR)",
+        "Paragraph1": "Most people will not have a need for FHWA because very few digital credentials are currently available. (FR)",
         "Confirmed": "I have confirmed that this app is for me. (FR)",
     },
     "Chat": {

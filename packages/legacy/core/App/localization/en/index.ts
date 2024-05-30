@@ -142,8 +142,8 @@ const translation = {
     "Attestation": "I have read, understand and accept the terms and conditions.",
   },
   "Tour": {
-    "GuideTitle": "Welcome to Aries Bifold",
-    "WouldYouLike": "Would you like some guidance on how to use Aries Bifold?",
+    "GuideTitle": "Welcome to FHWA",
+    "WouldYouLike": "Would you like some guidance on how to use FHWA?",
     "UseAppGuides": "Use app guides",
     "DoNotUseAppGuides": "Don't use app guides",
     "AddAndShare": "Add and share credentials",
@@ -166,7 +166,7 @@ const translation = {
   "CameraDisclosure": {
     "AllowCameraUse": "Allow camera use",
     "CameraDisclosure": "The camera is used to scan QR codes that initiate a credential offer or credential request. No information about the images is stored, used for analytics, or shared.",
-    "ToContinueUsing": "To continue using the Aries Bifold scan feature, please allow camera permissions.",
+    "ToContinueUsing": "To continue using the FHWA scan feature, please allow camera permissions.",
     "OpenSettings": "Open settings",
   },
   "PINCreate": {
@@ -217,6 +217,12 @@ const translation = {
     "ChangePIN": "Change PIN",
     "Continue": "Continue",
     "EnterYourCurrentPIN": "Enter your current PIN"
+  },
+  "ScanBLE": {
+    "Text1": "Ensure Bluetooth is enabled on both devices. Use the button below to scan for available devices and send and invitation to connect.",
+    "Toggle": "Toggle Bluetooth discovery",
+    "ScanDevices": "Scan for devices",
+    "MakeDiscoverable": "Make Discoverable"
   },
   "PINEnter": {
     "EnterPIN": "Enter your wallet PIN",
@@ -353,12 +359,12 @@ const translation = {
     "ScanHelp": "Scan Help",
     "ScanNow": "Scan Now",
     "WhatToScan": "What QR Codes can be scanned?",
-    "ScanOnySpecial": "Only special QR codes can be scanned by Bifold Wallet.",
+    "ScanOnySpecial": "Only special QR codes can be scanned by FHWA Wallet.",
     "ScanOnlySpecial2": "These are presented by participating services or people to receive a credential offer, request for information or to connect.",
-    "ScanOnlySpecial3": "Bifold Wallet currently doesn't support adding digital credential by scanning or taking photos of physical ones.",
-    "WhereToUseLink": "See where you can use Bifold Wallet",
+    "ScanOnlySpecial3": "FHWA Wallet currently doesn't support adding digital credential by scanning or taking photos of physical ones.",
+    "WhereToUseLink": "See where you can use FHWA Wallet",
     "BadQRCode": "QR Code Not Recognized",
-    "BadQRCodeDescription": "Ths QR code scanned doesn't work with Bifold Wallet. Bifold Wallet only works with participating services.\n\nIt currently can't add digital credentials by taking photos of physical ones.",
+    "BadQRCodeDescription": "This QR code scanned doesn't work with FHWA Wallet. FHWA Wallet only works with participating services.\n\nIt currently can't add digital credentials by taking photos of physical ones.",
   },
   "Connection": {
     "JustAMoment": "Just a moment while we make a secure connection...",
@@ -487,6 +493,8 @@ const translation = {
     "Build": "Build",
     "WhatAreContacts": "What are Contacts?",
     "QRCodeGen": "Generate QR Code",
+    "ScanBLE": "Bluetooth",
+    "ProofRequestDetails":"Proof Request Details",
     "ScanMyQR": "Scan my QR code",
     "Help": "Help",
     "MoreInformation": "More information",
@@ -521,7 +529,7 @@ const translation = {
   "Screens": {
     "Splash": "Splash",
     "Onboarding": "Onboarding",
-    "Preface": "Aries Bifold",
+    "Preface": "FHWA",
     "Terms": "Terms & Conditions",
     "CreatePIN": "Create a PIN",
     "EnterPIN": "Enter PIN",
@@ -548,6 +556,7 @@ const translation = {
     "ChangePIN": "Change PIN",
     "CommonDecline": "Decline",
     "ProofRequests": "Proof requests",
+    "SelectProofRequest": "Select proof request",
     "SendProofRequest": "Send a proof request",
     "ChooseProofRequest": "Choose a proof request",
     "ProofRequestUsageHistory": "Usage History",
@@ -586,16 +595,16 @@ const translation = {
   },
   "NetInfo": {
     "NoInternetConnectionTitle": "No internet connection",
-    "NoInternetConnectionMessage": "You're unable to access services using Bifold or receive credentials until you're back online.\n\nPlease check your internet connection.",
+    "NoInternetConnectionMessage": "You're unable to access services using FHWA or receive credentials until you're back online.\n\nPlease check your internet connection.",
     "LedgerConnectivityIssueTitle": "Wallet Services",
     "LedgerConnectivityIssueMessage": "A firewall may be preventing you from connecting to wallet related services.",
   },
   "Onboarding": {
-    "SkipA11y": "Skip introduction to Aries Bifold",
+    "SkipA11y": "Skip introduction to FHWA",
   },
   "Preface": {
     "PrimaryHeading": "Is this app for you?",
-    "Paragraph1": "Most people will not have a need for Aries Bifold because very few digital credentials are currently available.",
+    "Paragraph1": "Most people will not have a need for FHWA because very few digital credentials are currently available.",
     "Confirmed": "I have confirmed that this app is for me.",
   },
   "Chat": {

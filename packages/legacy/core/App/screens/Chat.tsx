@@ -53,6 +53,9 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParams | ContactStackParams>>()
   const connection = useConnectionById(connectionId)
   const basicMessages = useBasicMessagesByConnectionId(connectionId)
+
+  // eslint-disable-next-line no-console
+  // console.error(basicMessages)
   const credentials = useCredentialsByConnectionId(connectionId)
   const proofs = useProofsByConnectionId(connectionId)
   const isFocused = useIsFocused()
@@ -63,7 +66,6 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
   const { ColorPallet } = useTheme()
   const [theirLabel, setTheirLabel] = useState(getConnectionName(connection, store.preferences.alternateContactNames))
 
-  // This useEffect is for properly rendering changes to the alt contact name, useMemo did not pick them up
   useEffect(() => {
     setTheirLabel(getConnectionName(connection, store.preferences.alternateContactNames))
   }, [isFocused, connection, store.preferences.alternateContactNames])
@@ -111,7 +113,7 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
             if (i < links.length) {
               const link = links[i]
               return (
-                <>
+                <React.Fragment key={i}>
                   <Text>{split}</Text>
                   <Text
                     onPress={() => handleLinkPress(link)}
@@ -120,13 +122,14 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
                   >
                     {link}
                   </Text>
-                </>
+                </React.Fragment>
               )
             }
             return <Text>{split}</Text>
           })}
         </Text>
       )
+
       return {
         _id: record.id,
         text: record.content,
@@ -270,6 +273,8 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
 
   const onSend = useCallback(
     async (messages: IMessage[]) => {
+      // eslint-disable-next-line no-console
+      // console.error(messages)
       await agent?.basicMessages.sendMessage(connectionId, messages[0].text)
     },
     [agent, connectionId]
@@ -277,24 +282,23 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
 
   const onSendRequest = useCallback(async () => {
     navigation.navigate(Stacks.ProofRequestsStack as any, {
-      screen: Screens.ProofRequests,
+      // screen: Screens.ProofRequests,
+      screen: Screens.SelectProofRequest,
       params: { navigation: navigation, connectionId },
     })
   }, [navigation, connectionId])
 
   const actions = useMemo(() => {
-    return store.preferences.useVerifierCapability
-      ? [
-          {
-            text: t('Verifier.SendProofRequest'),
-            onPress: () => {
-              setShowActionSlider(false)
-              onSendRequest()
-            },
-            icon: () => <Assets.svg.iconInfoSentDark height={30} width={30} />,
-          },
-        ]
-      : undefined
+    return [
+      {
+        text: t('Verifier.SendProofRequest'),
+        onPress: () => {
+          setShowActionSlider(false)
+          onSendRequest()
+        },
+        icon: () => <Assets.svg.iconInfoSentDark height={30} width={30} />,
+      },
+    ]
   }, [t, store.preferences.useVerifierCapability, onSendRequest])
 
   const onDismiss = () => {
@@ -309,7 +313,7 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
         alignTop
         renderAvatar={() => null}
         messageIdGenerator={(msg) => msg?._id.toString() || '0'}
-        renderMessage={(props) => <ChatMessage messageProps={props} />}
+        renderMessage={(props) => <ChatMessage key={props.currentMessage?._id} messageProps={props} />}
         renderInputToolbar={(props) => renderInputToolbar(props, theme)}
         renderSend={(props) => renderSend(props, theme)}
         renderComposer={(props) => renderComposer(props, theme, t('Contacts.TypeHere'))}

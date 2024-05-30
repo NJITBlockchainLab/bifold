@@ -1,27 +1,30 @@
 import { ProofRequestTemplate, ProofRequestType } from './types/proof-reqeust-template'
 
-export const useProofRequestTemplates = (useDevRestrictions: boolean) => {
-  const studentRestrictions = [{ cred_def_id: 'XUxBrVSALWHLeycAUhrNr9:3:CL:26293:student_card' }]
-  const studentDevRestrictions = [{ schema_name: 'student_card' }]
+export const useProofRequestTemplates = (useDevRestrictions: boolean, attributes: string[]) => {
+  const currentDate = new Date().toLocaleDateString('en-US').split('/')
+  const todayDate = parseInt(
+    currentDate[2] +
+      (currentDate[0].length === 1 ? '0' + currentDate[0] : currentDate[0]) +
+      (currentDate[1].length === 1 ? '0' + currentDate[1] : currentDate[1])
+  )
+  const studentRestrictions = [{ cred_def_id: 'AqXGPNezvYDspDiG5qQ8me:3:CL:16:fhwa-vdkms-ca' }]
+  const schema_id = 'AqXGPNezvYDspDiG5qQ8me:2:vehicle_credential:0.1.0'
+  const studentDevRestrictions = [{ schema_name: 'vehicle_credential' }]
   const restrictions = useDevRestrictions ? studentDevRestrictions : studentRestrictions
   const defaultProofRequestTemplates: Array<ProofRequestTemplate> = [
     {
-      id: 'Aries:5:StudentFullName:0.0.1:indy',
-      name: 'Student full name',
-      description: 'Verify the full name of a student',
+      id: '1',
+      name: 'Full Name',
+      description: 'Verify the details of a verified car',
       version: '0.0.1',
       payload: {
         type: ProofRequestType.AnonCreds,
         data: [
           {
-            schema: 'XUxBrVSALWHLeycAUhrNr9:3:CL:26293:Student Card',
+            schema: schema_id,
             requestedAttributes: [
               {
-                name: 'student_first_name',
-                restrictions,
-              },
-              {
-                name: 'student_last_name',
+                names: attributes,
                 restrictions,
               },
             ],
@@ -30,18 +33,18 @@ export const useProofRequestTemplates = (useDevRestrictions: boolean) => {
       },
     },
     {
-      id: 'Aries:5:StudentFullNameAndExpirationDate:0.0.1:indy',
-      name: 'Student full name and expiration date',
-      description: 'Verify that full name of a student and that he/she has a not expired student card.',
+      id: '2',
+      name: 'Full Name',
+      description: 'Verify the details of a verified car',
       version: '0.0.1',
       payload: {
         type: ProofRequestType.AnonCreds,
         data: [
           {
-            schema: 'XUxBrVSALWHLeycAUhrNr9:3:CL:26293:Student Card',
+            schema: schema_id,
             requestedAttributes: [
               {
-                names: ['student_first_name', 'student_last_name'],
+                names: attributes,
                 restrictions,
               },
             ],
@@ -49,7 +52,7 @@ export const useProofRequestTemplates = (useDevRestrictions: boolean) => {
               {
                 name: 'expiry_date',
                 predicateType: '>=',
-                predicateValue: 20240101,
+                predicateValue: todayDate,
                 restrictions,
               },
             ],

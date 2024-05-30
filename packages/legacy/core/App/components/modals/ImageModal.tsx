@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
+import Default from '../../assets/img/default-photo.svg'
 import { hitSlop } from '../../constants'
 import { useTheme } from '../../contexts/theme'
 import { GenericFn } from '../../types/fn'
@@ -75,7 +76,11 @@ const ImageModal: React.FC<ImageModalProps> = ({ uri, onDismissPressed }) => {
                   <Icon name={dismissIconName} size={iconSize} color={iconColor} />
                 </TouchableOpacity>
               </View>
-              <Image style={styles.image} source={{ uri }} />
+              {uri === '*' ? (
+                <Default {...{ height: 250, aspectRatio: 1, margin: 25 }} />
+              ) : (
+                <Image style={styles.image} source={{ uri }} />
+              )}
             </View>
           </TouchableWithoutFeedback>
         </View>

@@ -114,6 +114,7 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
     }
 
     const updateCredentialPreview = async () => {
+      // eslint-disable-next-line no-unsafe-optional-chaining
       const { ...formatData } = await agent?.credentials.getFormatData(credential.id)
       const { offer, offerAttributes } = formatData
       const offerData = offer?.anoncreds ?? offer?.indy

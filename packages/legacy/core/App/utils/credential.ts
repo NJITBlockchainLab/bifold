@@ -6,6 +6,8 @@ import { ImageSourcePropType } from 'react-native'
 import { luminanceForHexColor } from './luminance'
 
 export const isValidAnonCredsCredential = (credential: CredentialExchangeRecord) => {
+  // eslint-disable-next-line no-console
+  console.error(credential)
   return (
     credential &&
     (credential.state === CredentialState.OfferReceived ||
@@ -34,4 +36,8 @@ export const getCredentialIdentifiers = (credential: CredentialExchangeRecord) =
     credentialDefinitionId: credential.metadata.get(AnonCredsCredentialMetadataKey)?.credentialDefinitionId,
     schemaId: credential.metadata.get(AnonCredsCredentialMetadataKey)?.schemaId,
   }
+}
+
+export function DateToString(value: string) {
+  return value.substring(0, 4) + '-' + value.substring(4, 6) + '-' + value.substring(6, 8)
 }

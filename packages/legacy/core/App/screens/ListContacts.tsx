@@ -38,6 +38,16 @@ const ListContacts: React.FC<ListContactsProps> = ({ navigation }) => {
     connections = records.filter((r) => !r.connectionTypes.includes(ConnectionType.Mediator))
   }
 
+  // Sort connections by updatedAt
+  connections.sort((a, b) => {
+    // Convert updatedAt to Date objects, handling potential undefined values
+    const dateA = a.updatedAt ? new Date(a.updatedAt) : new Date(0)
+    const dateB = b.updatedAt ? new Date(b.updatedAt) : new Date(0)
+
+    // Compare dates
+    return dateB.getTime() - dateA.getTime()
+  })
+
   const onPressAddContact = () => {
     navigation.getParent()?.navigate(Stacks.ConnectStack, { screen: Screens.Scan, params: { defaultToConnect: true } })
   }

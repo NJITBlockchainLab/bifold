@@ -13,6 +13,7 @@ import { ToastType } from '../components/toast/BaseToast'
 import { EventTypes } from '../constants'
 import { useStore } from '../contexts/store'
 import { useTheme } from '../contexts/theme'
+// import { useConnectionByOutOfBandId } from '../hooks/connections'
 import { BifoldError } from '../types/error'
 import { ContactStackParams, Screens, TabStacks } from '../types/navigators'
 import { ModalUsage } from '../types/remove'
@@ -22,6 +23,7 @@ import { testIdWithKey } from '../utils/testable'
 type ContactDetailsProps = StackScreenProps<ContactStackParams, Screens.ContactDetails>
 
 const ContactDetails: React.FC<ContactDetailsProps> = ({ route }) => {
+  // eslint-disable-next-line no-unsafe-optional-chaining
   const { connectionId } = route?.params
   const { agent } = useAgent()
   const { t } = useTranslation()
@@ -91,7 +93,13 @@ const ContactDetails: React.FC<ContactDetailsProps> = ({ route }) => {
     navigation.navigate(Screens.RenameContact, { connectionId })
   }
 
+  const handleGoToSelect = () => {
+    navigation.navigate(Screens.SelectProofRequest, { connectionId })
+    // useConnectionByOutOfBandId()
+  }
+
   const callGoToRename = useCallback(() => handleGoToRename(), [])
+  const callGoToProofSelection = useCallback(() => handleGoToSelect(), [])
   const callOnRemove = useCallback(() => handleOnRemove(), [])
   const callSubmitRemove = useCallback(() => handleSubmitRemove(), [])
   const callCancelRemove = useCallback(() => handleCancelRemove(), [])
@@ -121,6 +129,15 @@ const ContactDetails: React.FC<ContactDetailsProps> = ({ route }) => {
         style={[styles.contentContainer, { marginTop: 10 }]}
       >
         <Text style={{ ...TextTheme.normal }}>{t('Screens.RenameContact')}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={callGoToProofSelection}
+        accessibilityLabel={t('Screens.SelectProofRequest')}
+        accessibilityRole={'button'}
+        testID={testIdWithKey('SelectProofRequest')}
+        style={[styles.contentContainer, { marginTop: 10 }]}
+      >
+        <Text style={{ ...TextTheme.normal }}>{t('Screens.SelectProofRequest')}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={callOnRemove}
