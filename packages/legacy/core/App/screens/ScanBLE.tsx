@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable no-console */
 import React, { useState, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   PermissionsAndroid,
   SafeAreaView,
@@ -15,31 +16,39 @@ import {
   NativeModules,
   NativeEventEmitter,
 } from 'react-native'
-import Button, { ButtonType } from '../components/buttons/Button'
-import BleAdvertise from 'react-native-ble-advertise'
+// import BleAdvertiser from 'react-native-ble-advertiser'
 import BleManager from 'react-native-ble-manager'
-import { useTranslation } from 'react-i18next'
+
+import Button, { ButtonType } from '../components/buttons/Button'
+import { useAnimatedComponents } from '../contexts/animated-components'
 import { useTheme } from '../contexts/theme'
 import { testIdWithKey } from '../utils/testable'
-import { useAnimatedComponents } from '../contexts/animated-components'
+
+const { BleAdvertise } = NativeModules
 
 // Define the local device interface for TypeScript
 interface LocalDevice {
   id: string
   name?: string
+  rssi?: number
+  advertising?: Advertising
+}
+
+interface Advertising {
+  serviceUUIDs: string[]
 }
 
 // Styling for the component
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10
+    padding: 10,
   },
   device: {
     marginVertical: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   deviceName: {
     fontWeight: 'bold',
@@ -55,18 +64,24 @@ const ScanBLE = () => {
   const [devices, setDevices] = useState<LocalDevice[]>([])
   const [discoverable, setDiscoverable] = useState<boolean>()
   const [connectedDeviceId, setConnectedDeviceId] = useState<string | null>(null)
-  const BleManagerModule = NativeModules.BleManager;
-  const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+  const BleManagerModule = NativeModules.BleManager
+  const BleManagerEmitter = new NativeEventEmitter(BleManagerModule)
   const { ColorPallet, TextTheme } = useTheme()
   const { ButtonLoading } = useAnimatedComponents()
   const { t } = useTranslation()
+  const uuid = '1357d860-1eb6-11ef-9e35-0800200c9a66'
 
-  const handleDiscoverPeripheral = (peripheral: { id: string; name: any }) => {
+  BleAdvertise.setCompanyId(0x00e0)
+
+  const handleDiscoverPeripheral = (peripheral: LocalDevice) => {
+    console.log(peripheral)
     if (peripheral && peripheral.id && peripheral.name) {
       setDevices((prevDevices) => {
-        console.log(prevDevices)
         const deviceExists = prevDevices.some((device) => device.id === peripheral.id)
-        return deviceExists ? prevDevices : [...prevDevices, { id: peripheral.id, name: peripheral.name }]
+        if (!deviceExists) console.log(peripheral)
+        return deviceExists
+          ? prevDevices
+          : [...prevDevices, { id: peripheral.id, name: peripheral.name, rssi: peripheral.rssi }]
       })
     }
   }
@@ -76,20 +91,16 @@ const ScanBLE = () => {
       console.error('BleManager initialization error:', error)
     })
 
-    let stopListener = BleManagerEmitter.addListener(
-      'BleManagerStopScan',
-      () => {
-        setIsScanning(false);
-        console.log('Scan is stopped');
-      },
-    );
+    const stopListener = BleManagerEmitter.addListener('BleManagerStopScan', () => {
+      setIsScanning(false)
+      console.log('Scan is stopped')
+    })
 
-    const subscription = BleManager.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral)
+    const discoverListener = BleManager.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral)
     return () => {
       stopListener.remove()
-      subscription.remove()
+      discoverListener.remove()
     }
-
   }, [])
 
   const requestPermissions = useCallback(async () => {
@@ -98,6 +109,7 @@ const ScanBLE = () => {
         PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
         PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        PermissionsAndroid.PERMISSIONS.BLUETOOTH_ADVERTISE,
       ]
 
       const granted = await PermissionsAndroid.requestMultiple(permissions)
@@ -116,8 +128,8 @@ const ScanBLE = () => {
     console.log(permissionsGranted)
     if (permissionsGranted) {
       setDevices([]) // Clear devices list before scanning
-      BleManager.scan([], 10, true)
-      .then(() => {
+      BleManager.scan([uuid], 10, true)
+        .then(() => {
           setIsScanning(true)
         })
         .catch((err: any) => {
@@ -142,24 +154,22 @@ const ScanBLE = () => {
       })
   }
 
-  const renderItem = ({ item }: { item: LocalDevice }) => (
-    <View style={styles.device}>
-      <Text style={[TextTheme.title]}>{item.name}</Text>
-      <Button title="Connect" onPress={() => connectToDevice(item.id)} buttonType={ButtonType.Secondary} />
-    </View>
-  )
-
-  const startBLEAdvertising = async () => {
+  const startAdvertising = async () => {
+    setDiscoverable(true)
+    console.log('permissionsGranted')
     const permissionsGranted = await requestPermissions()
+    console.log(permissionsGranted)
     if (permissionsGranted) {
-      const uuid = '44C13E43-097A-9C9F-537F-5666A6840C08'
-      const major = '00001'
-      const minor = '00003'
       try {
-        BleAdvertise.setCompanyId('0x00e0')
-        await BleAdvertise.broadcast(uuid, major, minor)
-        console.log('Broadcast started')
-        Alert.alert('Broadcast Started', 'Your device is now broadcasting as a peripheral')
+        await BleAdvertise.broadcast(uuid, [], {
+          includeDeviceName: true,
+        })
+          .then((success) => {
+            console.log(success)
+          })
+          .catch((error) => {
+            console.log('broadcast failed with: ' + error)
+          })
       } catch (error) {
         console.log('Broadcast failed with: ' + error)
         Alert.alert('Broadcast Failed', `Failed to start broadcasting: ${error}`)
@@ -169,6 +179,23 @@ const ScanBLE = () => {
       Alert.alert('Permissions Denied', 'Necessary permissions are not granted')
     }
   }
+
+  const stopAdvertising = async () => {
+    setDiscoverable(false)
+    try {
+      await BleAdvertise.stopBroadcast()
+      console.log('Stopped advertising')
+    } catch (error) {
+      console.error('Failed to stop advertising:', error)
+    }
+  }
+
+  const renderItem = ({ item }: { item: LocalDevice }) => (
+    <View style={styles.device}>
+      <Text style={[TextTheme.title]}>{item.name}</Text>
+      <Button title="Connect" onPress={() => connectToDevice(item.id)} buttonType={ButtonType.Secondary} />
+    </View>
+  )
 
   return (
     <SafeAreaView style={styles.container}>
@@ -193,20 +220,25 @@ const ScanBLE = () => {
               trackColor={{ false: ColorPallet.grayscale.lightGrey, true: ColorPallet.brand.primaryDisabled }}
               thumbColor={discoverable ? ColorPallet.brand.primary : ColorPallet.grayscale.mediumGrey}
               ios_backgroundColor={ColorPallet.grayscale.lightGrey}
-              onValueChange={(value) => setDiscoverable(value)}
+              onValueChange={(value) => (value ? startAdvertising() : stopAdvertising())}
               value={discoverable}
               // disabled={!biometryAvailable}
             />
           </Pressable>
         </View>
       </View>
-      <View style={{marginBottom: 10}}>
+      <View style={{ marginBottom: 10 }}>
         <Text style={[TextTheme.normal]}>{t('ScanBLE.Text1')}</Text>
       </View>
       {!isScanning && devices.length === 0 && <Text style={styles.noDevicesText}>No devices found.</Text>}
       <FlatList data={devices} renderItem={renderItem} keyExtractor={(item) => item.id} />
       {connectedDeviceId && <Text>Connected to device: {connectedDeviceId}</Text>}
-      <Button title={t('ScanBLE.ScanDevices')} onPress={startScan} disabled={isScanning} buttonType={ButtonType.Primary}>
+      <Button
+        title={t('ScanBLE.ScanDevices')}
+        onPress={startScan}
+        disabled={isScanning}
+        buttonType={ButtonType.Primary}
+      >
         {isScanning && <ButtonLoading />}
       </Button>
       {/* <Button title="Advertise as peripheral" onPress={startBLEAdvertising} buttonType={ButtonType.Primary} /> */}
