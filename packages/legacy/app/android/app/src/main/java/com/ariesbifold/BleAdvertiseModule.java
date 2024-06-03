@@ -1,5 +1,6 @@
 package com.ariesbifold;
 
+import com.facebook.react.common.StandardCharsets;
 import com.facebook.react.uimanager.*;
 import com.facebook.react.bridge.*;
 import com.facebook.systrace.Systrace;
@@ -11,6 +12,10 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattServer;
+import android.bluetooth.BluetoothGattServerCallback;
+import android.bluetooth.BluetoothGattService;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +40,8 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
 
+import java.nio.ByteBuffer;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -45,14 +52,13 @@ import java.util.Hashtable;
 import java.util.Set;
 
 public class BleAdvertiseModule extends ReactContextBaseJavaModule {
-
+    private static final UUID SERVICE_UUID = UUID.fromString("1357d860-1eb6-11ef-9e35-0800200c9a66");
+    private static final UUID CHARACTERISTIC_UUID = UUID.fromString("d918d942-8516-4165-922f-dd6823d32b2f");
     public static final String TAG = "BleAdvertiseXX0";
     private BluetoothAdapter mBluetoothAdapter;
-    
+    private BluetoothGattServer gattServer;
     private static Hashtable<String, BluetoothLeAdvertiser> mAdvertiserList;
     private static Hashtable<String, AdvertiseCallback> mAdvertiserCallbackList;
-    private static BluetoothLeScanner mScanner;
-    private static ScanCallback mScannerCallback;
     private int companyId;
     private Boolean mObservedState;
 
@@ -67,7 +73,8 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
                 .getSystemService(Context.BLUETOOTH_SERVICE);
         if (bluetoothManager != null) {
             mBluetoothAdapter = bluetoothManager.getAdapter();
-        } 
+            gattServer = bluetoothManager.openGattServer(reactContext, gattServerCallback);
+        }
 
         if (mBluetoothAdapter != null) {
             mObservedState = mBluetoothAdapter.isEnabled();
@@ -78,6 +85,22 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         reactContext.registerReceiver(mReceiver, filter);
     }
+
+    private final BluetoothGattServerCallback gattServerCallback = new BluetoothGattServerCallback() {
+        @Override
+        public void onCharacteristicWriteRequest(android.bluetooth.BluetoothDevice device, int requestId, BluetoothGattCharacteristic characteristic, boolean preparedWrite, boolean responseNeeded, int offset, byte[] value) {
+            if (CHARACTERISTIC_UUID.equals(characteristic.getUuid())) {
+                characteristic.setValue(value);
+                if (responseNeeded) {
+                    gattServer.sendResponse(device, requestId, android.bluetooth.BluetoothGatt.GATT_SUCCESS, offset, value);
+                }
+                WritableMap map = Arguments.createMap();
+                map.putString("data", new String(value, StandardCharsets.UTF_8));
+                Log.d(TAG, "data:" + value + "_________" + new String(value, StandardCharsets.UTF_8));
+                sendEvent("onRead", map);
+            }
+        }
+    };
     
     @Override
     public String getName() {
@@ -104,13 +127,7 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void broadcast(String uid, ReadableArray payload, ReadableMap options, Promise promise) {
-        if (mBluetoothAdapter == null) {
-            Log.w("BleAdvertiseModule", "Device does not support Bluetooth. Adapter is Null");
-            promise.reject("Device does not support Bluetooth. Adapter is Null");
-            return;
-        } 
-        
+    public void broadcast(String uid, String cuid, ReadableMap options, Promise promise) {
         if (companyId == 0x0000) {
             Log.w("BleAdvertiseModule", "Invalid company id");
             promise.reject("Invalid company id");
@@ -128,6 +145,15 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
             promise.reject("Bluetooth disabled");
             return;
         }
+
+        BluetoothGattService service = new BluetoothGattService(UUID.fromString(uid), BluetoothGattService.SERVICE_TYPE_PRIMARY);
+        BluetoothGattCharacteristic characteristic = new BluetoothGattCharacteristic(
+                UUID.fromString(cuid),
+                BluetoothGattCharacteristic.PROPERTY_READ | BluetoothGattCharacteristic.PROPERTY_WRITE,
+                BluetoothGattCharacteristic.PERMISSION_READ | BluetoothGattCharacteristic.PERMISSION_WRITE
+        );
+        service.addCharacteristic(characteristic);
+        gattServer.addService(service);
 
         BluetoothLeAdvertiser tempAdvertiser;
         AdvertiseCallback tempCallback;
@@ -149,28 +175,12 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
         }
         
         AdvertiseSettings settings = buildAdvertiseSettings(options);
-        AdvertiseData data = buildAdvertiseData(ParcelUuid.fromString(uid), toByteArray(payload), options);
+        AdvertiseData data = buildAdvertiseData(ParcelUuid.fromString(uid), options);
 
         tempAdvertiser.startAdvertising(settings, data, tempCallback);
 
         mAdvertiserList.put(uid, tempAdvertiser);
         mAdvertiserCallbackList.put(uid, tempCallback);
-    }
-
-    private byte[] toByteArray(ReadableArray payload) {
-        byte[] temp = new byte[payload.size()];
-        for (int i = 0; i < payload.size(); i++) {
-            temp[i] = (byte)payload.getInt(i);
-        }
-        return temp;
-    }
-
-    private WritableArray toByteArray(byte[] payload) {
-        WritableArray array = Arguments.createArray();
-        for (byte data : payload) {
-            array.pushInt(data);
-        }
-        return array;
     }
 
    @ReactMethod
@@ -189,7 +199,7 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        WritableArray promiseArray=Arguments.createArray();
+        WritableArray promiseArray = Arguments.createArray();
 
         Set<String> keys = mAdvertiserList.keySet();
         for (String key : keys) {
@@ -202,6 +212,16 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
         }
 
         promise.resolve(promiseArray);
+    }
+
+    @ReactMethod
+    public void addListener(String eventName) {
+
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+
     }
 
     private AdvertiseSettings buildAdvertiseSettings(ReadableMap options) {
@@ -222,16 +242,15 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
         return settingsBuilder.build();
     }
 
-    private AdvertiseData buildAdvertiseData(ParcelUuid uuid, byte[] payload, ReadableMap options) {
+    private AdvertiseData buildAdvertiseData(ParcelUuid uuid, ReadableMap options) {
         AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
 
-        if (options != null && options.hasKey("includeDeviceName")) 
+        if (options != null && options.hasKey("includeDeviceName"))
             dataBuilder.setIncludeDeviceName(options.getBoolean("includeDeviceName"));
-        
-         if (options != null && options.hasKey("includeTxPowerLevel")) 
+
+         if (options != null && options.hasKey("includeTxPowerLevel"))
             dataBuilder.setIncludeTxPowerLevel(options.getBoolean("includeTxPowerLevel"));
-        
-        // dataBuilder.addManufacturerData(companyId, payload);
+
         dataBuilder.addServiceUuid(uuid);
         return dataBuilder.build();
     }
