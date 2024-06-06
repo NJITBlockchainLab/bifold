@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable no-console */
 import { DidExchangeState } from '@aries-framework/core'
 import { useAgent } from '@aries-framework/react-hooks'
@@ -18,7 +17,6 @@ import {
   NativeModules,
   NativeEventEmitter,
 } from 'react-native'
-// import BleAdvertiser from 'react-native-ble-advertiser'
 import BleManager from 'react-native-ble-manager'
 
 import Button, { ButtonType } from '../components/buttons/Button'
@@ -26,15 +24,9 @@ import { domain } from '../constants'
 import { useAnimatedComponents } from '../contexts/animated-components'
 import { useTheme } from '../contexts/theme'
 import { useConnectionByOutOfBandId } from '../hooks/connections'
-import { BifoldError } from '../types/error'
 import { Screens, Stacks } from '../types/navigators'
-import {
-  connectFromInvitation,
-  createConnectionInvitation,
-  getJson,
-  getUrl,
-  receiveMessageFromUrlRedirect,
-} from '../utils/helpers'
+import { createConnectionInvitation } from '../utils/helpers'
+import { handleInvitation } from '../utils/invitation'
 import { testIdWithKey } from '../utils/testable'
 
 import { ScanProps } from './Scan'
@@ -91,44 +83,11 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
   const { agent } = useAgent()
   const record = useConnectionByOutOfBandId(recordId || '')
   let receivedInvitation = ''
-  let implicitInvitations = false
-  if (route?.params && route.params['implicitInvitations']) {
-    implicitInvitations = route.params['implicitInvitations']
-  }
-  let reuseConnections = false
-  if (route?.params && route.params['reuseConnections']) {
-    reuseConnections = route.params['reuseConnections']
-  }
 
   const uuid = '1357d860-1eb6-11ef-9e35-0800200c9a66'
   const cuuid = 'd918d942-8516-4165-922f-dd6823d32b2f'
 
   BleAdvertise.setCompanyId(0x00e0)
-
-  const handleDiscoverPeripheral = (peripheral: LocalDevice) => {
-    console.log(peripheral)
-    if (peripheral && peripheral.id && peripheral.name) {
-      setDevices((prevDevices) => {
-        const deviceExists = prevDevices.some((device) => device.id === peripheral.id)
-        if (!deviceExists) console.log(peripheral)
-        return deviceExists
-          ? prevDevices
-          : [...prevDevices, { id: peripheral.id, name: peripheral.name, rssi: peripheral.rssi }]
-      })
-    }
-  }
-
-  const handleRead = ({ data }: { data: string }) => {
-    console.log('Received data from', cuuid, 'in service', uuid)
-    console.log('Data:', data)
-
-    receivedInvitation += data
-
-    if (data.includes('\n')) {
-      receivedInvitation.replace('\n', '')
-      handleInvitation(receivedInvitation)
-    }
-  }
 
   useEffect(() => {
     BleManager.start({ showAlert: false }).catch((error) => {
@@ -160,6 +119,31 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
       })
     }
   }, [record])
+
+  const handleDiscoverPeripheral = (peripheral: LocalDevice) => {
+    console.log(peripheral)
+    if (peripheral && peripheral.id && peripheral.name) {
+      setDevices((prevDevices) => {
+        const deviceExists = prevDevices.some((device) => device.id === peripheral.id)
+        if (!deviceExists) console.log(peripheral)
+        return deviceExists
+          ? prevDevices
+          : [...prevDevices, { id: peripheral.id, name: peripheral.name, rssi: peripheral.rssi }]
+      })
+    }
+  }
+
+  const handleRead = async ({ data }: { data: string }) => {
+    console.log('Received data from', cuuid, 'in service', uuid)
+    console.log('Data:', data)
+
+    receivedInvitation += data
+
+    if (data.includes('\n')) {
+      receivedInvitation.replace('\n', '')
+      await handleInvitation(navigation, route, agent, receivedInvitation)
+    }
+  }
 
   const requestPermissions = useCallback(async () => {
     if (Platform.OS === 'android') {
@@ -199,31 +183,6 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
     }
   }, [requestPermissions, devices])
 
-  const connectToDevice = (deviceId: string) => {
-    BleManager.connect(deviceId)
-      .then(async () => {
-        console.log('Connected to', deviceId)
-        setConnectedDeviceId(deviceId)
-        // Alert.alert('Connection Successful', `Connected to device ${deviceId}`)
-
-        return BleManager.retrieveServices(deviceId)
-      })
-      .then(async (peripheralInfo) => {
-        console.log('Peripheral info:', peripheralInfo)
-        const invitationURL = await createInvitation()
-
-        console.log(invitationURL)
-        return sendInvitation(deviceId, invitationURL)
-      })
-      .then(() => {
-        disconnectDevice(deviceId)
-      })
-      .catch((err: any) => {
-        console.error('Connection failed', err)
-        Alert.alert('Connection Failed', `Failed to connect to device ${deviceId}`)
-      })
-  }
-
   const stringToBytes = (str: string) => {
     const bytes = []
     for (let i = 0; i < str.length; i++) {
@@ -260,58 +219,29 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
       })
   }
 
-  const handleInvitation = async (value: string): Promise<void> => {
-    try {
-      const receivedInvitation = await connectFromInvitation(value, agent, implicitInvitations, reuseConnections)
-      if (receivedInvitation?.connectionRecord?.id) {
-        // not connectionless
-        navigation.getParent()?.navigate(Stacks.ConnectionStack, {
-          screen: Screens.Connection,
-          params: { connectionId: receivedInvitation.connectionRecord.id },
-        })
-      } else {
-        //connectionless
-        navigation.navigate(Stacks.ConnectionStack as any, {
-          screen: Screens.Connection,
-          params: { threadId: receivedInvitation?.outOfBandRecord.outOfBandInvitation.threadId },
-        })
-      }
-    } catch (err: unknown) {
-      // [Error: Connection does not have an ID]
-      // [AriesFrameworkError: An out of band record with invitation 05fe3693-2c12-4165-a3b6-370280ccd43b has already been received. Invitations should have a unique id.]
-      try {
-        // if scanned value is json -> pass into AFJ as is
-        const json = getJson(value)
-        if (json) {
-          await agent?.receiveMessage(json)
-          navigation.getParent()?.navigate(Stacks.ConnectionStack, {
-            screen: Screens.Connection,
-            params: { threadId: json['@id'] },
-          })
-          return
-        }
+  const connectToDevice = (deviceId: string) => {
+    BleManager.connect(deviceId)
+      .then(async () => {
+        console.log('Connected to', deviceId)
+        setConnectedDeviceId(deviceId)
+        // Alert.alert('Connection Successful', `Connected to device ${deviceId}`)
 
-        // if scanned value is url -> receive message from it
-        const url = getUrl(value)
-        if (url) {
-          const message = await receiveMessageFromUrlRedirect(value, agent)
-          navigation.getParent()?.navigate(Stacks.ConnectionStack, {
-            screen: Screens.Connection,
-            params: { threadId: message['@id'] },
-          })
-          return
-        }
-      } catch (err: unknown) {
-        const error = new BifoldError(
-          t('Error.Title1031'),
-          t('Error.Message1031'),
-          (err as Error)?.message ?? err,
-          1031
-        )
-        // throwing for QrCodeScanError
-        throw error
-      }
-    }
+        return BleManager.retrieveServices(deviceId)
+      })
+      .then(async (peripheralInfo) => {
+        console.log('Peripheral info:', peripheralInfo)
+        const invitationURL = await createInvitation()
+
+        console.log(invitationURL)
+        return sendInvitation(deviceId, invitationURL)
+      })
+      .then(() => {
+        disconnectDevice(deviceId)
+      })
+      .catch((err: any) => {
+        console.error('Connection failed', err)
+        Alert.alert('Connection Failed', `Failed to connect to device ${deviceId}`)
+      })
   }
 
   const startAdvertising = async () => {
