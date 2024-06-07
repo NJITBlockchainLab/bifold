@@ -25,7 +25,7 @@ import { useAnimatedComponents } from '../contexts/animated-components'
 import { useTheme } from '../contexts/theme'
 import { useConnectionByOutOfBandId } from '../hooks/connections'
 import { Screens, Stacks } from '../types/navigators'
-import { createConnectionInvitation } from '../utils/helpers'
+import { createConnectionInvitation, stringToBytes } from '../utils/helpers'
 import { handleInvitation } from '../utils/invitation'
 import { testIdWithKey } from '../utils/testable'
 
@@ -72,8 +72,7 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
   const [devices, setDevices] = useState<LocalDevice[]>([])
   const [discoverable, setDiscoverable] = useState<boolean>()
   const [connectedDeviceId, setConnectedDeviceId] = useState<string | null>(null)
-  // const [invitation, setInvitation] = useState<string | undefined>(undefined)
-  // const [recordId, setRecordId] = useState<string | undefined>(undefined)
+  const [loading, setLoading] = useState<boolean>(true)
   const bleManagerModule = NativeModules.BleManager
   const bleManagerEmitter = new NativeEventEmitter(bleManagerModule)
   const bleAdvertiseEmitter = new NativeEventEmitter(NativeModules.BleAdvertise)
@@ -88,6 +87,31 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
   const cuuid = 'd918d942-8516-4165-922f-dd6823d32b2f'
 
   BleAdvertise.setCompanyId(0x00e0)
+
+  const handleDiscoverPeripheral = (peripheral: LocalDevice) => {
+    console.log(peripheral)
+    if (peripheral && peripheral.id && peripheral.name) {
+      setDevices((prevDevices) => {
+        const deviceExists = prevDevices.some((device) => device.id === peripheral.id)
+        if (!deviceExists) console.log(peripheral)
+        return deviceExists
+          ? prevDevices
+          : [...prevDevices, { id: peripheral.id, name: peripheral.name, rssi: peripheral.rssi }]
+      })
+    }
+  }
+
+  const handleRead = async ({ data }: { data: string }) => {
+    console.log('Received data from', cuuid, 'in service', uuid)
+    console.log('Data:', data)
+
+    receivedInvitation += data
+
+    if (data.includes('\n')) {
+      receivedInvitation.replace('\n', '')
+      await handleInvitation(navigation, route, agent, receivedInvitation)
+    }
+  }
 
   useEffect(() => {
     BleManager.start({ showAlert: false }).catch((error) => {
@@ -120,31 +144,6 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
     }
   }, [record])
 
-  const handleDiscoverPeripheral = (peripheral: LocalDevice) => {
-    console.log(peripheral)
-    if (peripheral && peripheral.id && peripheral.name) {
-      setDevices((prevDevices) => {
-        const deviceExists = prevDevices.some((device) => device.id === peripheral.id)
-        if (!deviceExists) console.log(peripheral)
-        return deviceExists
-          ? prevDevices
-          : [...prevDevices, { id: peripheral.id, name: peripheral.name, rssi: peripheral.rssi }]
-      })
-    }
-  }
-
-  const handleRead = async ({ data }: { data: string }) => {
-    console.log('Received data from', cuuid, 'in service', uuid)
-    console.log('Data:', data)
-
-    receivedInvitation += data
-
-    if (data.includes('\n')) {
-      receivedInvitation.replace('\n', '')
-      await handleInvitation(navigation, route, agent, receivedInvitation)
-    }
-  }
-
   const requestPermissions = useCallback(async () => {
     if (Platform.OS === 'android') {
       const permissions = [
@@ -165,7 +164,7 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
     return true
   }, [])
 
-  const startScan = useCallback(async () => {
+  const startScan = async () => {
     const permissionsGranted = await requestPermissions()
     console.log(permissionsGranted)
     if (permissionsGranted) {
@@ -181,14 +180,6 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
     } else {
       console.log('Permissions not granted')
     }
-  }, [requestPermissions, devices])
-
-  const stringToBytes = (str: string) => {
-    const bytes = []
-    for (let i = 0; i < str.length; i++) {
-      bytes.push(str.charCodeAt(i))
-    }
-    return bytes
   }
 
   const createInvitation = async () => {
