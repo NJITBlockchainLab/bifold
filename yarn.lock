@@ -4639,6 +4639,7 @@ __metadata:
     "@team-griffin/install-self-peers": ^1.1.1
     "@testing-library/jest-native": ^5.4.3
     "@testing-library/react-native": ^12.3.0
+    "@types/convert-string": ^0.1.3
     "@types/jest": ^29.5.5
     "@types/lodash.flatten": ^4.4.6
     "@types/lodash.startcase": ^4.4.7
@@ -4652,6 +4653,7 @@ __metadata:
     babel-jest: ^27.5.1
     babel-plugin-module-resolver: ^5.0.0
     commitlint: ^17.7.1
+    convert-string: ^0.1.0
     eslint: ^8.48.0
     eslint-import-resolver-typescript: ^2.5.0
     eslint-plugin-import: ^2.28.1
@@ -4675,7 +4677,7 @@ __metadata:
     react-native: ~0.72.5
     react-native-animated-pagination-dots: ^0.1.72
     react-native-argon2: ^2.0.1
-    react-native-ble-advertise: ^0.4.0
+    react-native-ble-advertise: ^0.7.0
     react-native-ble-manager: ^11.5.3
     react-native-ble-plx: ^3.1.2
     react-native-bouncy-checkbox: ^3.0.5
@@ -7334,6 +7336,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/convert-string@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "@types/convert-string@npm:0.1.3"
+  checksum: 107386d21890917bf91411022fbe6e3aaff8e27240e51b407a597e3846aa5a0a10c384e525fa6e2ce0b0a14a48f7894f82ef81755270c4466ec40e2edc752df8
+  languageName: node
+  linkType: hard
+
 "@types/express-serve-static-core@npm:^4.17.33":
   version: 4.17.33
   resolution: "@types/express-serve-static-core@npm:4.17.33"
@@ -8408,7 +8417,7 @@ __metadata:
     react-native: "*"
     react-native-animated-pagination-dots: ^0.1.72
     react-native-argon2: ^2.0.1
-    react-native-ble-advertise: ^0.4.0
+    react-native-ble-advertise: ^0.7.0
     react-native-ble-manager: ^11.5.3
     react-native-ble-plx: ^3.1.2
     react-native-bouncy-checkbox: ^3.0.5
@@ -8463,7 +8472,7 @@ __metadata:
     lottie-react-native: ^6.6.0
     npm-run-all: ^4.1.5
     prettier: ^2.8.4
-    react-native-ble-advertise: ^0.4.0
+    react-native-ble-advertise: ^0.7.0
     react-native-ble-manager: ^11.5.3
     react-native-ble-plx: ^3.1.2
     react-native-maps: ^1.15.4
@@ -10542,6 +10551,13 @@ __metadata:
   version: 2.0.0
   resolution: "convert-source-map@npm:2.0.0"
   checksum: 63ae9933be5a2b8d4509daca5124e20c14d023c820258e484e32dc324d34c2754e71297c94a05784064ad27615037ef677e3f0c00469fb55f409d2bb21261035
+  languageName: node
+  linkType: hard
+
+"convert-string@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "convert-string@npm:0.1.0"
+  checksum: a1775cb186d2fbf175486f02e3f7cc68c75e7a0c7609bf434d2a933e801b3a0499ab57de4230919ec824351dc344055bf639a1db5e44a976787145817106d9aa
   languageName: node
   linkType: hard
 
@@ -19998,10 +20014,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-ble-advertise@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "react-native-ble-advertise@npm:0.4.0"
-  checksum: 179bb764e785f1484da0397a3be601255708e97eb39f7f6a7ce6d67a7acf1d0d102db6802b63c68e778ceba0a6ee0cddc3290a9b063048920a2458038fa72b91
+"react-native-ble-advertise@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "react-native-ble-advertise@npm:0.7.0"
+  checksum: a613df576f0fa3a45c767c73e87e98738374627d9096d8a773e1ddb55b8fa0c24da01def899000fdc039fd1b4d85d60935dc36309731f3f9e1a887574b65e464
   languageName: node
   linkType: hard
 
