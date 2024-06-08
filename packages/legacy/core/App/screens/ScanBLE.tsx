@@ -18,6 +18,17 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
   const [showDisclosureModal, setShowDisclosureModal] = useState<boolean>(true)
   const [disclosureType, setDisclosureType] = useState<DisclosureTypes>('NearbyDevicesDisclosure')
   const { t } = useTranslation()
+  // const { agent } = useAgent()
+  // const record = useConnectionByOutOfBandId(recordId || '')
+  let receivedInvitation = ''
+  let implicitInvitations = false
+  if (route?.params && route.params['implicitInvitations']) {
+    implicitInvitations = route.params['implicitInvitations']
+  }
+  let reuseConnections = false
+  if (route?.params && route.params['reuseConnections']) {
+    reuseConnections = route.params['reuseConnections']
+  }
 
   const permissionFlow = async (
     method: MultiplePermissionContract,
@@ -46,6 +57,18 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
 
     return false
   }
+
+  // const handleRead = ({ value }: { value: string }) => {
+  //   console.log('Received data from', cuuid, 'in service', uuid)
+  //   console.log('Data:', value)
+
+  //   receivedInvitation += value
+
+  //   if (value.includes('\n')) {
+  //     receivedInvitation.replace('\n', '')
+  //     handleInvitation(receivedInvitation)
+  //   }
+  // }
 
   useEffect(() => {
     const asyncEffect = async () => {

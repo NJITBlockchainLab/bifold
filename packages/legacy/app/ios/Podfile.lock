@@ -330,7 +330,7 @@ PODS:
   - React-jsinspector (0.72.5)
   - React-logger (0.72.5):
     - glog
-  - react-native-ble-advertise (0.4.0):
+  - react-native-ble-advertise (0.7.0):
     - React-Core
   - react-native-ble-manager (11.5.3):
     - React-Core
@@ -769,7 +769,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: ff70a72027dea5cc7d71cfcc6fad7f599f63987a
   React-jsinspector: aef73cbd43b70675f572214d10fa438c89bf11ba
   React-logger: 2e4aee3e11b3ec4fa6cfd8004610bbb3b8d6cca4
-  react-native-ble-advertise: 06f06722e3b3d0849764f182adcf6ba7ab4e6b89
+  react-native-ble-advertise: 53a8db90614ed4b98b17b96fda723ea73c3bb327
   react-native-ble-manager: d63955f48a45306ae02b3d313ca46ad928a4645a
   react-native-ble-plx: 669899d2fd4d360d541b05ce19c6ee77d95853bf
   react-native-config: 5330c8258265c1e5fdb8c009d2cabd6badd96727
