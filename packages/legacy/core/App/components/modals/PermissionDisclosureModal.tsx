@@ -6,17 +6,18 @@ import { Modal, ScrollView, StyleSheet, Text, View, Linking } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { useTheme } from '../../contexts/theme'
-import { Screens, HomeStackParams, TabStacks } from '../../types/navigators'
+import { Screens, HomeStackParams, TabStacks, Stacks } from '../../types/navigators'
 import { testIdWithKey } from '../../utils/testable'
 import Button, { ButtonType } from '../buttons/Button'
 
 import DismissiblePopupModal from './DismissiblePopupModal'
 
-interface CameraDisclosureModalProps {
-  requestCameraUse: () => Promise<boolean>
+interface PermissionDisclosureModalProps {
+  type: 'CameraDisclosure' | 'NearbyDevicesDisclosure' | 'LocationDisclosure'
+  requestUse: () => Promise<boolean>
 }
 
-const CameraDisclosureModal: React.FC<CameraDisclosureModalProps> = ({ requestCameraUse }) => {
+const PermissionDisclosureModal: React.FC<PermissionDisclosureModalProps> = ({ type, requestUse }) => {
   const { t } = useTranslation()
   const navigation = useNavigation<StackNavigationProp<HomeStackParams>>()
   const [modalVisible, setModalVisible] = useState(true)
@@ -45,7 +46,7 @@ const CameraDisclosureModal: React.FC<CameraDisclosureModalProps> = ({ requestCa
 
   const onContinueTouched = async () => {
     setRequestInProgress(true)
-    const granted = await requestCameraUse()
+    const granted = await requestUse()
     if (!granted) {
       setShowSettingsPopup(true)
     }
@@ -55,12 +56,20 @@ const CameraDisclosureModal: React.FC<CameraDisclosureModalProps> = ({ requestCa
   const onOpenSettingsTouched = async () => {
     setModalVisible(false)
     await Linking.openSettings()
-    navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
+    if (type == 'CameraDisclosure') {
+      navigation.getParent()?.navigate(Stacks.HomeStack, { screen: Screens.Home })
+    } else {
+      navigation.getParent()?.navigate(Stacks.SettingStack, { screen: Screens.ScanBLE })
+    }
   }
 
   const onNotNowTouched = () => {
     setModalVisible(false)
-    navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
+    if (type == 'CameraDisclosure') {
+      navigation.getParent()?.navigate(Stacks.HomeStack, { screen: Screens.Home })
+    } else {
+      navigation.getParent()?.navigate(Stacks.SettingStack, { screen: Screens.ScanBLE })
+    }
   }
 
   const onOpenSettingsDismissed = () => {
@@ -71,20 +80,20 @@ const CameraDisclosureModal: React.FC<CameraDisclosureModalProps> = ({ requestCa
     <Modal visible={modalVisible} animationType={'slide'} supportedOrientations={['portrait', 'landscape']} transparent>
       {showSettingsPopup && (
         <DismissiblePopupModal
-          title={t('CameraDisclosure.AllowCameraUse')}
-          description={t('CameraDisclosure.ToContinueUsing')}
-          onCallToActionLabel={t('CameraDisclosure.OpenSettings')}
+          title={t(`${type}.AllowUse`)}
+          description={t(`${type}.ToContinueUsing`)}
+          onCallToActionLabel={t(`${type}.OpenSettings`)}
           onCallToActionPressed={onOpenSettingsTouched}
           onDismissPressed={onOpenSettingsDismissed}
         />
       )}
       <SafeAreaView style={{ backgroundColor: ColorPallet.brand.modalPrimaryBackground }}>
         <ScrollView style={[styles.container]}>
-          <Text style={[TextTheme.modalHeadingOne]} testID={testIdWithKey('AllowCameraUse')}>
-            {t('CameraDisclosure.AllowCameraUse')}
+          <Text style={[TextTheme.modalHeadingOne]} testID={testIdWithKey('AllowUse')}>
+            {t(`${type}.AllowUse`)}
           </Text>
-          <Text style={[TextTheme.modalNormal, styles.messageText]}>{t('CameraDisclosure.CameraDisclosure')}</Text>
-          <Text style={[TextTheme.modalNormal, styles.messageText]}>{t('CameraDisclosure.ToContinueUsing')}</Text>
+          <Text style={[TextTheme.modalNormal, styles.messageText]}>{t(`${type}.Disclosure`)}</Text>
+          <Text style={[TextTheme.modalNormal, styles.messageText]}>{t(`${type}.ToContinueUsing`)}</Text>
         </ScrollView>
         <View style={[styles.controlsContainer]}>
           <View style={styles.buttonContainer}>
@@ -112,4 +121,4 @@ const CameraDisclosureModal: React.FC<CameraDisclosureModalProps> = ({ requestCa
   )
 }
 
-export default CameraDisclosureModal
+export default PermissionDisclosureModal

@@ -8,7 +8,7 @@ import Toast from 'react-native-toast-message'
 
 import NewQRView from '../components/misc/NewQRView'
 import QRScanner from '../components/misc/QRScanner'
-import CameraDisclosureModal from '../components/modals/CameraDisclosureModal'
+import PermissionDisclosureModal from '../components/modals/PermissionDisclosureModal'
 import { ToastType } from '../components/toast/BaseToast'
 import LoadingView from '../components/views/LoadingView'
 import { useStore } from '../contexts/store'
@@ -94,7 +94,7 @@ const Scan: React.FC<ScanProps> = ({ navigation, route }) => {
   }
 
   if (showDisclosureModal) {
-    return <CameraDisclosureModal requestCameraUse={requestCameraUse} />
+    return <PermissionDisclosureModal requestUse={requestCameraUse} type={'CameraDisclosure'} />
   }
 
   if (store.preferences.useConnectionInviterCapability) {

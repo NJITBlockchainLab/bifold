@@ -42,8 +42,6 @@ export enum Screens {
   ScanHelp = 'Scan Help',
   QRCodeGen = 'Generate QR Code',
   ScanBLE = 'Bluetooth',
-  ScanDevices = 'Scan For Devices',
-  MakeDiscoverable = 'Make Discoverable'
 }
 
 export enum Stacks {
