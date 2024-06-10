@@ -164,8 +164,20 @@ const translation = {
         "Done": "Terminer",
     },
     "CameraDisclosure": {
-        "AllowCameraUse": "Autoriser l'utilisation de la caméra",
-        "CameraDisclosure": "La caméra est utilisée pour capturer les codes QR qui initient une offre de justificatifs d'identité ou une demande de preuve. Aucune information de l'image n'est sauvegardée, utilisée pour les analyses, ou partagée.",
+        "AllowUse": "Autoriser l'utilisation de la caméra",
+        "Disclosure": "La caméra est utilisée pour capturer les codes QR qui initient une offre de justificatifs d'identité ou une demande de preuve. Aucune information de l'image n'est sauvegardée, utilisée pour les analyses, ou partagée.",
+        "ToContinueUsing": "Pour continuer à utiliser la fonction de balayage du Portefeuille QC, autoriser l'utilisation de caméra.",
+        "OpenSettings": "Ourvir Paramètres",
+    },
+    "NearbyDevicesDisclosure": {
+        "AllowUse": "Autoriser l'utilisation de la caméra",
+        "Disclosure": "La caméra est utilisée pour capturer les codes QR qui initient une offre de justificatifs d'identité ou une demande de preuve. Aucune information de l'image n'est sauvegardée, utilisée pour les analyses, ou partagée.",
+        "ToContinueUsing": "Pour continuer à utiliser la fonction de balayage du Portefeuille QC, autoriser l'utilisation de caméra.",
+        "OpenSettings": "Ourvir Paramètres",
+    },
+    "LocationDisclosure": {
+        "AllowUse": "Autoriser l'utilisation de la caméra",
+        "Disclosure": "La caméra est utilisée pour capturer les codes QR qui initient une offre de justificatifs d'identité ou une demande de preuve. Aucune information de l'image n'est sauvegardée, utilisée pour les analyses, ou partagée.",
         "ToContinueUsing": "Pour continuer à utiliser la fonction de balayage du Portefeuille QC, autoriser l'utilisation de caméra.",
         "OpenSettings": "Ourvir Paramètres",
     },
@@ -218,6 +230,7 @@ const translation = {
         "EnterYourCurrentPIN": "Entrez votre NIP actuel"
     },
     "ScanBLE": {
+        "BluetoothText": "Turn On Bluetooth",
         "Text1": "Assurez-vous que Bluetooth est activé sur les deux appareils. Utilisez le bouton ci-dessous pour rechercher les appareils disponibles et envoyer une invitation à vous connecter.",
         "Toggle": "Activer/Désactiver la découverte Bluetooth",
         "ScanDevices": "Rechercher des appareils",
