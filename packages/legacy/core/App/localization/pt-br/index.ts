@@ -158,8 +158,20 @@ const translation = {
     "Done": "Terminar",
   },
   "CameraDisclosure": {
-    "AllowCameraUse": "Permitir uso da câmera",
-    "CameraDisclosure": "A câmera é usada para escanear QR Codes para processamento imediato no dispositivo. Nenhuma informação sobre as imagens é armazenada, usada para análise, ou compartilhada.",
+    "AllowUse": "Permitir uso da câmera",
+    "Disclosure": "A câmera é usada para escanear QR Codes para processamento imediato no dispositivo. Nenhuma informação sobre as imagens é armazenada, usada para análise, ou compartilhada.",
+    "ToContinueUsing": "Para continuar usando a funcionalidade de scan da FHWA, favor permitir o uso da câmera.",
+    "OpenSettings": "Abrir as configurações",
+  },
+  "NearbyDevicesDisclosure": {
+    "AllowUse": "Permitir uso da câmera",
+    "Disclosure": "A câmera é usada para escanear QR Codes para processamento imediato no dispositivo. Nenhuma informação sobre as imagens é armazenada, usada para análise, ou compartilhada.",
+    "ToContinueUsing": "Para continuar usando a funcionalidade de scan da FHWA, favor permitir o uso da câmera.",
+    "OpenSettings": "Abrir as configurações",
+  },
+  "LocationDisclosure": {
+    "AllowUse": "Permitir uso da câmera",
+    "Disclosure": "A câmera é usada para escanear QR Codes para processamento imediato no dispositivo. Nenhuma informação sobre as imagens é armazenada, usada para análise, ou compartilhada.",
     "ToContinueUsing": "Para continuar usando a funcionalidade de scan da FHWA, favor permitir o uso da câmera.",
     "OpenSettings": "Abrir as configurações",
   },
@@ -212,6 +224,7 @@ const translation = {
     "EnterYourCurrentPIN": "Digite seu PIN atual."
   },
   "ScanBLE": {
+    "BluetoothText": "Turn On Bluetooth",
     "Text1": "Certifique-se de que o Bluetooth esteja ativado em ambos os dispositivos. Use o botão abaixo para procurar dispositivos disponíveis e enviar um convite para conexão.",
     "Toggle": "Alternar descoberta de Bluetooth",
     "ScanDevices": "Procurar dispositivos",

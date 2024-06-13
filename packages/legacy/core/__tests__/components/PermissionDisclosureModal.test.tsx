@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/core'
 import { render, fireEvent, act } from '@testing-library/react-native'
 import React from 'react'
 
-import CameraDisclosureModal from '../../App/components/modals/CameraDisclosureModal'
+import PermissionDisclosureModal from '../../App/components/modals/PermissionDisclosureModal'
 import { testIdWithKey } from '../../App/utils/testable'
 
 let requestCameraUse = jest.fn(() => Promise.resolve(true))
@@ -13,11 +13,11 @@ jest.mock('@react-navigation/native', () => {
   return require('../../__mocks__/custom/@react-navigation/native')
 })
 
-describe('CameraDisclosureModal Component', () => {
-  beforeAll(()=>{
+describe('PermissionDisclosureModal Component', () => {
+  beforeAll(() => {
     jest.useFakeTimers()
   })
-  afterAll(()=>{
+  afterAll(() => {
     jest.useRealTimers()
   })
   beforeEach(() => {
@@ -26,12 +26,14 @@ describe('CameraDisclosureModal Component', () => {
   })
 
   test('Renders correctly', () => {
-    const tree = render(<CameraDisclosureModal requestCameraUse={requestCameraUse} />)
+    const tree = render(<PermissionDisclosureModal requestUse={requestCameraUse} type={'CameraDisclosure'} />)
     expect(tree).toMatchSnapshot()
   })
 
   test('Pressing "Continue" triggers requestCameraUse callback', async () => {
-    const { getByTestId } = render(<CameraDisclosureModal requestCameraUse={requestCameraUse} />)
+    const { getByTestId } = render(
+      <PermissionDisclosureModal requestUse={requestCameraUse} type={'CameraDisclosure'} />
+    )
     const continueButton = getByTestId(testIdWithKey('Continue'))
     await act(async () => {
       fireEvent(continueButton, 'press')
@@ -41,7 +43,9 @@ describe('CameraDisclosureModal Component', () => {
 
   test('Pressing "Not now" navigates correctly', async () => {
     const navigation = useNavigation()
-    const { getByTestId } = render(<CameraDisclosureModal requestCameraUse={requestCameraUse} />)
+    const { getByTestId } = render(
+      <PermissionDisclosureModal requestUse={requestCameraUse} type={'CameraDisclosure'} />
+    )
     const notNowButton = getByTestId(testIdWithKey('NotNow'))
     await act(async () => {
       fireEvent(notNowButton, 'press')
