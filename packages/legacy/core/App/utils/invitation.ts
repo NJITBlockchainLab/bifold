@@ -6,6 +6,7 @@ import { BifoldError } from '../types/error'
 import { ConnectStackParams, Screens, Stacks } from '../types/navigators'
 
 import { connectFromInvitation, getJson, getUrl, receiveMessageFromUrlRedirect } from './helpers'
+import { t } from 'i18next'
 
 export const handleInvitation = async (
   navigation: StackNavigationProp<ConnectStackParams, keyof ConnectStackParams>,

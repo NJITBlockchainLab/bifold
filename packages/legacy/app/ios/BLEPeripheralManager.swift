@@ -7,31 +7,49 @@
 
 import Foundation
 import CoreBluetooth
+import UIKit
 
-@objc(BLEPeripheralManager)
-class BLEPeripheralManager: NSObject, CBPeripheralManagerDelegate {
+@objc(BleAdvertise)
+class BleAdvertise: RCTEventEmitter, CBPeripheralManagerDelegate {
     
-    var peripheralManager: CBPeripheralManager!
-    var customService: CBMutableService!
+  var peripheralManager: CBPeripheralManager!
+  var customService: CBMutableService!
     
-    // Define your Service and Characteristic UUIDs
-    let serviceUUID = CBUUID(string: "1357d860-1eb6-11ef-9e35-0800200c9a66")
-    let characteristicUUID = CBUUID(string: "d918d942-8516-4165-922f-dd6823d32b2f")
+  // Define your Service and Characteristic UUIDs
+  var serviceUUID: CBUUID!
+  var characteristicUUID: CBUUID!
+  var deviceName: String!
+  
+  var startAdvertisePromise: RCTPromiseResolveBlock?
+  var startAdvertiseReject: RCTPromiseRejectBlock?
+  
+//  @objc
+//  static var sharedInstance: BleAdvertise?
     
-    @objc func startBLEAdvertising() {
-        peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
-    }
+  override init() {
+          deviceName = UIDevice.current.name // Fetch the device name
+          super.init()
+          peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
+//          BleAdvertise.sharedInstance = self
+      }
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         if peripheral.state == .poweredOn {
             print("Bluetooth is powered on and ready to use")
-            startAdvertising()
+//            startAdvertising()
         } else {
             print("Bluetooth is not available")
         }
     }
+  
+  @objc func setCompanyId(_ companyId: Int64) {
     
-  @objc func startAdvertising() {
+  }
+
+  @objc(broadcast:characteristicUUID:config:resolver:rejecter:)
+  func broadcast(serviceUUIDString: String, characteristicUUIDString: String, config: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        serviceUUID = CBUUID(string: serviceUUIDString)
+        characteristicUUID = CBUUID(string: characteristicUUIDString)
         let characteristic = CBMutableCharacteristic(
             type: characteristicUUID,
             properties: [.read, .write, .notify],
@@ -46,11 +64,17 @@ class BLEPeripheralManager: NSObject, CBPeripheralManagerDelegate {
         
         let advertisementData: [String: Any] = [
             CBAdvertisementDataServiceUUIDsKey: [serviceUUID],
-            CBAdvertisementDataLocalNameKey: "MyBLEDevice"
+            CBAdvertisementDataLocalNameKey: deviceName
         ]
         peripheralManager.startAdvertising(advertisementData)
         
-        print("Started advertising service with UUID: \(serviceUUID)")
+    print("Started advertising service with UUID: \(String(describing: serviceUUID))")
+    }
+  
+  @objc(stopBroadcast)
+  func stopBroadcast() {
+        peripheralManager.stopAdvertising()
+        print("Stopped advertising")
     }
     
     func peripheralManager(_ peripheral: CBPeripheralManager, didAdd service: CBService, error: Error?) {
@@ -84,36 +108,25 @@ class BLEPeripheralManager: NSObject, CBPeripheralManagerDelegate {
                 if let value = request.value {
 //                    characteristic.value = value
                     // Notify React Native about the received data
-                  sendEvent(withName: "onDataReceived", body: ["value": String(decoding:value, as: UTF8.self)])
+                  sendEvent(withName: "onRead", body: ["data": String(decoding:value, as: UTF8.self)])
                     peripheralManager.respond(to: request, withResult: .success)
                 }
             }
         }
     }
     
-    func sendEvent(withName name: String, body: Any) {
-        // Send event to React Native
-      BLEPeripheralManagerBridge.sharedInstance?.sendEvent(withName: name, body: body)
-    }
-}
+  override func supportedEvents() -> [String]! {
+          return ["onRead"]
+      }
+      
+      override class func requiresMainQueueSetup() -> Bool {
+          return true
+      }
 
-extension Data {
-    var hexString: String {
-        return map { String(format: "%02x", $0) }.joined()
-    }
-}
+  }
 
-@objc(BLEPeripheralManagerBridge)
-class BLEPeripheralManagerBridge: RCTEventEmitter {
-    static var sharedInstance: BLEPeripheralManagerBridge?
-    
-    override init() {
-        super.init()
-        BLEPeripheralManagerBridge.sharedInstance = self
-    }
-    
-    override func supportedEvents() -> [String]! {
-        return ["onDataReceived"]
-    }
-  
-}
+  extension Data {
+      var hexString: String {
+          return map { String(format: "%02x", $0) }.joined()
+      }
+  }

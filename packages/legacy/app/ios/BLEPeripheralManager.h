@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BLEPeripheralManager : RCTEventEmitter <RCTBridgeModule>
+@interface BleAdvertise : RCTEventEmitter <RCTBridgeModule>
 
 @end
 

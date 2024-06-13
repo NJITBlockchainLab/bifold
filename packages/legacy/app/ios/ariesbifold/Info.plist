@@ -37,6 +37,10 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>$(PRODUCT_NAME) wants to use Bluetooth</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>$(PRODUCT_NAME) wants to use Bluetooth</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera used for in-app QR Code scanning</string>
 	<key>NSFaceIDUsageDescription</key>
