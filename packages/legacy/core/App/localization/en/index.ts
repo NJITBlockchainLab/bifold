@@ -231,6 +231,7 @@ const translation = {
     "EnterYourCurrentPIN": "Enter your current PIN"
   },
   "ScanBLE": {
+    "Connect": "Connect",
     "BluetoothText": "Please turn on Bluetooth to continue.",
     "Text1": "Ensure Bluetooth is enabled on both devices. Use the button below to scan for available devices and send and invitation to connect.",
     "Toggle": "Toggle Bluetooth discovery",

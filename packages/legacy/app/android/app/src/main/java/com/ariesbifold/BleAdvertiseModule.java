@@ -32,7 +32,6 @@ import java.util.Hashtable;
 import java.util.Set;
 
 public class BleAdvertiseModule extends ReactContextBaseJavaModule {
-    private static final UUID SERVICE_UUID = UUID.fromString("1357d860-1eb6-11ef-9e35-0800200c9a66");
     private static final UUID CHARACTERISTIC_UUID = UUID.fromString("d918d942-8516-4165-922f-dd6823d32b2f");
     public static final String TAG = "BleAdvertise";
     private BluetoothManager mBluetoothManager;
@@ -157,7 +156,7 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        AdvertiseSettings settings = buildAdvertiseSettings(options);
+        AdvertiseSettings settings = buildAdvertiseSettings();
         AdvertiseData data = buildAdvertiseData(ParcelUuid.fromString(uid), options);
 
         tempAdvertiser.startAdvertising(settings, data, tempCallback);
@@ -207,34 +206,21 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
 
     }
 
-    private AdvertiseSettings buildAdvertiseSettings(ReadableMap options) {
-        AdvertiseSettings.Builder settingsBuilder = new AdvertiseSettings.Builder();
-
-        if (options != null && options.hasKey("advertiseMode")) {
-            settingsBuilder.setAdvertiseMode(options.getInt("advertiseMode"));
-        }
-
-        if (options != null && options.hasKey("txPowerLevel")) {
-            settingsBuilder.setTxPowerLevel(options.getInt("txPowerLevel"));
-        }
-
-        if (options != null && options.hasKey("connectable")) {
-            settingsBuilder.setConnectable(options.getBoolean("connectable"));
-        }
+    private AdvertiseSettings buildAdvertiseSettings() {
+        AdvertiseSettings.Builder settingsBuilder = new AdvertiseSettings.Builder()
+                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
+                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
+                .setConnectable(true);
 
         return settingsBuilder.build();
     }
 
     private AdvertiseData buildAdvertiseData(ParcelUuid uuid, ReadableMap options) {
-        AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
+        AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder()
+                .setIncludeDeviceName(true)
+                .setIncludeTxPowerLevel(false)
+                .addServiceUuid(uuid);
 
-        if (options != null && options.hasKey("includeDeviceName"))
-            dataBuilder.setIncludeDeviceName(options.getBoolean("includeDeviceName"));
-
-         if (options != null && options.hasKey("includeTxPowerLevel"))
-            dataBuilder.setIncludeTxPowerLevel(options.getBoolean("includeTxPowerLevel"));
-
-        dataBuilder.addServiceUuid(uuid);
         return dataBuilder.build();
     }
 
