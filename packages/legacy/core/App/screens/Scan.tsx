@@ -8,14 +8,14 @@ import Toast from 'react-native-toast-message'
 
 import NewQRView from '../components/misc/NewQRView'
 import QRScanner from '../components/misc/QRScanner'
-import CameraDisclosureModal from '../components/modals/CameraDisclosureModal'
+import PermissionDisclosureModal from '../components/modals/PermissionDisclosureModal'
 import { ToastType } from '../components/toast/BaseToast'
 import LoadingView from '../components/views/LoadingView'
 import { useStore } from '../contexts/store'
-import { BifoldError, QrCodeScanError } from '../types/error'
-import { ConnectStackParams, Screens, Stacks } from '../types/navigators'
+import { QrCodeScanError } from '../types/error'
+import { ConnectStackParams } from '../types/navigators'
 import { PermissionContract } from '../types/permissions'
-import { connectFromInvitation, getJson, getUrl, receiveMessageFromUrlRedirect } from '../utils/helpers'
+import { handleInvitation } from '../utils/invitation'
 
 export type ScanProps = StackScreenProps<ConnectStackParams>
 
@@ -30,75 +30,12 @@ const Scan: React.FC<ScanProps> = ({ navigation, route }) => {
   if (route?.params && route.params['defaultToConnect']) {
     defaultToConnect = route.params['defaultToConnect']
   }
-  let implicitInvitations = false
-  if (route?.params && route.params['implicitInvitations']) {
-    implicitInvitations = route.params['implicitInvitations']
-  }
-  let reuseConnections = false
-  if (route?.params && route.params['reuseConnections']) {
-    reuseConnections = route.params['reuseConnections']
-  }
-
-  const handleInvitation = async (value: string): Promise<void> => {
-    try {
-      const receivedInvitation = await connectFromInvitation(value, agent, implicitInvitations, reuseConnections)
-      if (receivedInvitation?.connectionRecord?.id) {
-        // not connectionless
-        navigation.getParent()?.navigate(Stacks.ConnectionStack, {
-          screen: Screens.Connection,
-          params: { connectionId: receivedInvitation.connectionRecord.id },
-        })
-      } else {
-        //connectionless
-        navigation.navigate(Stacks.ConnectionStack as any, {
-          screen: Screens.Connection,
-          params: { threadId: receivedInvitation?.outOfBandRecord.outOfBandInvitation.threadId },
-        })
-      }
-    } catch (err: unknown) {
-      // [Error: Connection does not have an ID]
-      // [AriesFrameworkError: An out of band record with invitation 05fe3693-2c12-4165-a3b6-370280ccd43b has already been received. Invitations should have a unique id.]
-      try {
-        // if scanned value is json -> pass into AFJ as is
-        const json = getJson(value)
-        if (json) {
-          await agent?.receiveMessage(json)
-          navigation.getParent()?.navigate(Stacks.ConnectionStack, {
-            screen: Screens.Connection,
-            params: { threadId: json['@id'] },
-          })
-          return
-        }
-
-        // if scanned value is url -> receive message from it
-        const url = getUrl(value)
-        if (url) {
-          const message = await receiveMessageFromUrlRedirect(value, agent)
-          navigation.getParent()?.navigate(Stacks.ConnectionStack, {
-            screen: Screens.Connection,
-            params: { threadId: message['@id'] },
-          })
-          return
-        }
-      } catch (err: unknown) {
-        const error = new BifoldError(
-          t('Error.Title1031'),
-          t('Error.Message1031'),
-          (err as Error)?.message ?? err,
-          1031
-        )
-        // throwing for QrCodeScanError
-        throw error
-      }
-    }
-  }
 
   const handleCodeScan = async (value: string) => {
     setQrCodeScanError(null)
     try {
-      const uri =
-        'http://52.14.38.49:8051?c_i=eyJAdHlwZSI6ICJkaWQ6c292OkJ6Q2JzTlloTXJqSGlxWkRUVUFTSGc7c3BlYy9jb25uZWN0aW9ucy8xLjAvaW52aXRhdGlvbiIsICJAaWQiOiAiMmEwZWQyNjktN2I0Zi00Y2IzLWI0OTItMjRjYWZmNTJmOTEwIiwgImxhYmVsIjogImluZnJhc3RydWN0dXJlIiwgInJlY2lwaWVudEtleXMiOiBbIjhOaUtXZE5KVGpBeGJUZm15ck1HanQ1MW1yRVdBWnlnV0gxZnNQcWRncUZ0Il0sICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cDovLzUyLjE0LjM4LjQ5OjgwNTEifQ=='
-      await handleInvitation(uri)
+      const uri = value
+      await handleInvitation(navigation, route, agent, uri)
     } catch (e: unknown) {
       const error = new QrCodeScanError(t('Scan.InvalidQrCode'), value)
       setQrCodeScanError(error)
@@ -157,7 +94,7 @@ const Scan: React.FC<ScanProps> = ({ navigation, route }) => {
   }
 
   if (showDisclosureModal) {
-    return <CameraDisclosureModal requestCameraUse={requestCameraUse} />
+    return <PermissionDisclosureModal requestUse={requestCameraUse} type={'CameraDisclosure'} />
   }
 
   if (store.preferences.useConnectionInviterCapability) {

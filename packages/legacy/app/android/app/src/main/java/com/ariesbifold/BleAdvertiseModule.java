@@ -1,60 +1,40 @@
 package com.ariesbifold;
 
 import com.facebook.react.common.StandardCharsets;
-import com.facebook.react.uimanager.*;
 import com.facebook.react.bridge.*;
-import com.facebook.systrace.Systrace;
-import com.facebook.systrace.SystraceMessage;
-import com.facebook.react.ReactInstanceManager;
-import com.facebook.react.ReactRootView;
-import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.facebook.react.shell.MainReactPackage;
-import com.facebook.soloader.SoLoader;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattServer;
 import android.bluetooth.BluetoothGattServerCallback;
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanFilter;
-import android.bluetooth.le.ScanResult;
-import android.bluetooth.le.ScanSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
-import android.bluetooth.le.BluetoothLeScanner;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.ParcelUuid;
-import android.os.Build;
 
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
 
-import java.nio.ByteBuffer;
 import java.util.UUID;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
-import java.lang.Thread;
 import java.lang.Object;
 import java.util.Hashtable;
 import java.util.Set;
 
 public class BleAdvertiseModule extends ReactContextBaseJavaModule {
-    private static final UUID SERVICE_UUID = UUID.fromString("1357d860-1eb6-11ef-9e35-0800200c9a66");
     private static final UUID CHARACTERISTIC_UUID = UUID.fromString("d918d942-8516-4165-922f-dd6823d32b2f");
-    public static final String TAG = "BleAdvertiseXX0";
+    public static final String TAG = "BleAdvertise";
+    private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothGattServer gattServer;
     private static Hashtable<String, BluetoothLeAdvertiser> mAdvertiserList;
@@ -69,11 +49,10 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
         mAdvertiserList = new Hashtable<String, BluetoothLeAdvertiser>();
         mAdvertiserCallbackList = new Hashtable<String, AdvertiseCallback>();
 
-        BluetoothManager bluetoothManager = (BluetoothManager) reactContext.getApplicationContext()
+        mBluetoothManager = (BluetoothManager) reactContext.getApplicationContext()
                 .getSystemService(Context.BLUETOOTH_SERVICE);
-        if (bluetoothManager != null) {
-            mBluetoothAdapter = bluetoothManager.getAdapter();
-            gattServer = bluetoothManager.openGattServer(reactContext, gattServerCallback);
+        if (mBluetoothManager != null) {
+            mBluetoothAdapter = mBluetoothManager.getAdapter();
         }
 
         if (mBluetoothAdapter != null) {
@@ -101,7 +80,7 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
             }
         }
     };
-    
+
     @Override
     public String getName() {
         return "BleAdvertise";
@@ -128,17 +107,19 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void broadcast(String uid, String cuid, ReadableMap options, Promise promise) {
+        ReactApplicationContext reactContext = getReactApplicationContext();
+
         if (companyId == 0x0000) {
             Log.w("BleAdvertiseModule", "Invalid company id");
             promise.reject("Invalid company id");
             return;
-        } 
-        
+        }
+
         if (mBluetoothAdapter == null) {
             Log.w("BleAdvertiseModule", "mBluetoothAdapter unavailable");
             promise.reject("mBluetoothAdapter unavailable");
             return;
-        } 
+        }
 
         if (mObservedState != null && !mObservedState) {
             Log.w("BleAdvertiseModule", "Bluetooth disabled");
@@ -153,6 +134,7 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
                 BluetoothGattCharacteristic.PERMISSION_READ | BluetoothGattCharacteristic.PERMISSION_WRITE
         );
         service.addCharacteristic(characteristic);
+        gattServer = mBluetoothManager.openGattServer(reactContext, gattServerCallback);
         gattServer.addService(service);
 
         BluetoothLeAdvertiser tempAdvertiser;
@@ -167,14 +149,14 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
             tempAdvertiser = mBluetoothAdapter.getBluetoothLeAdvertiser();
             tempCallback = new BleAdvertiseModule.SimpleAdvertiseCallback(promise);
         }
-         
+
         if (tempAdvertiser == null) {
             Log.w("BleAdvertiseModule", "Advertiser Not Available unavailable");
             promise.reject("Advertiser unavailable on this device");
             return;
         }
-        
-        AdvertiseSettings settings = buildAdvertiseSettings(options);
+
+        AdvertiseSettings settings = buildAdvertiseSettings();
         AdvertiseData data = buildAdvertiseData(ParcelUuid.fromString(uid), options);
 
         tempAdvertiser.startAdvertising(settings, data, tempCallback);
@@ -191,7 +173,7 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
             Log.w("BleAdvertiseModule", "mBluetoothAdapter unavailable");
             promise.reject("mBluetoothAdapter unavailable");
             return;
-        } 
+        }
 
         if (mObservedState != null && !mObservedState) {
             Log.w("BleAdvertiseModule", "Bluetooth disabled");
@@ -224,34 +206,21 @@ public class BleAdvertiseModule extends ReactContextBaseJavaModule {
 
     }
 
-    private AdvertiseSettings buildAdvertiseSettings(ReadableMap options) {
-        AdvertiseSettings.Builder settingsBuilder = new AdvertiseSettings.Builder();
-
-        if (options != null && options.hasKey("advertiseMode")) {
-            settingsBuilder.setAdvertiseMode(options.getInt("advertiseMode"));
-        }
-
-        if (options != null && options.hasKey("txPowerLevel")) {
-            settingsBuilder.setTxPowerLevel(options.getInt("txPowerLevel"));
-        }
-
-        if (options != null && options.hasKey("connectable")) {
-            settingsBuilder.setConnectable(options.getBoolean("connectable"));
-        }
+    private AdvertiseSettings buildAdvertiseSettings() {
+        AdvertiseSettings.Builder settingsBuilder = new AdvertiseSettings.Builder()
+                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
+                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
+                .setConnectable(true);
 
         return settingsBuilder.build();
     }
 
     private AdvertiseData buildAdvertiseData(ParcelUuid uuid, ReadableMap options) {
-        AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
+        AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder()
+                .setIncludeDeviceName(true)
+                .setIncludeTxPowerLevel(false)
+                .addServiceUuid(uuid);
 
-        if (options != null && options.hasKey("includeDeviceName"))
-            dataBuilder.setIncludeDeviceName(options.getBoolean("includeDeviceName"));
-
-         if (options != null && options.hasKey("includeTxPowerLevel"))
-            dataBuilder.setIncludeTxPowerLevel(options.getBoolean("includeTxPowerLevel"));
-
-        dataBuilder.addServiceUuid(uuid);
         return dataBuilder.build();
     }
 

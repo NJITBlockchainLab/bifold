@@ -164,9 +164,21 @@ const translation = {
     "Done": "Done",
   },
   "CameraDisclosure": {
-    "AllowCameraUse": "Allow camera use",
-    "CameraDisclosure": "The camera is used to scan QR codes that initiate a credential offer or credential request. No information about the images is stored, used for analytics, or shared.",
+    "AllowUse": "Allow camera use",
+    "Disclosure": "The camera is used to scan QR codes that initiate a credential offer or credential request. No information about the images is stored, used for analytics, or shared.",
     "ToContinueUsing": "To continue using the FHWA scan feature, please allow camera permissions.",
+    "OpenSettings": "Open settings",
+  },
+  "NearbyDevicesDisclosure": {
+    "AllowUse": "Allow nearby devices use",
+    "Disclosure": "The nearby devices is used to discover other devices.",
+    "ToContinueUsing": "To continue using the FHWA bluetooth feature, please allow nearby devices permissions.",
+    "OpenSettings": "Open settings",
+  },
+  "LocationDisclosure": {
+    "AllowUse": "Allow location use",
+    "Disclosure": "The location is used to discover other devices.",
+    "ToContinueUsing": "To continue using the FHWA bluetooth feature, please allow location permissions.",
     "OpenSettings": "Open settings",
   },
   "PINCreate": {
@@ -219,6 +231,8 @@ const translation = {
     "EnterYourCurrentPIN": "Enter your current PIN"
   },
   "ScanBLE": {
+    "Connect": "Connect",
+    "BluetoothText": "Please turn on Bluetooth to continue.",
     "Text1": "Ensure Bluetooth is enabled on both devices. Use the button below to scan for available devices and send and invitation to connect.",
     "Toggle": "Toggle Bluetooth discovery",
     "ScanDevices": "Scan for devices",

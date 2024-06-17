@@ -1024,3 +1024,11 @@ export function generateRandomWalletName() {
   }
   return name
 }
+
+export function stringToBytes(str: string) {
+  const bytes = []
+  for (let i = 0; i < str.length; i++) {
+    bytes.push(str.charCodeAt(i))
+  }
+  return bytes
+}
