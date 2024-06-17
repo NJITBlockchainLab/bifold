@@ -232,7 +232,7 @@ const translation = {
   },
   "ScanBLE": {
     "Connect": "Connect",
-    "BluetoothText": "Please turn on Bluetooth to continue.",
+    "BluetoothText": "Please turn on Bluetooth or check Bluetooth permissions to continue.",
     "Text1": "Ensure Bluetooth is enabled on both devices. Use the button below to scan for available devices and send and invitation to connect.",
     "Toggle": "Toggle Bluetooth discovery",
     "ScanDevices": "Scan for devices",
