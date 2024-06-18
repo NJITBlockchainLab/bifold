@@ -37,9 +37,10 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
   ): Promise<boolean> => {
     try {
       const permissionResult = await method(permission, rationale)
-      const allPermissionsGranted = Object.values(permissionResult).every(
-        (permission) => permission === RESULTS.GRANTED
-      )
+      let allPermissionsGranted = false
+      if (Object.values(permissionResult).length) {
+        allPermissionsGranted = Object.values(permissionResult).every((permission) => permission === RESULTS.GRANTED)
+      }
 
       if (allPermissionsGranted) {
         setShowDisclosureModal(false)
