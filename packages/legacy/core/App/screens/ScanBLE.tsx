@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PermissionsAndroid, Platform } from 'react-native'
+import { Platform } from 'react-native'
 import { PERMISSIONS, Permission, RESULTS, Rationale, checkMultiple, requestMultiple } from 'react-native-permissions'
 import Toast from 'react-native-toast-message'
 
@@ -18,7 +18,7 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
   const [showDisclosureModal, setShowDisclosureModal] = useState<boolean>(true)
   const [disclosureType, setDisclosureType] = useState<DisclosureTypes>('NearbyDevicesDisclosure')
   const { t } = useTranslation()
-
+  
   const permissionFlow = async (
     method: MultiplePermissionContract,
     permission: Permission[],
@@ -26,9 +26,10 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
   ): Promise<boolean> => {
     try {
       const permissionResult = await method(permission, rationale)
-      const allPermissionsGranted = Object.values(permissionResult).every(
-        (permission) => permission === RESULTS.GRANTED
-      )
+      let allPermissionsGranted = false
+      if (Object.values(permissionResult).length) {
+        allPermissionsGranted = Object.values(permissionResult).every((permission) => permission === RESULTS.GRANTED)
+      }
 
       if (allPermissionsGranted) {
         setShowDisclosureModal(false)
@@ -52,21 +53,16 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
       if (Platform.OS === 'android') {
         const isAndroid12OrAbove = Platform.Version >= 31
 
-        const permissions = isAndroid12OrAbove
-          ? [
-              PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
-              PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
-              PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE,
-            ]
-          : [
-              PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-              PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-              PermissionsAndroid.PERMISSIONS.BLUETOOTH,
-              PermissionsAndroid.PERMISSIONS.BLUETOOTH_ADMIN,
-            ]
+        const permissions = [
+          PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
+          PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
+          PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE,
+        ]
 
         setDisclosureType(isAndroid12OrAbove ? 'NearbyDevicesDisclosure' : 'LocationDisclosure')
         await permissionFlow(checkMultiple, permissions)
+      } else if (Platform.OS === 'ios') {
+        await permissionFlow(checkMultiple, [PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL])
       }
       setLoading(false)
     }
@@ -78,20 +74,15 @@ const ScanBLE: React.FC<ScanProps> = ({ navigation, route }) => {
     if (Platform.OS === 'android') {
       const isAndroid12OrAbove = Platform.Version >= 31
 
-      const permissions = isAndroid12OrAbove
-        ? [
-            PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
-            PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
-            PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE,
-          ]
-        : [
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-            PermissionsAndroid.PERMISSIONS.BLUETOOTH,
-            PermissionsAndroid.PERMISSIONS.BLUETOOTH_ADMIN,
-          ]
+      const permissions = [
+        PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
+        PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
+        PERMISSIONS.ANDROID.BLUETOOTH_ADVERTISE,
+      ]
 
       return await permissionFlow(requestMultiple, permissions, rationale)
+    } else if (Platform.OS === 'ios') {
+      return await permissionFlow(requestMultiple, [PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL], rationale)
     }
 
     return false

@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import React from 'react'
 import { DidExchangeState } from '@aries-framework/core'
 import { useAgent } from '@aries-framework/react-hooks'
 import { useIsFocused } from '@react-navigation/native'
@@ -150,7 +151,10 @@ const BLEScanner: React.FC<ScanProps> = ({ navigation, route }) => {
     const readListener = bleAdvertiseEmitter.addListener('onRead', handleRead)
     BleManager.checkState()
 
+    console.log("Added listeners")
+
     return () => {
+      console.log("Removed listeners")
       updateListener.remove()
       stopListener.remove()
       discoverListener.remove()
@@ -171,6 +175,7 @@ const BLEScanner: React.FC<ScanProps> = ({ navigation, route }) => {
   // When app is pushed to the background, stop advertising
   useEffect(() => {
     const handleAppStateChange = (nextAppState: AppStateStatus) => {
+      console.log("stop from app state change")
       if (nextAppState.match(/inactive|background/)) {
         stopAdvertising()
       }
@@ -186,6 +191,7 @@ const BLEScanner: React.FC<ScanProps> = ({ navigation, route }) => {
 
   // When screen is unfocused, stop advertising
   useEffect(() => {
+    console.log("Stop from is focus")
     if (!isFocused) {
       stopAdvertising()
     }

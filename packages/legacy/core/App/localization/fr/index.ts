@@ -230,7 +230,7 @@ const translation = {
         "EnterYourCurrentPIN": "Entrez votre NIP actuel"
     },
     "ScanBLE": {
-        "BluetoothText": "Turn On Bluetooth",
+        "BluetoothText": "Please turn on Bluetooth to continue.",
         "Text1": "Assurez-vous que Bluetooth est activé sur les deux appareils. Utilisez le bouton ci-dessous pour rechercher les appareils disponibles et envoyer une invitation à vous connecter.",
         "Toggle": "Activer/Désactiver la découverte Bluetooth",
         "ScanDevices": "Rechercher des appareils",

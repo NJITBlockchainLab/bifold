@@ -16,7 +16,8 @@ import IconInfoSentDark from './assets/img/icon-info-sent-dark.svg'
 import IconInfoSentLight from './assets/img/icon-info-sent-light.svg'
 import IconProofRequestDark from './assets/img/icon-proof-request-dark.svg'
 import IconProofRequestLight from './assets/img/icon-proof-request-light.svg'
-import Logo from './assets/img/logo.svg'
+import Logo from './assets/img/FHWA-Logo.svg'
+import NoInfoShared from './assets/img/no_information_shared.svg'
 import Preface from './assets/img/preface.svg'
 import ProofRequestDeclined from './assets/img/proof-declined.svg'
 import VerifierRequestDeclined from './assets/img/verifier-request-declined.svg'
@@ -836,14 +837,14 @@ export const Assets = {
   },
   img: {
     logoPrimary: {
-      src: require('./assets/img/logo-large.png'),
+      src: require('./assets/img/logo.png'),
       aspectRatio: 1,
       height: '33%',
       width: '33%',
       resizeMode: 'contain',
     },
     logoSecondary: {
-      src: require('./assets/img/logo-large.png'),
+      src: require('./assets/img/logo.png'),
       aspectRatio: 1,
       height: 120,
       width: 120,
