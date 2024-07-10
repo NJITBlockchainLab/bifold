@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {
   AnonCredsCredentialInfo,
   AnonCredsCredentialsForProofRequest,
@@ -870,7 +871,7 @@ export const createConnectionInvitation = async (agent: Agent | undefined, goalC
     throw new Error('Could not create new invitation')
   }
   const invitationUrl = record.outOfBandInvitation.toUrl({ domain })
-
+  console.log(record)
   return {
     record,
     invitation: record.outOfBandInvitation,
@@ -1022,4 +1023,12 @@ export function generateRandomWalletName() {
     name = name.concat(Math.floor(Math.random() * 10).toString())
   }
   return name
+}
+
+export function stringToBytes(str: string) {
+  const bytes = []
+  for (let i = 0; i < str.length; i++) {
+    bytes.push(str.charCodeAt(i))
+  }
+  return bytes
 }

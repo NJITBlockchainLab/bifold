@@ -1,5 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import React, { useRef } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   ScrollView,
@@ -15,7 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import { useConfiguration } from '../contexts/configuration'
-import { DispatchAction } from '../contexts/reducers/store'
+// import { DispatchAction } from '../contexts/reducers/store'
 import { useStore } from '../contexts/store'
 import { useTheme } from '../contexts/theme'
 import { Locales } from '../localization'
@@ -26,12 +26,12 @@ import { testIdWithKey } from '../utils/testable'
 
 type SettingsProps = StackScreenProps<SettingStackParams>
 
-const touchCountToEnableBiometrics = 9
+// const touchCountToEnableBiometrics = 9
 
 const Settings: React.FC<SettingsProps> = ({ navigation }) => {
   const { t, i18n } = useTranslation()
-  const [store, dispatch] = useStore()
-  const developerOptionCount = useRef(0)
+  const [store /*, dispatch*/] = useStore()
+  // const developerOptionCount = useRef(0)
   const { SettingsTheme, TextTheme, ColorPallet, Assets } = useTheme()
   const { settings, enableTours } = useConfiguration()
   const defaultIconSize = 24
@@ -80,19 +80,19 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
 
   const currentLanguage = i18n.t('Language.code', { context: i18n.language as Locales })
 
-  const incrementDeveloperMenuCounter = () => {
-    if (developerOptionCount.current >= touchCountToEnableBiometrics) {
-      developerOptionCount.current = 0
-      dispatch({
-        type: DispatchAction.ENABLE_DEVELOPER_MODE,
-        payload: [true],
-      })
+  // const incrementDeveloperMenuCounter = () => {
+  //   if (developerOptionCount.current >= touchCountToEnableBiometrics) {
+  //     developerOptionCount.current = 0
+  //     dispatch({
+  //       type: DispatchAction.ENABLE_DEVELOPER_MODE,
+  //       payload: [true],
+  //     })
 
-      return
-    }
+  //     return
+  //   }
 
-    developerOptionCount.current = developerOptionCount.current + 1
-  }
+  //   developerOptionCount.current = developerOptionCount.current + 1
+  // }
 
   const settingsSections: SettingSection[] = [
     {
@@ -134,6 +134,20 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
           onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.QRCodeGen }),
           value: undefined,
         },
+        {
+          title: t('Settings.ScanBLE'),
+          accessibilityLabel: t('Settings.ScanBLE'),
+          testID: testIdWithKey('ScanBLE'),
+          onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.ScanBLE }),
+          value: undefined,
+        },
+        // {
+        //   title: t('Screens.ProofRequestDetails'),
+        //   accessibilityLabel: t('Screens.ProofRequestDetails'),
+        //   testID: testIdWithKey('ProofRequestDetails'),
+        //   onPress: () => navigation.getParent()?.navigate(Stacks.ContactStack, { screen: Screens.ProofRequestDetails }),
+        //   value: undefined,
+        // },
       ],
     },
     {
@@ -215,7 +229,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
           testID: testIdWithKey('ProofRequests'),
           onPress: () =>
             navigation.getParent()?.navigate(Stacks.ProofRequestsStack, {
-              screen: Screens.ProofRequests,
+              screen: Screens.SelectProofRequest,
               params: { navigation: navigation },
             }),
         },
@@ -353,7 +367,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
         ListFooterComponent={() => (
           <View style={styles.footer}>
             <TouchableWithoutFeedback
-              onPress={incrementDeveloperMenuCounter}
+              // onPress={incrementDeveloperMenuCounter}
               disabled={store.preferences.developerModeEnabled}
             >
               <View>

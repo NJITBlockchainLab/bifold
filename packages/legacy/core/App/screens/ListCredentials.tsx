@@ -46,7 +46,6 @@ const ListCredentials: React.FC = () => {
 
     return stop
   }, [screenIsFocused])
-
   return (
     <View>
       <FlatList

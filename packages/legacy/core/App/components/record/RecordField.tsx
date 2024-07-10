@@ -7,6 +7,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { hiddenFieldValue } from '../../constants'
 import { useTheme } from '../../contexts/theme'
+import { DateToString } from '../../utils/credential'
 import { isDataUrl } from '../../utils/helpers'
 import { testIdWithKey } from '../../utils/testable'
 
@@ -41,13 +42,20 @@ export const AttributeValue: React.FC<AttributeValueParams> = ({ field, style, s
   })
   if (
     (field.encoding == validEncoding && field.format && validFormat.test(field.format) && field.value) ||
-    isDataUrl(field.value)
+    isDataUrl(field.value) ||
+    field.name?.toLowerCase().includes('photo')
   ) {
     return <RecordBinaryField attributeValue={field.value as string} style={style} shown={shown} />
   }
   if (field.type == CaptureBaseAttributeType.DateInt || field.type == CaptureBaseAttributeType.DateTime) {
     return <RecordDateIntField field={field} style={style} shown={shown} />
   }
+  if (field.name?.toLowerCase().includes('date'))
+    return (
+      <Text style={style || styles.text} testID={testIdWithKey('AttributeValue')}>
+        {shown ? DateToString(field.value as string) : hiddenFieldValue}
+      </Text>
+    )
   return (
     <Text style={style || styles.text} testID={testIdWithKey('AttributeValue')}>
       {shown ? field.value : hiddenFieldValue}
@@ -91,6 +99,9 @@ const RecordField: React.FC<RecordFieldProps> = ({
       paddingVertical: 4,
     },
   })
+
+  // // eslint-disable-next-line no-console
+  // console.log(field)
 
   return (
     <View style={styles.container}>

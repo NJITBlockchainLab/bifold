@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import type { StackScreenProps } from '@react-navigation/stack'
 
 import { CredentialExchangeRecord } from '@aries-framework/core'
@@ -69,15 +70,12 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
 
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: overlay.brandingOverlay?.primaryBackgroundColor,
+      backgroundColor: '#113B51', //hardcode overlay.brandingOverlay?.primaryBackgroundColor,
       display: 'flex',
     },
     secondaryHeaderContainer: {
       height: 1.5 * logoHeight,
-      backgroundColor:
-        (overlay.brandingOverlay?.backgroundImage
-          ? 'rgba(0, 0, 0, 0)'
-          : overlay.brandingOverlay?.secondaryBackgroundColor) ?? 'rgba(0, 0, 0, 0.24)',
+      backgroundColor: '#0D2D3E', //hardcode (overlay.brandingOverlay?.backgroundImage ? 'rgba(0, 0, 0, 0)' : overlay.brandingOverlay?.secondaryBackgroundColor) ?? 'rgba(0, 0, 0, 0.24)',
     },
     primaryHeaderContainer: {
       paddingHorizontal,
@@ -256,10 +254,11 @@ const CredentialDetails: React.FC<CredentialDetailsProps> = ({ navigation, route
               styles.textContainer,
               {
                 lineHeight: 24,
+                fontWeight: 'bold',
               },
             ]}
           >
-            {overlay.metaOverlay?.name}
+            {overlay.metaOverlay?.name?.toUpperCase()}
           </Text>
         </View>
       </View>

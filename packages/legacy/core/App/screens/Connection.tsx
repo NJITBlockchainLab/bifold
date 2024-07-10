@@ -64,6 +64,7 @@ const Connection: React.FC<ConnectionProps> = ({ navigation, route }) => {
     },
     messageText: {
       fontWeight: TextTheme.normal.fontWeight,
+      color: ColorPallet.grayscale.black,
       textAlign: 'center',
       marginTop: 30,
     },

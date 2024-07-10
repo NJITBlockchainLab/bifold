@@ -53,7 +53,7 @@ jest.mock('react-native-vision-camera', () => {
 jest.useFakeTimers({ legacyFakeTimers: true })
 jest.spyOn(global, 'setTimeout')
 
-const templates = useProofRequestTemplates(true)
+const templates = useProofRequestTemplates(true, [])
 const template = templates[0]
 const templateId = template.id
 

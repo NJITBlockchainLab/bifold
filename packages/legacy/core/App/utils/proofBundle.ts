@@ -127,14 +127,14 @@ export class DefaultProofBundleResolver implements ProofBundleResolverType {
     this.proofRequestTemplates = proofRequestTemplates ?? useProofRequestTemplates
   }
   public async resolve(acceptDevRestrictions: boolean): Promise<ProofRequestTemplate[]> {
-    return Promise.resolve(this.proofRequestTemplates(acceptDevRestrictions))
+    return Promise.resolve(this.proofRequestTemplates(acceptDevRestrictions, []))
   }
   public async resolveById(
     templateId: string,
     acceptDevRestrictions: boolean
   ): Promise<ProofRequestTemplate | undefined> {
     return Promise.resolve(
-      this.proofRequestTemplates(acceptDevRestrictions).find((template) => template.id === templateId)
+      this.proofRequestTemplates(acceptDevRestrictions, []).find((template) => template.id === templateId)
     )
   }
 }

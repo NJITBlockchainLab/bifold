@@ -33,12 +33,15 @@ export enum Screens {
   CustomNotification = 'Custom Notification',
   ProofChangeCredential = 'Choose a credential',
   ProofRequests = 'Proof Requests',
+  SelectProofRequest = 'Select Proof Requests',
+  SendProofRequest = 'Send a proof request',
   ProofRequesting = 'Proof Requesting',
   ProofDetails = 'Proof Details',
   NameWallet = 'Name Wallet',
   RenameContact = 'Rename Contact',
   ScanHelp = 'Scan Help',
   QRCodeGen = 'Generate QR Code',
+  ScanBLE = 'Bluetooth',
 }
 
 export enum Stacks {
@@ -93,12 +96,16 @@ export type OnboardingStackParams = {
 }
 
 export type ContactStackParams = {
+  [Screens.ProofRequestDetails]: { templateId: string; connectionId?: string }
   [Screens.Contacts]: undefined
   [Screens.Chat]: { connectionId: string }
   [Screens.ContactDetails]: { connectionId: string }
   [Screens.RenameContact]: { connectionId: string }
+  [Screens.SelectProofRequest]: { connectionId: string }
+  [Screens.SendProofRequest]: { connectionId: string }
   [Screens.WhatAreContacts]: undefined
   [Screens.QRCodeGen]: undefined
+  [Screens.ScanBLE]: undefined
   [Screens.CredentialDetails]: { credentialId: string }
   [Screens.CredentialOffer]: { credentialId: string }
   [Screens.ProofDetails]: { recordId: string; isHistory?: boolean }
@@ -107,6 +114,7 @@ export type ContactStackParams = {
 
 export type ProofRequestsStackParams = {
   [Screens.ProofRequests]: { connectionId?: string }
+  [Screens.SelectProofRequest]: { connectionId?: string }
   [Screens.ProofRequesting]: { templateId: string; predicateValues?: Record<string, Record<string, number>> }
   [Screens.ProofDetails]: { recordId: string; isHistory?: boolean; senderReview?: boolean }
   [Screens.ProofRequestDetails]: { templateId: string; connectionId?: string }

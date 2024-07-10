@@ -1,3 +1,5 @@
+/* eslint-disable import/no-named-as-default-member */
+/* eslint-disable no-unsafe-optional-chaining */
 import type { StackScreenProps } from '@react-navigation/stack'
 
 import {

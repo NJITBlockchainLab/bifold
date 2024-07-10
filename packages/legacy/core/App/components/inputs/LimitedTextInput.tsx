@@ -12,7 +12,7 @@ interface Props extends TextInputProps {
 const LimitedTextInput: React.FC<Props> = ({ label, limit, handleChangeText, ...textInputProps }) => {
   const [focused, setFocused] = useState(false)
   const [characterCount, setCharacterCount] = useState(0)
-  const { Inputs, TextTheme } = useTheme()
+  const { Inputs, TextTheme, ColorPallet } = useTheme()
   const styles = StyleSheet.create({
     container: {
       marginVertical: 10,
@@ -23,6 +23,8 @@ const LimitedTextInput: React.FC<Props> = ({ label, limit, handleChangeText, ...
     },
     textInput: {
       ...Inputs.textInput,
+      color: TextTheme.normal.color,
+      borderColor: ColorPallet.brand.primary,
     },
     limitCounter: {
       color: TextTheme.normal.color,

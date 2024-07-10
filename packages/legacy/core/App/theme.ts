@@ -16,7 +16,8 @@ import IconInfoSentDark from './assets/img/icon-info-sent-dark.svg'
 import IconInfoSentLight from './assets/img/icon-info-sent-light.svg'
 import IconProofRequestDark from './assets/img/icon-proof-request-dark.svg'
 import IconProofRequestLight from './assets/img/icon-proof-request-light.svg'
-import Logo from './assets/img/logo.svg'
+import Logo from './assets/img/FHWA-Logo.svg'
+import NoInfoShared from './assets/img/no_information_shared.svg'
 import Preface from './assets/img/preface.svg'
 import ProofRequestDeclined from './assets/img/proof-declined.svg'
 import VerifierRequestDeclined from './assets/img/verifier-request-declined.svg'
@@ -186,28 +187,28 @@ const GrayscaleColors: IGrayscaleColors = {
 }
 
 const BrandColors: IBrandColors = {
-  primary: '#42803E',
-  primaryDisabled: `rgba(53, 130, 63, ${lightOpacity})`,
+  primary: '#1C6DA5',
+  primaryDisabled: `rgba(28,109,165, ${lightOpacity})`,
   secondary: '#FFFFFFFF',
-  secondaryDisabled: `rgba(53, 130, 63, ${heavyOpacity})`,
-  primaryLight: `rgba(53, 130, 63, ${lightOpacity})`,
+  secondaryDisabled: `rgba(28,109,165, ${heavyOpacity})`,
+  primaryLight: `rgba(28,109,165, ${lightOpacity})`,
   highlight: '#FCBA19',
-  primaryBackground: '#000000',
-  secondaryBackground: '#313132',
-  modalPrimary: '#42803E',
+  primaryBackground: '#F5F5F5',
+  secondaryBackground: '#F5F5F5',
+  modalPrimary: '#1C6DA5',
   modalSecondary: '#FFFFFFFF',
-  modalPrimaryBackground: '#000000',
-  modalSecondaryBackground: '#313132',
-  modalIcon: GrayscaleColors.white,
-  unorderedList: GrayscaleColors.white,
-  unorderedListModal: GrayscaleColors.white,
-  link: GrayscaleColors.white,
-  text: GrayscaleColors.white,
-  icon: GrayscaleColors.white,
+  modalPrimaryBackground: '#F5F5F5',
+  modalSecondaryBackground: '#F5F5F5',
+  modalIcon: GrayscaleColors.black,
+  unorderedList: GrayscaleColors.black,
+  unorderedListModal: GrayscaleColors.black,
+  link: GrayscaleColors.black,
+  text: GrayscaleColors.black,
+  icon: GrayscaleColors.black,
   headerIcon: GrayscaleColors.white,
   headerText: GrayscaleColors.white,
   buttonText: GrayscaleColors.white,
-  tabBarInactive: GrayscaleColors.white,
+  tabBarInactive: GrayscaleColors.black,
 }
 
 const SemanticColors: ISemanticColors = {
@@ -217,22 +218,22 @@ const SemanticColors: ISemanticColors = {
 }
 
 const NotificationColors: INotificationColors = {
-  success: '#313132',
+  success: '#ffffff',
   successBorder: '#2E8540',
   successIcon: '#2E8540',
-  successText: '#FFFFFF',
-  info: '#313132',
+  successText: '#000000',
+  info: '#ffffff',
   infoBorder: '#0099FF',
   infoIcon: '#0099FF',
-  infoText: '#FFFFFF',
-  warn: '#313132',
+  infoText: '#000000',
+  warn: '#ffffff',
   warnBorder: '#FCBA19',
   warnIcon: '#FCBA19',
-  warnText: '#FFFFFF',
-  error: '#313132',
+  warnText: '#000000',
+  error: '#ffffff',
   errorBorder: '#D8292F',
   errorIcon: '#D8292F',
-  errorText: '#FFFFFF',
+  errorText: '#000000',
   popupOverlay: `rgba(0, 0, 0, ${mediumOpacity})`,
 }
 
@@ -313,22 +314,22 @@ export const TextTheme: ITextTheme = {
   modalNormal: {
     fontSize: 18,
     fontWeight: 'normal',
-    color: ColorPallet.grayscale.white,
+    color: ColorPallet.grayscale.black,
   },
   modalTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: ColorPallet.grayscale.white,
+    color: ColorPallet.grayscale.black,
   },
   modalHeadingOne: {
     fontSize: 38,
     fontWeight: 'bold',
-    color: ColorPallet.grayscale.white,
+    color: ColorPallet.grayscale.black,
   },
   modalHeadingThree: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: ColorPallet.grayscale.white,
+    color: ColorPallet.grayscale.black,
   },
   popupModalText: {
     fontSize: 18,
@@ -351,7 +352,7 @@ export const Inputs: IInputs = StyleSheet.create({
     borderRadius,
     fontSize: 16,
     backgroundColor: ColorPallet.brand.primaryBackground,
-    color: ColorPallet.notification.infoText,
+    color: '#fff',
     borderWidth: 2,
     borderColor: ColorPallet.brand.secondary,
   },
@@ -433,9 +434,11 @@ export const Buttons = StyleSheet.create({
     padding: 16,
     borderRadius: 4,
     backgroundColor: ColorPallet.brand.modalPrimary,
+    color: ColorPallet.brand.secondary,
   },
   modalPrimaryText: {
     ...TextTheme.bold,
+    color: ColorPallet.grayscale.white,
     textAlign: 'center',
   },
   modalSecondary: {
@@ -646,7 +649,7 @@ export const ChatTheme = {
     alignSelf: 'flex-end',
   },
   leftBubble: {
-    backgroundColor: ColorPallet.brand.secondaryBackground,
+    backgroundColor: ColorPallet.brand.secondary,
     borderRadius: 4,
     padding: 16,
     marginLeft: 16,
@@ -658,30 +661,30 @@ export const ChatTheme = {
     marginRight: 16,
   },
   timeStyleLeft: {
-    color: ColorPallet.grayscale.lightGrey,
+    color: ColorPallet.grayscale.darkGrey,
     fontSize: 12,
     marginTop: 8,
   },
   timeStyleRight: {
-    color: ColorPallet.grayscale.lightGrey,
+    color: ColorPallet.grayscale.darkGrey,
     fontSize: 12,
     marginTop: 8,
   },
   leftText: {
-    color: ColorPallet.brand.secondary,
+    color: ColorPallet.grayscale.black,
     fontSize: TextTheme.normal.fontSize,
   },
   leftTextHighlighted: {
     ...TextTheme.bold,
-    color: ColorPallet.brand.secondary,
+    color: ColorPallet.grayscale.black,
   },
   rightText: {
-    color: ColorPallet.brand.secondary,
+    color: ColorPallet.grayscale.black,
     fontSize: TextTheme.normal.fontSize,
   },
   rightTextHighlighted: {
     ...TextTheme.bold,
-    color: ColorPallet.brand.secondary,
+    color: ColorPallet.grayscale.black,
   },
   inputToolbar: {
     backgroundColor: ColorPallet.brand.secondary,
@@ -689,6 +692,7 @@ export const ChatTheme = {
     borderRadius: 10,
   },
   inputText: {
+    color: ColorPallet.grayscale.black,
     lineHeight: undefined,
     fontWeight: '500',
     fontSize: TextTheme.normal.fontSize,
@@ -795,7 +799,7 @@ const PINEnterTheme = {
 const PINInputTheme = {
   cell: {
     backgroundColor: ColorPallet.brand.secondaryBackground,
-    borderColor: ColorPallet.brand.secondary,
+    borderColor: ColorPallet.brand.primary,
     borderWidth: 1,
   },
   focussedCell: {
@@ -805,7 +809,7 @@ const PINInputTheme = {
     color: ColorPallet.brand.text,
   },
   icon: {
-    color: ColorPallet.brand.headerIcon,
+    color: ColorPallet.grayscale.black,
   },
 }
 
@@ -833,14 +837,14 @@ export const Assets = {
   },
   img: {
     logoPrimary: {
-      src: require('./assets/img/logo-large.png'),
+      src: require('./assets/img/logo.png'),
       aspectRatio: 1,
       height: '33%',
       width: '33%',
       resizeMode: 'contain',
     },
     logoSecondary: {
-      src: require('./assets/img/logo-large.png'),
+      src: require('./assets/img/logo.png'),
       aspectRatio: 1,
       height: 120,
       width: 120,

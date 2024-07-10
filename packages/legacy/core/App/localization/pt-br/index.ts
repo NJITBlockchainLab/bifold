@@ -136,8 +136,8 @@ const translation = {
     "Attestation": "Eu li, entendo e aceito os termos e condições.",
   },
   "Tour": {
-    "GuideTitle": "Bem-vindo a Aries Bifold",
-    "WouldYouLike": "Gostaria de ver algumas instruções sobre como usar a Aries Bifold?",
+    "GuideTitle": "Bem-vindo a FHWA",
+    "WouldYouLike": "Gostaria de ver algumas instruções sobre como usar a FHWA?",
     "UseAppGuides": "Usar o guia do app",
     "DoNotUseAppGuides": "Não usar o guia do app",
     "AddAndShare": "Adicionar e compartilhar credenciais",
@@ -158,9 +158,21 @@ const translation = {
     "Done": "Terminar",
   },
   "CameraDisclosure": {
-    "AllowCameraUse": "Permitir uso da câmera",
-    "CameraDisclosure": "A câmera é usada para escanear QR Codes para processamento imediato no dispositivo. Nenhuma informação sobre as imagens é armazenada, usada para análise, ou compartilhada.",
-    "ToContinueUsing": "Para continuar usando a funcionalidade de scan da Aries Bifold, favor permitir o uso da câmera.",
+    "AllowUse": "Permitir uso da câmera",
+    "Disclosure": "A câmera é usada para escanear QR Codes para processamento imediato no dispositivo. Nenhuma informação sobre as imagens é armazenada, usada para análise, ou compartilhada.",
+    "ToContinueUsing": "Para continuar usando a funcionalidade de scan da FHWA, favor permitir o uso da câmera.",
+    "OpenSettings": "Abrir as configurações",
+  },
+  "NearbyDevicesDisclosure": {
+    "AllowUse": "Permitir uso da câmera",
+    "Disclosure": "A câmera é usada para escanear QR Codes para processamento imediato no dispositivo. Nenhuma informação sobre as imagens é armazenada, usada para análise, ou compartilhada.",
+    "ToContinueUsing": "Para continuar usando a funcionalidade de scan da FHWA, favor permitir o uso da câmera.",
+    "OpenSettings": "Abrir as configurações",
+  },
+  "LocationDisclosure": {
+    "AllowUse": "Permitir uso da câmera",
+    "Disclosure": "A câmera é usada para escanear QR Codes para processamento imediato no dispositivo. Nenhuma informação sobre as imagens é armazenada, usada para análise, ou compartilhada.",
+    "ToContinueUsing": "Para continuar usando a funcionalidade de scan da FHWA, favor permitir o uso da câmera.",
     "OpenSettings": "Abrir as configurações",
   },
   "PINCreate": {
@@ -210,6 +222,13 @@ const translation = {
     "ChangePIN": "Alterar PIN",
     "Continue": "Continuar",
     "EnterYourCurrentPIN": "Digite seu PIN atual."
+  },
+  "ScanBLE": {
+    "BluetoothText": "Please turn on Bluetooth to continue.",
+    "Text1": "Certifique-se de que o Bluetooth esteja ativado em ambos os dispositivos. Use o botão abaixo para procurar dispositivos disponíveis e enviar um convite para conexão.",
+    "Toggle": "Alternar descoberta de Bluetooth",
+    "ScanDevices": "Procurar dispositivos",
+    "MakeDiscoverable": "Tornar detectável"
   },
   "PINEnter": {
     "EnterPIN": "Digitar PIN",
@@ -333,12 +352,12 @@ const translation = {
     "Torch": "Flash",
     "ScanHelp": "Scan Help (PB)",
     "ScanNow": "Scan Now (PB)",
-    "ScanOnySpecial": "Only special QR codes can be scanned by Bifold Wallet. (PB)",
+    "ScanOnySpecial": "Only special QR codes can be scanned by FHWA Wallet. (PB)",
     "ScanOnlySpecial2": "These are presented by participating services or people to receive a credential offer, request for information or to connect. (PB)",
-    "ScanOnlySpecial3": "Bifold Wallet currently doesn't support adding digital credential by scanning or taking photos of physical ones. (PB)",
-    "WhereToUseLink": "See where you can use Bifold Wallet (PB)",    
+    "ScanOnlySpecial3": "FHWA Wallet currently doesn't support adding digital credential by scanning or taking photos of physical ones. (PB)",
+    "WhereToUseLink": "See where you can use FHWA Wallet (PB)",    
     "BadQRCode": "QR Code Not Recognized (PB)",
-    "BadQRCodeDescription": "Ths QR code scanned doesn't work with Bifold Wallet. Bifold Wallet only works with participating services.\n\nIt currently can't add digital credentials by taking photos of physical ones. (PB)",
+    "BadQRCodeDescription": "This QR code scanned doesn't work with FHWA Wallet. FHWA Wallet only works with participating services.\n\nIt currently can't add digital credentials by taking photos of physical ones. (PB)",
   },
   "Connection": {
     "JustAMoment": "Aguarde um momento enquanto fazemos uma conexão segura...",
@@ -491,7 +510,7 @@ const translation = {
   "Screens": {
     "Splash": "Splash",
     "Onboarding": "Onboarding",
-    "Preface": "Aries Bifold",
+    "Preface": "FHWA",
     "Terms": "Termos & Condições",
     "CreatePIN": "Criar um PIN",
     "EnterPIN": "Digitar o PIN",
@@ -545,16 +564,16 @@ const translation = {
   },
   "NetInfo": {
     "NoInternetConnectionTitle": "Sem conexão com a internet",
-    "NoInternetConnectionMessage": "Não é possivel acessar serviços utilizando a Bifold ou receber credenciais até você voltar a estar online.\n\nFavor checkar sua conexão com a internet.",
+    "NoInternetConnectionMessage": "Não é possivel acessar serviços utilizando a FHWA ou receber credenciais até você voltar a estar online.\n\nFavor checkar sua conexão com a internet.",
     "LedgerConnectivityIssueTitle": "Serviços de Carteira",
     "LedgerConnectivityIssueMessage": "Um firewall pode estar te impedindo de conectar-se a serviços relacionados a carteira.",
   },
   "Onboarding": {
-    "SkipA11y": "Pular introdução a Aries Bifold",
+    "SkipA11y": "Pular introdução a FHWA",
   },
   "Preface": {
     "PrimaryHeading": "Is this app for you? (PT-BR)",
-    "Paragraph1": "Most people will not have a need for Aries Bifold because very few digital credentials are currently available. (PT-BR)",
+    "Paragraph1": "Most people will not have a need for FHWA because very few digital credentials are currently available. (PT-BR)",
     "Confirmed": "I have confirmed that this app is for me. (PT-BR)",
   },
   "Chat": {

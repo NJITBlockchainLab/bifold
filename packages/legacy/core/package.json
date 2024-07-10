@@ -221,5 +221,8 @@
       "module",
       "typescript"
     ]
+  },
+  "dependencies": {
+    "react-native-ble-manager": "^11.5.3"
   }
 }

@@ -2,7 +2,7 @@
   "name": "aries-bifold-app",
   "version": "1.0.0",
   "private": true,
-  "description": "Aries Bifold Wallet App",
+  "description": "FHWA Wallet App",
   "scripts": {
     "android": "react-native run-android",
     "gradle": "./android/gradlew --project-dir=./android --no-daemon",
@@ -56,6 +56,8 @@
     "react-native": "*",
     "react-native-animated-pagination-dots": "^0.1.72",
     "react-native-argon2": "^2.0.1",
+    "react-native-ble-manager": "^11.5.3",
+    "react-native-ble-plx": "^3.1.2",
     "react-native-bouncy-checkbox": "^3.0.5",
     "react-native-collapsible": "^1.6.1",
     "react-native-config": "^1.4.2",

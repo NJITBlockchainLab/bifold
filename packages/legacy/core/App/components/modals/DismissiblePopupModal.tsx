@@ -74,7 +74,7 @@ const DismissiblePopupModal: React.FC<DismissiblePopupModalProps> = ({
     headerText: {
       ...TextTheme.bold,
       alignSelf: 'flex-start',
-      color: ColorPallet.notification.infoText,
+      color: ColorPallet.grayscale.black,
     },
     bodyText: {
       ...TextTheme.normal,

@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* AriesBifoldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* AriesBifoldTests.m */; };
+		0BE4E0DD2C140BCD00636F44 /* BLEPeripheralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE4E0DC2C140BCD00636F44 /* BLEPeripheralManager.swift */; };
+		0BE4E0DE2C140BCD00636F44 /* BLEPeripheralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE4E0DC2C140BCD00636F44 /* BLEPeripheralManager.swift */; };
+		0BE4E0E12C140C1800636F44 /* BLEPeripheralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BE4E0E02C140C1800636F44 /* BLEPeripheralManager.m */; };
+		0BE4E0E22C140C1800636F44 /* BLEPeripheralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BE4E0E02C140C1800636F44 /* BLEPeripheralManager.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -45,7 +49,12 @@
 		00E356EE1AD99517003FC87E /* AriesBifoldTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AriesBifoldTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* AriesBifoldTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AriesBifoldTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* AriesBifold.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AriesBifold.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0BE4E0DA2C140BCD00636F44 /* AriesBifold-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AriesBifold-Bridging-Header.h"; sourceTree = "<group>"; };
+		0BE4E0DB2C140BCD00636F44 /* AriesBifoldTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AriesBifoldTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		0BE4E0DC2C140BCD00636F44 /* BLEPeripheralManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPeripheralManager.swift; sourceTree = "<group>"; };
+		0BE4E0DF2C140C1800636F44 /* BLEPeripheralManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BLEPeripheralManager.h; sourceTree = "<group>"; };
+		0BE4E0E02C140C1800636F44 /* BLEPeripheralManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BLEPeripheralManager.m; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* FHWA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FHWA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = AriesBifold/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = AriesBifold/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = AriesBifold/Images.xcassets; sourceTree = "<group>"; };
@@ -144,6 +153,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				0BE4E0DC2C140BCD00636F44 /* BLEPeripheralManager.swift */,
+				0BE4E0DF2C140C1800636F44 /* BLEPeripheralManager.h */,
+				0BE4E0E02C140C1800636F44 /* BLEPeripheralManager.m */,
 				566FB1F1273B158E003E9BEE /* Media.xcassets */,
 				13B07FAE1A68108700A75B9A /* AriesBifold */,
 				00E356EF1AD99517003FC87E /* AriesBifoldTests */,
@@ -152,6 +164,8 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				56A83D5927D95BBF002FE8FE /* Resources */,
 				8ACF6F3B2962FE31C0EE5408 /* Pods */,
+				0BE4E0DA2C140BCD00636F44 /* AriesBifold-Bridging-Header.h */,
+				0BE4E0DB2C140BCD00636F44 /* AriesBifoldTests-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -161,7 +175,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* AriesBifold.app */,
+				13B07F961A680F5B00A75B9A /* FHWA.app */,
 				00E356EE1AD99517003FC87E /* AriesBifoldTests.xctest */,
 			);
 			name = Products;
@@ -222,7 +236,7 @@
 			);
 			name = AriesBifold;
 			productName = AriesBifold;
-			productReference = 13B07F961A680F5B00A75B9A /* AriesBifold.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* FHWA.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -235,10 +249,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						LastSwiftMigration = 1540;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1540;
 					};
 				};
 			};
@@ -284,7 +299,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -294,7 +309,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+			shellScript = "\nset -e\n\nif [[ -s \"$HOME/.nvm/nvm.sh\" ]]; then\n. \"$HOME/.nvm/nvm.sh\"\nelif [[ -x \"$(command -v brew)\" && -s \"$(brew --prefix nvm)/nvm.sh\" ]]; then\n. \"$(brew --prefix nvm)/nvm.sh\"\nfi\n\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		04A23698871F60D02E13ACB0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -435,6 +450,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E356F31AD99517003FC87E /* AriesBifoldTests.m in Sources */,
+				0BE4E0E22C140C1800636F44 /* BLEPeripheralManager.m in Sources */,
+				0BE4E0DE2C140BCD00636F44 /* BLEPeripheralManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,8 +459,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BE4E0DD2C140BCD00636F44 /* BLEPeripheralManager.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				0BE4E0E12C140C1800636F44 /* BLEPeripheralManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,7 +481,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9337C17A2E512FDE0E677F2E /* Pods-AriesBifold-AriesBifoldTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -482,6 +503,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "AriesBifoldTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AriesBifold.app/AriesBifold";
 			};
 			name = Debug;
@@ -490,7 +514,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 65B4BCEABB8190F24B4588BC /* Pods-AriesBifold-AriesBifoldTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = AriesBifoldTests/Info.plist;
@@ -507,6 +533,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "AriesBifoldTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AriesBifold.app/AriesBifold";
 			};
 			name = Release;
@@ -518,7 +546,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G9667JTP83;
+				DEVELOPMENT_TEAM = X4AZ3Y5536;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = AriesBifold/Info.plist;
@@ -535,11 +563,12 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.AriesBifold;
-				PRODUCT_NAME = AriesBifold;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.AriesBifoldNJIT;
+				PRODUCT_NAME = FHWA;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "AriesBifold-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -554,7 +583,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G9667JTP83;
+				DEVELOPMENT_TEAM = X4AZ3Y5536;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = AriesBifold/Info.plist;
@@ -571,11 +600,12 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.AriesBifold;
-				PRODUCT_NAME = AriesBifold;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.AriesBifoldNJIT;
+				PRODUCT_NAME = FHWA;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "AriesBifold-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -648,7 +678,13 @@
 				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					" ",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -716,7 +752,13 @@
 				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					" ",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
